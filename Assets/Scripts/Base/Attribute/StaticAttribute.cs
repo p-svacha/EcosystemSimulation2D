@@ -7,16 +7,32 @@ using UnityEngine;
 /// </summary>
 public class StaticAttribute<T> : Attribute
 {
+    // Attribute Base
+    public override string Name => _Name;
+    public override string Description => _Description;
+    public override AttributeId Id => _Id;
+    public override AttributeType Type => AttributeType.Static;
+    public override string Category => _Category;
+    public override IThing Thing => _Thing;
+
+    // Static
     public T Value { get; protected set; }
 
-    public StaticAttribute(IThing thing, AttributeId id, AttributeCategory category, string name, string description, T value) : base(thing)
+    private readonly string _Name;
+    private readonly string _Description;
+    private readonly AttributeId _Id;
+    private readonly AttributeType _Type;
+    private readonly string _Category;
+    private readonly IThing _Thing;
+
+    public StaticAttribute(IThing thing, AttributeId id, string category, string name, string description, T value)
     {
-        Id = id;
-        Category = category;
-        Name = name;
-        Description = description;
+        _Thing = thing;
+        _Id = id;
+        _Category = category;
+        _Name = name;
+        _Description = description;
         Value = value;
-        Type = AttributeType.Static;
     }
 
     public void SetValue(T newValue)

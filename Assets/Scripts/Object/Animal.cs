@@ -22,16 +22,21 @@ public abstract class Animal : TileObject
 
         if (MOVEMENT_SPEED >= 1f) Debug.LogWarning("Movement Speed of an animal is not allowed to be greater than 1 because it breaks Pathfinding.");
 
-        _Attributes.Add(AttributeId.MovementSpeed, new StaticAttribute<float>(this, AttributeId.MovementSpeed, AttributeCategory.General, "Movement Speed", "How fast this animal is moving.", MOVEMENT_SPEED));
-        _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, AttributeCategory.General, "Water Movement Speed", "How fast this animal is moving on water.", WATER_MOVEMENT_SPEED));
+        _Attributes.Add(AttributeId.MovementSpeed, new StaticAttribute<float>(this, AttributeId.MovementSpeed, "Movement", "Movement Speed", "How fast this animal is moving.", MOVEMENT_SPEED));
+        _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "Movement", "Water Movement Speed", "How fast this animal is moving on water.", WATER_MOVEMENT_SPEED));
     }
 
     protected void MoveTo(WorldTile target)
     {
         List<WorldTile> pathToTarget = Pathfinder.GetPath(this, Tile, target);
-        if (pathToTarget == null || pathToTarget.Count == 0) return; // no path found
+        SetMovementPath(pathToTarget);
+    }
 
-        CurrentPath = pathToTarget;
+    protected void SetMovementPath(List<WorldTile> path)
+    {
+        if (path == null || path.Count == 0) return; // no path found
+
+        CurrentPath = path;
         IsMoving = true;
 
         if (CurrentPath[1].Coordinates.x > CurrentPath[0].Coordinates.x) transform.localScale = new Vector3(1f, 1f, 1f);

@@ -17,6 +17,6 @@ public class Surface_Soil : Surface
 
     public Surface_Soil(World world) : base(world)
     {
-        _Attributes.Add(AttributeId.TallGrassSpawnChance, new StaticAttribute<float>(this, AttributeId.TallGrassSpawnChance, AttributeCategory.Production, "Tall Grass Spawn Chance", "Chance to spawn tall grass on this tile per hour", TALL_GRASS_SPAWN_CHANCE));
+        _Attributes.Add(AttributeId.TallGrassSpawnChance, new StaticAttribute<float>(this, AttributeId.TallGrassSpawnChance, "Production", "Tall Grass Spawn Chance", "Chance to spawn tall grass on this tile per hour", TALL_GRASS_SPAWN_CHANCE));
     }
 }

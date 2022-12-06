@@ -16,6 +16,7 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
     public TextMeshProUGUI AttributeBreakdownText;
 
     [Header("Prefabs")]
+    public GameObject AttributeCategoryPrefab;
     public UI_ThingInfoAttribute AttributePrefab;
 
     private IThing Thing;
@@ -35,23 +36,32 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         HelperFunctions.DestroyAllChildredImmediately(AttributeListContainer);
 
         // Create temporary attributes for ID, Name and Description to display in as rows.
-        Attribute tempIdAtt = new StaticAttribute<string>(thing, AttributeId.Id, AttributeCategory.Base, "Thing ID", "Unique key to identify what kind of thing this is.", thing.Id.ToString());
-        UI_ThingInfoAttribute tempIdAttDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
-        tempIdAttDisplay.Init(tempIdAtt, this);
+        Attribute tempIdAtt = new StaticAttribute<string>(thing, AttributeId.Id, "Base", "Thing ID", "Unique key to identify what kind of thing this is.", thing.Id.ToString());
+        Attribute tempNameAtt = new StaticAttribute<string>(thing, AttributeId.Name, "Base", "Name", "", thing.Name);
+        Attribute tempDescAtt = new StaticAttribute<string>(thing, AttributeId.Description, "Base", "Description", "", thing.Description);
 
-        Attribute tempNameAtt = new StaticAttribute<string>(thing, AttributeId.Name, AttributeCategory.Base, "Name", "Name of this thing.", thing.Name);
-        UI_ThingInfoAttribute tempNameAttDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
-        tempNameAttDisplay.Init(tempNameAtt, this);
+        // Collect all attributes to display
+        List<Attribute> attributesToDisplay = new List<Attribute>() { tempIdAtt, tempNameAtt, tempDescAtt };
+        foreach (Attribute att in thing.Attributes.Values) attributesToDisplay.Add(att);
 
-        Attribute tempDescAtt = new StaticAttribute<string>(thing, AttributeId.Description, AttributeCategory.Base, "Description", "Description of the thing.", thing.Description);
-        UI_ThingInfoAttribute tempDescAttDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
-        tempDescAttDisplay.Init(tempDescAtt, this);
+        // Group attributes by category
+        Dictionary<string, List<Attribute>> groupedAttributes = new Dictionary<string, List<Attribute>>();
+        foreach(Attribute att in attributesToDisplay)
+        {
+            if (!groupedAttributes.ContainsKey(att.Category)) groupedAttributes.Add(att.Category, new List<Attribute>() { att });
+            else groupedAttributes[att.Category].Add(att);
+        }
 
         // Display all attributes
-        foreach (Attribute att in thing.Attributes.Values)
+        foreach(KeyValuePair<string, List<Attribute>> attGroup in groupedAttributes)
         {
-            UI_ThingInfoAttribute attDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
-            attDisplay.Init(att, this);
+            GameObject catDisplay = Instantiate(AttributeCategoryPrefab, AttributeListContainer.transform);
+            catDisplay.GetComponentInChildren<TextMeshProUGUI>().text = attGroup.Key;
+            foreach (Attribute att in attGroup.Value)
+            {
+                UI_ThingInfoAttribute attDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
+                attDisplay.Init(att, this);
+            }
         }
 
         // Init Layout
@@ -61,7 +71,9 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 
     public void ShowAttributeBreakdown(Attribute att)
     {
-        string text = att.Name + "\n\n" + att.Description + "\n\n\n";
+        string text = att.Name + "\n\n";
+        if(att.Description != "") text += att.Description + "\n\n";
+
 
         if (att.Type == AttributeType.Dynamic)
         {

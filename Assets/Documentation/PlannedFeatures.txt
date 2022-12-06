@@ -1,6 +1,5 @@
 UP NEXT
 -------------
-- Fix RandomTileInRange so it only takes reachable ones within range to not overload pathfinding
 - improve ThingInfoWindow so attributes are sorted by category
 - Animals should eat grass and have Hunger
 - Animals should drink water and have Thirst
@@ -14,3 +13,4 @@ UP NEXT
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
+- add path visualization to show where animals are walking to atm

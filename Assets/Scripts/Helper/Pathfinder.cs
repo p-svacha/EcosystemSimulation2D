@@ -5,7 +5,13 @@ using UnityEngine;
 
 public static class Pathfinder
 {
+    #region Public Methods
+
     // A* algorithm implementation. https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/
+    /// <summary>
+    /// Returns the optimal path for the given animal from a source tile to a target tile.
+    /// <br/> Returned path contains both source and target tile.
+    /// </summary>
     public static List<WorldTile> GetPath(Animal animal, WorldTile from, WorldTile to)
     {
         if (to == null) return new List<WorldTile>();
@@ -55,6 +61,39 @@ public static class Pathfinder
     }
 
     /// <summary>
+    /// Returns a random path that is no longer than the given range.
+    /// <br/> The path is not optimized towards a tile, it's just randomly wandering.
+    /// </summary>
+    public static List<WorldTile> GetRandomPath(Animal animal, WorldTile source, int maxRange)
+    {
+        List<WorldTile> path = new List<WorldTile> { source };
+        int chosenRange = Random.Range(1, maxRange + 1);
+
+        WorldTile currentTile = source;
+        
+        while(path.Count < chosenRange + 1)
+        {
+            List<WorldTile> nextTileCandidates = new List<WorldTile>();
+            foreach (WorldTile neighbour in currentTile.GetAdjacentTiles())
+            {
+                if (path.Contains(neighbour)) continue;
+                if (!neighbour.IsPassable(animal)) continue;
+
+                nextTileCandidates.Add(neighbour);
+            }
+            if (nextTileCandidates.Count == 0) return path;
+
+            WorldTile chosenNextTile = nextTileCandidates[Random.Range(0, nextTileCandidates.Count)];
+            path.Add(chosenNextTile);
+            currentTile = chosenNextTile;
+        }
+
+        return path;
+    }
+
+    #endregion
+
+    /// <summary>
     /// Assumed cost of that path. This function is not allowed to overestimate the cost. The real cost must be >= this cost.
     /// </summary>
     private static float GetHCost(WorldTile from, WorldTile to)
@@ -101,6 +140,7 @@ public static class Pathfinder
     }
 
 
+    #region Visualization
 
     private static Color PathVisualizationColor = new Color(1f, 1f, 1f, 0.5f);
     private static float PathVisualizationWidth = 0.05f;
@@ -120,4 +160,6 @@ public static class Pathfinder
 
         return pathVisualizer;
     }
+
+    #endregion
 }

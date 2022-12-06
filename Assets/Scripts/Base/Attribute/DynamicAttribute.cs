@@ -10,10 +10,7 @@ using UnityEngine;
 /// </summary>
 public abstract class DynamicAttribute : Attribute
 {
-    public DynamicAttribute(IThing thing) : base(thing)
-    {
-        Type = AttributeType.Dynamic;
-    }
+    public override AttributeType Type => AttributeType.Dynamic;
 
     /// <summary>
     /// Returns the current value of this attribute, calculated from the base value and all modifiers.

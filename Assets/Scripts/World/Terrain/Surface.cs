@@ -42,8 +42,8 @@ public abstract class Surface : IThing
     {
         World = world;
 
-        _Attributes.Add(AttributeId.MovementCost, new StaticAttribute<float>(this, AttributeId.MovementCost, AttributeCategory.General, "Movement Cost", "How hard it is to move across this surface.", MOVEMENT_COST));
-        _Attributes.Add(AttributeId.RequiresSwimming, new StaticAttribute<float>(this, AttributeId.RequiresSwimming, AttributeCategory.General, "Requires Swimming", "If objects need to be able to swim to traverse this surface.", REQUIRES_SWIMMING? 1 : 0));
+        _Attributes.Add(AttributeId.MovementCost, new StaticAttribute<float>(this, AttributeId.MovementCost, "Movement", "Movement Cost", "How hard it is to move across this surface.", MOVEMENT_COST));
+        _Attributes.Add(AttributeId.RequiresSwimming, new StaticAttribute<float>(this, AttributeId.RequiresSwimming, "Movement", "Requires Swimming", "If objects need to be able to swim to traverse this surface.", REQUIRES_SWIMMING? 1 : 0));
     }
 
     /// <summary>

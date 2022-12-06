@@ -20,7 +20,7 @@ public class Creer : Animal
         if (!IsSimulated) return;
         base.Update();
 
-        if (!IsMoving && Random.value < 0.05f) MoveTo(World.Singleton.GetRandomTileInRange(Tile.Coordinates, 15));
+        if (!IsMoving && Random.value < 0.001f) SetMovementPath(Pathfinder.GetRandomPath(this, Tile, 15));
     }
 
 }

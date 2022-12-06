@@ -12,38 +12,32 @@ public abstract class Attribute
     /// <summary>
     /// Display name of the attribute.
     /// </summary>
-    public string Name { get; protected set; }
+    public abstract string Name { get; }
 
     /// <summary>
     /// Description of the attribute.
     /// </summary>
-    public string Description { get; protected set; }
+    public abstract string Description { get; }
 
     /// <summary>
     /// Identifier of the attribute. Is unique per thing.
     /// </summary>
-    public AttributeId Id { get; protected set; }
+    public abstract AttributeId Id { get; }
 
     /// <summary>
     /// Type of the attribute used to know how to handle it. Can be static or dynamic number.
     /// </summary>
-    public AttributeType Type { get; protected set; }
+    public abstract AttributeType Type { get; }
 
     /// <summary>
     /// Category is solely used to better sort and organize different attributes within a thing. Has no effect of how the attribute is calculated.
     /// </summary>
-    public AttributeCategory Category { get; protected set; }
+    public abstract string Category { get; }
 
     /// <summary>
     /// Thing that this attribute belongs to.
     /// </summary>
-    public IThing Thing { get; private set; }
-
-
-    public Attribute(IThing thing)
-    {
-        Thing = thing;
-    }
+    public abstract IThing Thing { get; }
 
     /// <summary>
     /// Returns the numeric value of the attribute as a float.
@@ -65,14 +59,4 @@ public enum AttributeType
 {
     Dynamic,
     Static
-}
-
-/// <summary>
-/// The category is solely used to better sort and organize attributes by what they do.
-/// </summary>
-public enum AttributeCategory
-{
-    Base, // only used for id, name and description
-    General,
-    Production
 }

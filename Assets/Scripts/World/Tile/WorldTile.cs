@@ -36,8 +36,8 @@ public class WorldTile : IThing
         WorldPosition = new Vector2(coordinates.x + 0.5f, coordinates.y + 0.5f);
 
         // Attributes
-        _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(this, AttributeId.Coordinates, AttributeCategory.General, "Coordinates", "Position of this tile on the world map.", Coordinates.x + " / " + Coordinates.y));
-        _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(this, AttributeId.Surface, AttributeCategory.General, "Surface", "Surface type of this tile.", ""));
+        _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(this, AttributeId.Coordinates, "General", "Coordinates", "Position of this tile on the world map.", Coordinates.x + " / " + Coordinates.y));
+        _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(this, AttributeId.Surface, "General", "Surface", "Surface type of this tile.", ""));
         _Attributes.Add(AttributeId.MovementCost, new WTAtt_MovementCost(this));
     }
 

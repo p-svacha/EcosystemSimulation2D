@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class WTAtt_MovementCost : DynamicAttribute
 {
-    private WorldTile Tile;
+    // Attribute Base
+    public override string Name => "Movement Cost";
+    public override string Description => "How hard it is to traverse this tile.";
+    public override AttributeId Id => AttributeId.MovementCost;
+    public override string Category => "Movement";
+    public override IThing Thing => Tile;
 
-    public WTAtt_MovementCost(IThing thing) : base(thing)
+    // Individual
+    private readonly WorldTile Tile;
+
+    public WTAtt_MovementCost(WorldTile tile)
     {
-        Tile = (WorldTile)thing;
+        Tile = tile;
     }
 
     public override List<DynamicAttributeModifier> GetValueModifiers()
