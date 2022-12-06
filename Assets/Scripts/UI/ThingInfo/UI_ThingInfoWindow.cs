@@ -21,6 +21,10 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 
     private IThing Thing;
 
+    // Update / Refresh
+    private List<UI_ThingInfoAttribute> AttributeDisplays = new List<UI_ThingInfoAttribute>(); 
+    private Attribute SelectedAttribute;
+
     private void Start()
     {
         CloseBtn.onClick.AddListener(() => UIHandler.Singleton.CloseThingInfoWindow(Thing));
@@ -41,19 +45,19 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         Attribute tempDescAtt = new StaticAttribute<string>(thing, AttributeId.Description, "Base", "Description", "", thing.Description);
 
         // Collect all attributes to display
-        List<Attribute> attributesToDisplay = new List<Attribute>() { tempIdAtt, tempNameAtt, tempDescAtt };
-        foreach (Attribute att in thing.Attributes.Values) attributesToDisplay.Add(att);
+        List<Attribute> attributes = new List<Attribute>() { tempIdAtt, tempNameAtt, tempDescAtt };
+        foreach (Attribute att in thing.Attributes.Values) attributes.Add(att);
 
         // Group attributes by category
         Dictionary<string, List<Attribute>> groupedAttributes = new Dictionary<string, List<Attribute>>();
-        foreach(Attribute att in attributesToDisplay)
+        foreach(Attribute att in attributes)
         {
             if (!groupedAttributes.ContainsKey(att.Category)) groupedAttributes.Add(att.Category, new List<Attribute>() { att });
             else groupedAttributes[att.Category].Add(att);
         }
 
         // Display all attributes
-        foreach(KeyValuePair<string, List<Attribute>> attGroup in groupedAttributes)
+        foreach (KeyValuePair<string, List<Attribute>> attGroup in groupedAttributes)
         {
             GameObject catDisplay = Instantiate(AttributeCategoryPrefab, AttributeListContainer.transform);
             catDisplay.GetComponentInChildren<TextMeshProUGUI>().text = attGroup.Key;
@@ -61,23 +65,46 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
             {
                 UI_ThingInfoAttribute attDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
                 attDisplay.Init(att, this);
+                AttributeDisplays.Add(attDisplay);
             }
         }
 
-        // Init Layout
-        AttributeBreakdownText.text = "";
+        // Init layout
+        DisplayAttributeBreakdown();
         UpdateLayout();
     }
 
-    public void ShowAttributeBreakdown(Attribute att)
+    private void UpdateAttributeDisplays()
     {
-        string text = att.Name + "\n\n";
-        if(att.Description != "") text += att.Description + "\n\n";
+        foreach (UI_ThingInfoAttribute attDisplay in AttributeDisplays) attDisplay.UpdateValueDisplay();
+    }
 
+    void Update()
+    {
+        UpdateAttributeDisplays();
+        DisplayAttributeBreakdown();
+    }
 
-        if (att.Type == AttributeType.Dynamic)
+    public void SetSelectedAttribute(Attribute att)
+    {
+        SelectedAttribute = att;
+    }
+
+    public void DisplayAttributeBreakdown()
+    {
+        if (SelectedAttribute == null)
         {
-            DynamicAttribute numAtt = (DynamicAttribute)att;
+            AttributeBreakdownText.text = "";
+            return;
+        }
+
+        string text = SelectedAttribute.Name + "\n\n";
+        if(SelectedAttribute.Description != "") text += SelectedAttribute.Description + "\n\n";
+
+
+        if (SelectedAttribute.Type == AttributeType.Dynamic)
+        {
+            DynamicAttribute numAtt = (DynamicAttribute)SelectedAttribute;
             List<DynamicAttributeModifier> modifiers = numAtt.GetValueModifiers();
 
             DynamicAttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
@@ -89,9 +116,9 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
                 text += "\n" + mod.Description + ":\tx" + mod.Value;
             text += "\n\nFinal Value:\t" + numAtt.GetValue();
         }
-        else if(att.Type == AttributeType.Static)
+        else if(SelectedAttribute.Type == AttributeType.Static)
         {
-            text += att.GetValueString();
+            text += SelectedAttribute.GetValueString();
         }
 
         AttributeBreakdownText.text = text;

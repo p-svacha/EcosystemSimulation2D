@@ -1,16 +1,21 @@
 UP NEXT
 -------------
-- improve ThingInfoWindow so attributes are sorted by category
-- Animals should eat grass and have Hunger
-- Animals should drink water and have Thirst
-- Animals should have Health and be able to die
+- Add Malnutrition attribute that increases when nutrition is emptry and decreases when its not
+- Add StatusDisplays that show when a condition in the things attributes is met
+- Make StatusDisplays show up in SelectionWindow AND in world above sprite
+- Add Malnutrition StatusDisplay when > 0
+- Add new starvation rate required attribute to Animal
+- Add Mechanic that health decreases with malnutrition
+- Add deatch mechanic for animals that they disappear when health is 0
+- Add Eating mechanic
 - Animals should be able to reproduce
-- Display animal stats in selectionwindow
+- Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
 - add berries
-- water movement speed should not be required animal attribute
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
 - add path visualization to show where animals are walking to atm
+- status effects on animals
+- draw ordering layer for tileobjects

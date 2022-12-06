@@ -13,21 +13,28 @@ public abstract class TileObject : MonoBehaviour, IThing
     public string Name => ObjectName;
     public string Description => ObjectDescription;
     public Dictionary<AttributeId, Attribute> Attributes => _Attributes;
-    public UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_TileObjectBase;
+    public virtual UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_TileObjectBase;
 
     // General
     public abstract TileObjectType Type { get; }
-    protected abstract string ObjectName { get; }
-    protected abstract string ObjectDescription { get; }
     public Sprite Sprite => ResourceManager.Singleton.GetTileObjectSprite(Type);
 
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
+
+    // Required Attributes
+    protected abstract string ObjectName { get; }
+    protected abstract string ObjectDescription { get; }
+    protected abstract int MAX_HEALTH { get; }
 
     // Simulation
     public bool IsSimulated { get; private set; }
     public WorldTile Tile { get; private set; }
 
-    public virtual void Init() { }
+    public virtual void Init()
+    {
+        _Attributes.Add(AttributeId.MaxHealth, new StaticAttribute<float>(this, AttributeId.MaxHealth, "Health", "Max Health", "Maximum amount of HP an object can have.", MAX_HEALTH));
+        _Attributes.Add(AttributeId.Health, new StaticAttribute<float>(this, AttributeId.Health, "Health", "Current Health", "Current amount of HP an object has.", MAX_HEALTH));
+    }
 
     public void SetTile(WorldTile tile)
     {
@@ -37,6 +44,13 @@ public abstract class TileObject : MonoBehaviour, IThing
     {
         IsSimulated = value;
     }
+
+    #region Getters
+
+    public float MaxHealth => Attributes[AttributeId.MaxHealth].GetValue();
+    public float Health => Attributes[AttributeId.Health].GetValue();
+
+    #endregion
 
 }
 

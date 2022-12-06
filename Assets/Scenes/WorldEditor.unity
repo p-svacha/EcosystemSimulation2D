@@ -11360,7 +11360,8 @@ MonoBehaviour:
   IconButtonDefaultColor: {r: 1, g: 1, b: 1, a: 1}
   IconButtonDisabledColor: {r: 0.34117648, g: 0.3372549, b: 0.3372549, a: 1}
   ButtonSelectedColor: {r: 0.27058825, g: 0.5372549, b: 0.26666668, a: 1}
-  SWC_TileObjectBase: {fileID: 3922292038551982174, guid: 460fecbb108df574f94e786a25eee807, type: 3}
+  SWC_TileObjectBase: {fileID: 8118534461761760790, guid: 460fecbb108df574f94e786a25eee807, type: 3}
+  SWC_AnimalBase: {fileID: 1668863901293391801, guid: ba8f9b7bfc874f94a9eb60236c00b2dd, type: 3}
 --- !u!4 &1145587477
 Transform:
   m_ObjectHideFlags: 0

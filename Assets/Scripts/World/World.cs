@@ -104,6 +104,7 @@ public class World : MonoBehaviour
 
     public void RemoveObject(TileObject tileObject)
     {
+        tileObject.Tile.RemoveObject(tileObject);
         Destroy(tileObject.gameObject);
     }
 

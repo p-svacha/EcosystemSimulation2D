@@ -38,6 +38,7 @@ public class ResourceManager : MonoBehaviour
 
     [Header("Selection Window Content")]
     public UI_SWC_TileObjectBase SWC_TileObjectBase;
+    public UI_SWC_AnimalBase SWC_AnimalBase;
 
     void Awake()
     {

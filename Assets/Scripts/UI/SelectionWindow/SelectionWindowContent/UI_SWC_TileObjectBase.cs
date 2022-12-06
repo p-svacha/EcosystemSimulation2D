@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
 {
+    [Header("Elements")]
+    public UI_ValueBar HealthBar;
+
     private TileObject TileObject;
 
     public override void Init(IThing thing)
     {
         TileObject = (TileObject)thing;
+        HealthBar.Init("Health");
+    }
+
+    protected virtual void Update()
+    {
+        HealthBar.SetValue(TileObject.Health, TileObject.MaxHealth);
     }
 
     public override bool CanFocusCamera() => true;
@@ -20,6 +29,7 @@ public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
     {
         World.Singleton.RemoveObject(TileObject);
         UIHandler.Singleton.CloseSelectionWindow(TileObject);
+        UIHandler.Singleton.CloseThingInfoWindow(TileObject);
     }
 
     public override bool CanSelectNextLayer() => true;

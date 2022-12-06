@@ -40,8 +40,6 @@ public class UIHandler : MonoBehaviour
         if (!ThingInfoWindows.ContainsKey(thing)) return;
         DestroyImmediate(ThingInfoWindows[thing].gameObject);
         ThingInfoWindows.Remove(thing);
-
-        CloseSelectionWindow(thing);
     }
     private Vector3 GetNewThingWindowPosition()
     {
@@ -65,8 +63,6 @@ public class UIHandler : MonoBehaviour
         if (!SelectionWindows.ContainsKey(thing)) return;
         DestroyImmediate(SelectionWindows[thing].gameObject);
         SelectionWindows.Remove(thing);
-
-        CloseThingInfoWindow(thing);
     }
     private Vector3 GetNewSelectionWindowPosition()
     {
