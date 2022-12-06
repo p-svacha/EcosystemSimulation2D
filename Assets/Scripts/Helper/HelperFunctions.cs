@@ -63,8 +63,8 @@ public static class HelperFunctions
 
     public static Vector2Int GetRandomPositionInWorld(World world, int mapEdgeMargin)
     {
-        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
-        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
+        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_WIDTH - mapEdgeMargin);
+        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_HEIGHT - mapEdgeMargin);
         return new Vector2Int(x, y);
     }
 

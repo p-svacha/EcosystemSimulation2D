@@ -12,3 +12,5 @@ UP NEXT
 - add berries
 - water movement speed should not be required animal attribute
 - Add wofox animal
+- add selection marker when something is selected (add spriterenderer as child and scale it)
+- use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at

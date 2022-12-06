@@ -44,6 +44,7 @@ public class Simulation : MonoBehaviour
         WorldGenerationInfo genInfo = new WorldGenerationInfo();
         World.DrawTiles(WorldGenerator.GenerateBattleMap(World, genInfo));
 
+        CameraHandler.Singleton.SetBounds(World.MinWorldX, World.MinWorldY, World.MaxWorldX, World.MaxWorldY);
         CameraHandler.Singleton.FocusPosition(new Vector2(World.CenterWorldX, World.CenterWorldY));
 
         CurrentTime = new SimulationTime(year: 1, month: 1, day: 1, hour: 0);

@@ -25,7 +25,7 @@ public class UI_TileInfoText : MonoBehaviour
         text += "\nSurface: " + tile.Surface.Name;
         if(tile.TileObjects.Count > 0)
         {
-            text += "\nObjects; ";
+            text += "\nObjects: ";
             foreach (TileObject tobj in tile.TileObjects) text += tobj.Name + ", ";
             text = text.TrimEnd(' ');
             text = text.TrimEnd(',');

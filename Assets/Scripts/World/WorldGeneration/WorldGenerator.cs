@@ -5,7 +5,9 @@ using UnityEngine;
 
 public static class WorldGenerator
 {
-    public const int MAP_SIZE = 200;
+    // Increase Simulation.TILE_UPDATE_POTS with bigger map sizes and performance keeps being good (16 for 200x200) (128 for 400x400)
+    public static int MAP_WIDTH => 200;
+    public static int MAP_HEIGHT => 200;
 
     private static WorldGenerationInfo Info;
     private static World World;
@@ -29,9 +31,9 @@ public static class WorldGenerator
 
     private static void CreateTileInstances()
     {
-        for (int y = 0; y < MAP_SIZE; y++)
+        for (int y = 0; y < MAP_HEIGHT; y++)
         {
-            for (int x = 0; x < MAP_SIZE; x++)
+            for (int x = 0; x < MAP_WIDTH; x++)
             {
                 Vector2Int pos = new Vector2Int(x, y);
                 WorldTile tile = new WorldTile(World, pos);
@@ -44,9 +46,9 @@ public static class WorldGenerator
     {
         PerlinNoise noise = new PerlinNoise(scale: 0.05f);
 
-        for (int y = 0; y < MAP_SIZE; y++)
+        for (int y = 0; y < MAP_HEIGHT; y++)
         {
-            for (int x = 0; x < MAP_SIZE; x++)
+            for (int x = 0; x < MAP_WIDTH; x++)
             {
                 Surface surface = null;
                 Vector2Int pos = new Vector2Int(x, y);
@@ -66,18 +68,18 @@ public static class WorldGenerator
 
     private static Vector2Int GetRandomPositionOnMap(int mapEdgeMargin = 5)
     {
-        int x = Random.Range(mapEdgeMargin, MAP_SIZE - mapEdgeMargin);
-        int y = Random.Range(mapEdgeMargin, MAP_SIZE - mapEdgeMargin);
+        int x = Random.Range(mapEdgeMargin, MAP_WIDTH - mapEdgeMargin);
+        int y = Random.Range(mapEdgeMargin, MAP_HEIGHT - mapEdgeMargin);
         return new Vector2Int(x, y);
     }
 
     private static Vector2Int GetRandomPositionAround(Vector2Int center, int maxDistance)
     {
         int x = -1;
-        while (x < 0 || x >= MAP_SIZE) x = Random.Range(center.x - maxDistance, center.x + maxDistance + 1);
+        while (x < 0 || x >= MAP_WIDTH) x = Random.Range(center.x - maxDistance, center.x + maxDistance + 1);
 
         int y = -1;
-        while (y < 0 || y >= MAP_SIZE) y = Random.Range(center.y - maxDistance, center.y + maxDistance + 1);
+        while (y < 0 || y >= MAP_HEIGHT) y = Random.Range(center.y - maxDistance, center.y + maxDistance + 1);
 
         return new Vector2Int(x, y);
     }

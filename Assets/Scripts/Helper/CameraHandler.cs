@@ -12,14 +12,17 @@ public class CameraHandler : MonoBehaviour
 {
     private Camera Camera;
 
-    protected static float ZOOM_SPEED = 0.4f; // Mouse Wheel Speed
+    protected static float ZOOM_SPEED = 0.6f; // Mouse Wheel Speed
     protected static float DRAG_SPEED = 0.025f; // Middle Mouse Drag Speed
     protected static float PAN_SPEED = 20f; // WASD Speed
     protected static float MIN_CAMERA_SIZE = 3f;
-    protected static float MAX_CAMERA_SIZE = 30f;
+    protected static float MAX_CAMERA_SIZE = 50f;
     protected bool IsLeftMouseDown;
     protected bool IsRightMouseDown;
     protected bool IsMouseWheelDown;
+
+    // Bounds
+    protected float MinX, MinY, MaxX, MaxY;
 
     public void FocusPosition(Vector2 pos)
     {
@@ -29,19 +32,12 @@ public class CameraHandler : MonoBehaviour
     private void Start()
     {
         Camera = GetComponent<Camera>();
+        _Singleton = Camera.main.GetComponent<CameraHandler>();
     }
 
 
     public virtual void Update()
     {
-        // Position Boundaries
-        float minX = 0, maxX = 0, minY = 0, maxY = 0;
-
-        minX = World.Singleton.MinWorldX;
-        maxX = World.Singleton.MaxWorldX;
-        minY = World.Singleton.MinWorldY;
-        maxY = World.Singleton.MaxWorldY;
-
         // Scroll
         if (Input.mouseScrollDelta.y != 0)
         {
@@ -60,7 +56,7 @@ public class CameraHandler : MonoBehaviour
         if (IsMouseWheelDown)
         {
             float speed = DRAG_SPEED * Camera.orthographicSize;
-            float canvasScaleFactor = GameObject.Find("Canvas").GetComponent<Canvas>().scaleFactor;
+            float canvasScaleFactor = UIHandler.Singleton.GetComponent<Canvas>().scaleFactor;
             transform.position += new Vector3(-Input.GetAxis("Mouse X") * speed / canvasScaleFactor, -Input.GetAxis("Mouse Y") * speed / canvasScaleFactor, 0f);
         }
 
@@ -83,13 +79,22 @@ public class CameraHandler : MonoBehaviour
         }
 
         // Bounds
-        if (transform.position.x < minX) transform.position = new Vector3(minX, transform.position.y, transform.position.z);
-        if (transform.position.x > maxX) transform.position = new Vector3(maxX, transform.position.y, transform.position.z);
-        if (transform.position.y < minY) transform.position = new Vector3(transform.position.x, minY, transform.position.z);
-        if (transform.position.y > maxY) transform.position = new Vector3(transform.position.x, maxY, transform.position.z);
+        if (transform.position.x < MinX) transform.position = new Vector3(MinX, transform.position.y, transform.position.z);
+        if (transform.position.x > MaxX) transform.position = new Vector3(MaxX, transform.position.y, transform.position.z);
+        if (transform.position.y < MinY) transform.position = new Vector3(transform.position.x, MinY, transform.position.z);
+        if (transform.position.y > MaxY) transform.position = new Vector3(transform.position.x, MaxY, transform.position.z);
     }
 
-    public static CameraHandler Singleton => Camera.main.GetComponent<CameraHandler>();
+    private static CameraHandler _Singleton;
+    public static CameraHandler Singleton => _Singleton;
+
+    public void SetBounds(float minX, float minY, float maxX, float maxY)
+    {
+        MinX = minX;
+        MinY = minY;
+        MaxX = maxX;
+        MaxY = maxY;
+    }
 
     #region Triggers
 

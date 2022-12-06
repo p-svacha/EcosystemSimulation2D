@@ -20,6 +20,11 @@ public class UIHandler : MonoBehaviour
     private Dictionary<IThing, UI_ThingInfoWindow> ThingInfoWindows = new Dictionary<IThing, UI_ThingInfoWindow>();
     private Dictionary<IThing, UI_SelectionWindow> SelectionWindows = new Dictionary<IThing, UI_SelectionWindow>();
 
+    private void Start()
+    {
+        _Singleton = GameObject.Find("Canvas").GetComponent<UIHandler>();
+    }
+
     #region ThingInfoWindow
 
     public void AddThingInfoWindow(IThing thing)
@@ -73,5 +78,6 @@ public class UIHandler : MonoBehaviour
 
     #endregion
 
-    public static UIHandler Singleton { get { return GameObject.Find("Canvas").GetComponent<UIHandler>(); } }
+    private static UIHandler _Singleton;
+    public static UIHandler Singleton => _Singleton;
 }

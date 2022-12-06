@@ -13,7 +13,7 @@ public class Surface_Soil : Surface
     protected override bool REQUIRES_SWIMMING => false;
 
     // Individual
-    private const float TALL_GRASS_SPAWN_CHANCE = 0.005f;
+    private const float TALL_GRASS_SPAWN_CHANCE = 0.003f;
 
     public Surface_Soil(World world) : base(world)
     {
