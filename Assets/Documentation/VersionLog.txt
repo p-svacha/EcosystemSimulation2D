@@ -1,0 +1,5 @@
+Version Alpha 1 (not ready)
+---------------------------
+- 3 Surfaces (Water, Sand, Soil)
+- 1 Plant (Tall Grass)
+- 1 Animal (Creer)

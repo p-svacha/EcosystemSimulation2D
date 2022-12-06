@@ -1,0 +1,14 @@
+UP NEXT
+-------------
+- Fix RandomTileInRange so it only takes reachable ones within range to not overload pathfinding
+- improve ThingInfoWindow so attributes are sorted by category
+- Animals should eat grass and have Hunger
+- Animals should drink water and have Thirst
+- Animals should have Health and be able to die
+- Animals should be able to reproduce
+- Display animal stats in selectionwindow
+- Add mountains
+- add multiple sprite support for objects (tall grass)
+- add berries
+- water movement speed should not be required animal attribute
+- Add wofox animal
