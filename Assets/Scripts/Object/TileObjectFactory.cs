@@ -9,10 +9,10 @@ using UnityEngine;
 public static class TileObjectFactory
 {
 
-    public static TileObject CreateObject(TileObjectType type)
+    public static VisibleTileObject CreateObject(TileObjectType type)
     {
         GameObject newObject = new GameObject(type.ToString());
-        TileObject tileObject = type switch
+        VisibleTileObject tileObject = type switch
         {
             TileObjectType.TallGrass => newObject.AddComponent<TallGrass>(),
             TileObjectType.Creer => newObject.AddComponent<Creer>(),

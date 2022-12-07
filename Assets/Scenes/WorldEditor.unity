@@ -1391,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 310
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1427,7 +1427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 160
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -11353,6 +11353,8 @@ MonoBehaviour:
   WaterTexture: {fileID: 2800000, guid: a4d6053e89ce72740843d4b3688620be, type: 3}
   TallGrassSprite: {fileID: 21300000, guid: 5ffd9f6e7f409e04cbfd67d3ea88b105, type: 3}
   CreerSprite: {fileID: 21300000, guid: b3e4550b74f7f1d498192a4356a0f26f, type: 3}
+  SD_Malnutrition: {fileID: 21300000, guid: 9fa7e87504e052d4bba1509860eed312, type: 3}
+  SD_Dehydration: {fileID: 21300000, guid: b476bbdc46de3b54398a14fd07fef396, type: 3}
   DefaultSpriteRenderMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   WhiteTile: {fileID: 11400000, guid: 170566555b3ba0b4db8a1503ad9d7f32, type: 2}
   RemoveSprite: {fileID: 21300000, guid: 3634036589cb0774fbef959e794b6370, type: 3}
@@ -11362,6 +11364,7 @@ MonoBehaviour:
   ButtonSelectedColor: {r: 0.27058825, g: 0.5372549, b: 0.26666668, a: 1}
   SWC_TileObjectBase: {fileID: 8118534461761760790, guid: 460fecbb108df574f94e786a25eee807, type: 3}
   SWC_AnimalBase: {fileID: 1668863901293391801, guid: ba8f9b7bfc874f94a9eb60236c00b2dd, type: 3}
+  StatusDisplayPrefab: {fileID: 19010902948385558, guid: 27ebbbb2046d7bd449f2e933148fd141, type: 3}
 --- !u!4 &1145587477
 Transform:
   m_ObjectHideFlags: 0
@@ -19313,7 +19316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 310
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -19349,7 +19352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 160
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TallGrass : TileObject
+public class TallGrass : VisibleTileObject
 {
     // TileObject Base
     protected override string ObjectName => "Tall Grass";

@@ -1,17 +1,18 @@
+SINCE LAST COMMIT
+-------------------
+- added malnutrition
+- added death
+- added statusdisplay framework
+
 UP NEXT
 -------------
-- Add Malnutrition attribute that increases when nutrition is emptry and decreases when its not
-- Add StatusDisplays that show when a condition in the things attributes is met
-- Make StatusDisplays show up in SelectionWindow AND in world above sprite
-- Add Malnutrition StatusDisplay when > 0
-- Add new starvation rate required attribute to Animal
-- Add Mechanic that health decreases with malnutrition
-- Add deatch mechanic for animals that they disappear when health is 0
 - Add Eating mechanic
 - Animals should be able to reproduce
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
+- rename Animal to AnimalBase
+- add plantsBase class between VisibleTileObject and TallGrass
 - add berries
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
@@ -19,3 +20,8 @@ UP NEXT
 - add path visualization to show where animals are walking to atm
 - status effects on animals
 - draw ordering layer for tileobjects
+- thinginfo window: display floats with only one decimal
+- create TileObjectClass that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
+	- update tileobjectfactory
+- add speed4 button with modifier 10
+- add statusdisplay displays in SelectionWindow for Animals

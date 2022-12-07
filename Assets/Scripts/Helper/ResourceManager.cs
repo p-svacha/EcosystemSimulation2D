@@ -5,7 +5,8 @@ using UnityEngine.Tilemaps;
 
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager Singleton { get { return GameObject.Find("ResourceManager").GetComponent<ResourceManager>(); } }
+    private static ResourceManager _Singleton;
+    public static ResourceManager Singleton => _Singleton;
 
     [Header("Surface Textures")]
     public Texture2D SoilTexture;
@@ -20,6 +21,10 @@ public class ResourceManager : MonoBehaviour
     public Sprite CreerSprite;
 
     private Dictionary<TileObjectType, Sprite> TileObjectSprites;
+
+    [Header("Status Display Sprites")]
+    public Sprite SD_Malnutrition;
+    public Sprite SD_Dehydration;
 
     [Header("Materials")]
     public Material DefaultSpriteRenderMaterial;
@@ -40,6 +45,9 @@ public class ResourceManager : MonoBehaviour
     public UI_SWC_TileObjectBase SWC_TileObjectBase;
     public UI_SWC_AnimalBase SWC_AnimalBase;
 
+    [Header("Misc Prefabs")]
+    public StatusDisplayObject StatusDisplayPrefab;
+
     void Awake()
     {
         // Terrain
@@ -57,6 +65,11 @@ public class ResourceManager : MonoBehaviour
         TileObjectSprites = new Dictionary<TileObjectType, Sprite>();
         TileObjectSprites.Add(TileObjectType.TallGrass, TallGrassSprite);
         TileObjectSprites.Add(TileObjectType.Creer, CreerSprite);
+    }
+
+    private void Start()
+    {
+        _Singleton = GameObject.Find("ResourceManager").GetComponent<ResourceManager>();
     }
 
     public Texture2D GetSurfaceTexture(SurfaceType type) => TerrainTextures[type];

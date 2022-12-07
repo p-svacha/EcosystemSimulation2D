@@ -10,3 +10,7 @@ The artstyle is kept very simple to be able to focus on the systems and simulati
 
 *Version 2022-12-06*
 <br/><img src="Screenshots/2022-12-06.png" alt="2022-12-06" height="200" /><br/>
+
+# Credits
+Terrain textures are from iFlashs "Clean Textures" Rimworld mod (https://steamcommunity.com/sharedfiles/filedetails/?id=2865361569&searchtext=clean+textures).
+All other art is made by me (with some help from Stable Diffusion).

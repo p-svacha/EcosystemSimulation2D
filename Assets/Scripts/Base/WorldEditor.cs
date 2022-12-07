@@ -46,7 +46,7 @@ namespace WorldEditorSpace
                         break;
 
                     case EditorTool.SpawnObject:
-                        TileObject tileObject = (TileObject)EditorToolThing;
+                        VisibleTileObject tileObject = (VisibleTileObject)EditorToolThing;
                         if (tileObject != null && tile != null) World.SpawnTileObject(tile, tileObject.Type);
                         break;
 

@@ -18,7 +18,7 @@ public class Creer : Animal
 
     // Individual
 
-    protected new void Update()
+    protected override void Update()
     {
         if (!IsSimulated) return;
         base.Update();

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public enum AttributeId
 {
+    /// <summary> Used as null. </summary>
+    None,
+
     /// <summary> Unique identifier of a thing. </summary>
     Id,
 
@@ -53,4 +56,7 @@ public enum AttributeId
 
     /// <summary> Amount at which the nutrition of an animal drops per hour. </summary>
     HungerRate,
+
+    /// <summary> How advanced the malnutrition of an animal is. The higher it is, the more health it loses. </summary>
+    Malnutrition,
 }

@@ -23,7 +23,7 @@ public class WorldTile : IThing
 
     // Content
     public Surface Surface { get; private set; }
-    public List<TileObject> TileObjects = new List<TileObject>();
+    public List<VisibleTileObject> TileObjects = new List<VisibleTileObject>();
 
     // Attributes
     private Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
@@ -53,7 +53,7 @@ public class WorldTile : IThing
 
     public void SelectNextLayer(IThing sourceThing)
     {
-        if (sourceThing is TileObject tileObject)
+        if (sourceThing is VisibleTileObject tileObject)
         {
             int index = TileObjects.IndexOf(tileObject);
             if (index == TileObjects.Count - 1) UIHandler.Singleton.AddSelectionWindow(this);
@@ -108,12 +108,12 @@ public class WorldTile : IThing
         ((StaticAttribute<string>)_Attributes[AttributeId.Surface]).SetValue(surface.Name);
     }
 
-    public void AddObject(TileObject tileObject)
+    public void AddObject(VisibleTileObject tileObject)
     {
         TileObjects.Add(tileObject);
     }
 
-    public void RemoveObject(TileObject obj)
+    public void RemoveObject(VisibleTileObject obj)
     {
         TileObjects.Remove(obj);
     }

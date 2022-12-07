@@ -7,11 +7,11 @@ public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
     [Header("Elements")]
     public UI_ValueBar HealthBar;
 
-    private TileObject TileObject;
+    private VisibleTileObject TileObject;
 
     public override void Init(IThing thing)
     {
-        TileObject = (TileObject)thing;
+        TileObject = (VisibleTileObject)thing;
         HealthBar.Init("Health");
     }
 
@@ -28,8 +28,6 @@ public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
     public override void RemoveObject()
     {
         World.Singleton.RemoveObject(TileObject);
-        UIHandler.Singleton.CloseSelectionWindow(TileObject);
-        UIHandler.Singleton.CloseThingInfoWindow(TileObject);
     }
 
     public override bool CanSelectNextLayer() => true;
