@@ -12,8 +12,9 @@ public abstract class Animal : VisibleTileObject
     protected abstract float WATER_MOVEMENT_SPEED { get; }
     protected abstract float MAX_NUTRITION { get; }
     protected abstract float HUNGER_RATE { get; }
+    protected abstract List<NutrientType> DIET { get; }
 
-    // Static Values (could be replaced by attributes if necessary)
+    // Constant Values (could be replaced by attributes if necessary)
     private float MALNUTRITION_RATE => HUNGER_RATE; // How much malnutrition increases per hour when out of food. 1 Malnutrition = -1 Health per hour
     private float MALNUTRITION_REGENERATION_RATE => 1f; // How much malnutrition decreases per hour when not out of food. 1 Malnutrition = -1 Health per hour
 
@@ -32,6 +33,7 @@ public abstract class Animal : VisibleTileObject
         _Attributes.Add(AttributeId.MovementSpeed, new StaticAttribute<float>(this, AttributeId.MovementSpeed, "Movement", "Movement Speed", "How fast this animal is moving.", MOVEMENT_SPEED));
         _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "Movement", "Water Movement Speed", "How fast this animal is moving on water.", WATER_MOVEMENT_SPEED));
 
+        _Attributes.Add(AttributeId.Diet, new Att_Diet(this, DIET));
         _Attributes.Add(AttributeId.MaxNutrition, new StaticAttribute<float>(this, AttributeId.MaxNutrition, "Needs", "Max Nutrition", "Maximum amount of nutrition an animal can store.", MAX_NUTRITION));
         _Attributes.Add(AttributeId.Nutrition, new StaticAttribute<float>(this, AttributeId.Nutrition, "Needs", "Nutrition", "Current amount of nutrition an animal has.", MAX_NUTRITION));
         _Attributes.Add(AttributeId.HungerRate, new StaticAttribute<float>(this, AttributeId.HungerRate, "Needs", "Hunger Rate", "Amount at which the nutrition of an animal drops per hour.", HUNGER_RATE));
@@ -43,10 +45,9 @@ public abstract class Animal : VisibleTileObject
 
     #region Update
 
-    protected override void Update()
+    protected override void UpdateSelf()
     {
-        if (!IsSimulated) return;
-        base.Update();
+        base.UpdateSelf();
 
         UpdateMovement();
         UpdateNeeds();
@@ -126,6 +127,7 @@ public abstract class Animal : VisibleTileObject
     public float WaterMovementSpeed => Attributes[AttributeId.WaterMovementSpeed].GetValue();
     public bool CanSwim => (Attributes.ContainsKey(AttributeId.WaterMovementSpeed) && Attributes[AttributeId.WaterMovementSpeed].GetValue() > 0f);
 
+    public List<NutrientType> Diet => ((Att_Diet)Attributes[AttributeId.Diet]).Diet;
     public float MaxNutrition => Attributes[AttributeId.MaxNutrition].GetValue();
     public float Nutrition => Attributes[AttributeId.Nutrition].GetValue();
     public float HungerRate => Attributes[AttributeId.HungerRate].GetValue();

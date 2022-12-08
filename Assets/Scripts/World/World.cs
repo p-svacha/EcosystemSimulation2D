@@ -102,7 +102,7 @@ public class World : MonoBehaviour
         tile.TileObjects.Clear();
     }
 
-    public void RemoveObject(VisibleTileObject tileObject)
+    public void RemoveObject(TileObject tileObject)
     {
         tileObject.Tile.RemoveObject(tileObject);
         Destroy(tileObject.gameObject);

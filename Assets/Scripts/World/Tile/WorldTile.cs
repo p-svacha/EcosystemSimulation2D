@@ -23,7 +23,7 @@ public class WorldTile : IThing
 
     // Content
     public Surface Surface { get; private set; }
-    public List<VisibleTileObject> TileObjects = new List<VisibleTileObject>();
+    public List<TileObject> TileObjects = new List<TileObject>();
 
     // Attributes
     private Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
@@ -38,7 +38,7 @@ public class WorldTile : IThing
         // Attributes
         _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(this, AttributeId.Coordinates, "General", "Coordinates", "Position of this tile on the world map.", Coordinates.x + " / " + Coordinates.y));
         _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(this, AttributeId.Surface, "General", "Surface", "Surface type of this tile.", ""));
-        _Attributes.Add(AttributeId.MovementCost, new WTAtt_MovementCost(this));
+        _Attributes.Add(AttributeId.MovementCost, new Att_MovementCost(this));
     }
 
     /// <summary>
@@ -108,12 +108,12 @@ public class WorldTile : IThing
         ((StaticAttribute<string>)_Attributes[AttributeId.Surface]).SetValue(surface.Name);
     }
 
-    public void AddObject(VisibleTileObject tileObject)
+    public void AddObject(TileObject tileObject)
     {
         TileObjects.Add(tileObject);
     }
 
-    public void RemoveObject(VisibleTileObject obj)
+    public void RemoveObject(TileObject obj)
     {
         TileObjects.Remove(obj);
     }

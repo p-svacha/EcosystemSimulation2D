@@ -48,6 +48,7 @@ public enum AttributeId
     /// <summary> Speed at which an Animal moves on water. </summary>
     WaterMovementSpeed,
 
+
     /// <summary> Maximum amount of nutrition an animal can store. </summary>
     MaxNutrition,
 
@@ -59,4 +60,13 @@ public enum AttributeId
 
     /// <summary> How advanced the malnutrition of an animal is. The higher it is, the more health it loses. </summary>
     Malnutrition,
+
+    /// <summary> What kind of diet is needed to be able to eat an object. </summary>
+    NutrientType,
+
+    /// <summary> How much nutrition an object provides at when being eaten from full health to 0. </summary>
+    NutrientValue,
+
+    /// <summary> What types of food an animal is able to eat. </summary>
+    Diet,
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WTAtt_MovementCost : DynamicAttribute
+public class Att_MovementCost : DynamicAttribute
 {
     // Attribute Base
     public override string Name => "Movement Cost";
@@ -14,7 +14,7 @@ public class WTAtt_MovementCost : DynamicAttribute
     // Individual
     private readonly WorldTile Tile;
 
-    public WTAtt_MovementCost(WorldTile tile)
+    public Att_MovementCost(WorldTile tile)
     {
         Tile = tile;
     }

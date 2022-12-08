@@ -9,4 +9,7 @@ public class TallGrass : VisibleTileObject
     protected override string ObjectDescription => "Edible Plants that grow randomly.";
     public override TileObjectType Type => TileObjectType.TallGrass;
     protected override int MAX_HEALTH => 10;
+
+    protected override NutrientType NUTRIENT_TYPE => NutrientType.Plant;
+    protected override float NUTRIENT_VALUE => 20;
 }

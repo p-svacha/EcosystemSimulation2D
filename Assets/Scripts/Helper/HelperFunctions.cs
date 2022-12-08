@@ -15,6 +15,19 @@ public static class HelperFunctions
 
     #endregion
 
+    #region Strings
+
+    public static string ListToString<T>(List<T> list)
+    {
+        string txt = "";
+        foreach (T elem in list) txt += elem.ToString() + ", ";
+        txt = txt.TrimEnd(' ');
+        txt = txt.TrimEnd(',');
+        return txt;
+    }
+
+    #endregion
+
     #region Random
 
     public static T GetWeightedRandomElement<T>(Dictionary<T, int> weightDictionary)

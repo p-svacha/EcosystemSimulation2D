@@ -1,8 +1,6 @@
 SINCE LAST COMMIT
 -------------------
-- added malnutrition
-- added death
-- added statusdisplay framework
+- Nutrients, diets and eating mechanic
 
 UP NEXT
 -------------
@@ -25,3 +23,5 @@ UP NEXT
 	- update tileobjectfactory
 - add speed4 button with modifier 10
 - add statusdisplay displays in SelectionWindow for Animals
+- control simulation speed with space 0/1/2/3/4 keys
+- add scrollbar to thinginfo window with maxlength

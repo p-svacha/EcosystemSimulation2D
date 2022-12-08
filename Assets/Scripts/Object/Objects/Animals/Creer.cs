@@ -15,13 +15,13 @@ public class Creer : Animal
     protected override float HUNGER_RATE => 5f;
     protected override float MAX_NUTRITION => 80;
     protected override int MAX_HEALTH => 120;
+    protected override List<NutrientType> DIET => new List<NutrientType>() { NutrientType.Plant };
 
     // Individual
 
-    protected override void Update()
+    protected override void UpdateSelf()
     {
-        if (!IsSimulated) return;
-        base.Update();
+        base.UpdateSelf();
 
         if (!IsMoving && Random.value < 0.001f) SetMovementPath(Pathfinder.GetRandomPath(this, Tile, 15));
     }
