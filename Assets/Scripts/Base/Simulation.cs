@@ -19,6 +19,9 @@ public class Simulation : MonoBehaviour
 
     public bool IsPaused => SpeedModifier == SPEED0_MODIFIER;
 
+    // Simulation Constants
+    public const float MOVEMENT_SPEED_MODIFIER = 30f;
+
     /// <summary>
     /// Every individual WorldTile only gets updated every n'th frame according to this value for performance reasons.
     /// <br/> During world generation tiles get assigned into one of n pots and each frame one pot of tiles gets updated.

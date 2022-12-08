@@ -16,14 +16,14 @@ public class StaticAttribute<T> : Attribute
     public override IThing Thing => _Thing;
 
     // Static
-    public T Value { get; protected set; }
-
     private readonly string _Name;
     private readonly string _Description;
     private readonly AttributeId _Id;
-    private readonly AttributeType _Type;
     private readonly string _Category;
     private readonly IThing _Thing;
+
+    // Value
+    public virtual T Value { get; private set; }
 
     public StaticAttribute(IThing thing, AttributeId id, string category, string name, string description, T value)
     {

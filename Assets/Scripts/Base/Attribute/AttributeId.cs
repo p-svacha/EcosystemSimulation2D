@@ -33,26 +33,23 @@ public enum AttributeId
     MovementCost,
 
 
-    /// <summary> Maximum amount of HP an object can have. </summary>
-    MaxHealth,
-
-    /// <summary> Current amount of HP an object has. </summary>
+    /// <summary> Current and maximum amount of HP an object has. </summary>
     Health,
 
 
 
 
-    /// <summary> Speed at which an Animal moves on land. </summary>
+    /// <summary> Speed at which an animal moves on land. </summary>
     MovementSpeed,
 
-    /// <summary> Speed at which an Animal moves on water. </summary>
+    /// <summary> Speed at which an animal moves on water. </summary>
     WaterMovementSpeed,
 
+    /// <summary> How many tiles an animal can see in all directions and detect specific objects. </summary>
+    VisionRange,
 
-    /// <summary> Maximum amount of nutrition an animal can store. </summary>
-    MaxNutrition,
 
-    /// <summary> Current amount of nutrition an animal has. </summary>
+    /// <summary> Current and maximum amount of nutrition an animal has. </summary>
     Nutrition,
 
     /// <summary> Amount at which the nutrition of an animal drops per hour. </summary>
@@ -69,4 +66,10 @@ public enum AttributeId
 
     /// <summary> What types of food an animal is able to eat. </summary>
     Diet,
+
+    /// <summary> How fast an animal is at eating food generally. </summary>
+    EatingSpeed,
+
+    /// <summary> How difficult an object is to eat generally. 1 means it takes 1 hour for the full thing to be eaten. </summary>
+    EatingDifficulty,
 }

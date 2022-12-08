@@ -24,6 +24,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     // Optional Attributes
     protected virtual NutrientType NUTRIENT_TYPE => NutrientType.None;
     protected virtual float NUTRIENT_VALUE => 0f;
+    protected virtual float EATING_DIFFICULTY => 1f;
 
     // General
     public abstract TileObjectType Type { get; }
@@ -39,11 +40,11 @@ public abstract class TileObject : MonoBehaviour, IThing
     public virtual void Init()
     {
         // Init health attributes
-        _Attributes.Add(AttributeId.MaxHealth, new StaticAttribute<float>(this, AttributeId.MaxHealth, "Health", "Max Health", "Maximum amount of HP an object can have.", MAX_HEALTH));
-        _Attributes.Add(AttributeId.Health, new StaticAttribute<float>(this, AttributeId.Health, "Health", "Current Health", "Current amount of HP an object has.", MAX_HEALTH));
+        _Attributes.Add(AttributeId.Health, new RangeAttribute(this, AttributeId.Health, "Health", "Health", "Current and maximum amount of HP an object has.", MAX_HEALTH, MAX_HEALTH));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
         _Attributes.Add(AttributeId.NutrientValue, new StaticAttribute<float>(this, AttributeId.NutrientValue, "Nutrition", "Nutrients", "How much nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE));
+        _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(this, AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
     }
 
     #endregion
@@ -100,7 +101,7 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     /// <summary>
     /// Sets the value of a static float attribute. 
-    /// <br/> Throws an error if the attribute doesn't exist or isn't a StaticAtttribute with type float.
+    /// <br/> Throws an error if the attribute doesn't exist or isn't a StaticAttribute with type float.
     /// </summary>
     public void SetAttribute(AttributeId id, float value)
     {
@@ -132,10 +133,11 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     #region Getters
 
-    public float MaxHealth => Attributes[AttributeId.MaxHealth].GetValue();
+    public float MaxHealth => ((RangeAttribute)Attributes[AttributeId.Health]).MaxValue;
     public float Health => Attributes[AttributeId.Health].GetValue();
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
     public float NutrientValue => Attributes[AttributeId.NutrientValue].GetValue();
+    public float EatingDifficulty => Attributes[AttributeId.EatingDifficulty].GetValue();
 
     /// <summary>
     /// Returns how much nutrients this object would provide to an animal.
@@ -144,6 +146,17 @@ public abstract class TileObject : MonoBehaviour, IThing
     {
         if (!animal.Diet.Contains(NutrientType)) return 0f;
         else return NutrientValue;
+    }
+
+    /// <summary>
+    /// Calculates and returns the exact speed of an animal eating this object.
+    /// <br/> 1 means {Simulation.EATING_SPEED_MODIFIER %} of the object will be eaten per hour, providing the same % of its nutrients to the animal.
+    /// </summary>
+    public float GetEatingSpeed(Animal animal)
+    {
+        float es = (1f / EatingDifficulty) * animal.EatingSpeed;
+        Debug.Log(es);
+        return (1f / EatingDifficulty) * animal.EatingSpeed;
     }
 
     #endregion

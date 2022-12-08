@@ -12,4 +12,5 @@ public class TallGrass : VisibleTileObject
 
     protected override NutrientType NUTRIENT_TYPE => NutrientType.Plant;
     protected override float NUTRIENT_VALUE => 20;
+    protected override float EATING_DIFFICULTY => 0.4f;
 }

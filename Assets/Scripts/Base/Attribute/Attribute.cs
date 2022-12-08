@@ -53,10 +53,12 @@ public abstract class Attribute
 
 /// <summary>
 /// Dynamic attributes have its value calculated based on other attributes.
-/// <br/>Static attributes have fixed values that are not influenced by other attributes.
+/// <br/> Static attributes have fixed values that are not influenced by other attributes.
+/// <br/> Range attributes are a special kind of static float attributes that have their value clamped to range.
 /// </summary>
 public enum AttributeType
 {
     Dynamic,
-    Static
+    Static,
+    Range
 }

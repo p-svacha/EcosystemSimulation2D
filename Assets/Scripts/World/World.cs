@@ -145,7 +145,7 @@ public class World : MonoBehaviour
     public List<WorldTile> GetAllTilesInRange(Vector2Int pos, int range)
     {
         List<WorldTile> tiles = new List<WorldTile>();
-        foreach (Vector2Int v in HelperFunctions.GetAllPositionsAround(pos, range)) tiles.Add(GetTile(v));
+        foreach (Vector2Int v in HelperFunctions.GetAllPositionsInRange(pos, range)) tiles.Add(GetTile(v));
         return tiles;
     }
     public WorldTile GetRandomTileInRange(Vector2Int pos, int range)

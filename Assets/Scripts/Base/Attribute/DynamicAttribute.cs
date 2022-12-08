@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// A DynamicAttribute is a numeric attribute that is calculated at runtime and fully derived by modifiers rather than a static value.
+/// A DynamicAttribute is a float attribute that is calculated at runtime and fully derived by modifiers rather than a static value.
 /// <br/>These modifiers are often attributes so a DynamicAttribute can is often dependent on other things and their attributes.
 /// <br/>This class is abstract because all DynamicAttributes need to derive from this class to include their logic (how the value of the attribute is calculated) in GetValueModifiers.
 /// </summary>

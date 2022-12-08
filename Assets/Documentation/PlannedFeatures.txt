@@ -1,11 +1,16 @@
 SINCE LAST COMMIT
 -------------------
-- Nutrients, diets and eating mechanic
+- Range attribute
+- Animal activity
+- vision, eating mechanic
 
 UP NEXT
 -------------
-- Add Eating mechanic
+- FIndClosestFood doesn't check if food is reachable
+- increase chance of random wandering
 - Animals should be able to reproduce
+- Add RangeAttribute - a static attribute that has a min value, current value and max value and can return ratio
+- Change Health and Nutrition to RangeAttribute
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
@@ -15,6 +20,7 @@ UP NEXT
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
+- add particle effect when eating
 - add path visualization to show where animals are walking to atm
 - status effects on animals
 - draw ordering layer for tileobjects
@@ -25,3 +31,8 @@ UP NEXT
 - add statusdisplay displays in SelectionWindow for Animals
 - control simulation speed with space 0/1/2/3/4 keys
 - add scrollbar to thinginfo window with maxlength
+- split thingId into Animal, Plant etc. and make editorwindow dynamically sort into categories
+- add shoreeggs, eggs that spawn in water on shore
+- add wofox - woolfox that eats shoreeggs but is afraid of water, they produce wool
+- add carrier animal that brings shoreggs to wofoxes and eat wool
+- add herbivour bears that eat everything

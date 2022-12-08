@@ -86,7 +86,7 @@ public static class HelperFunctions
     /// </summary>
     public static Vector2Int GetRandomPositionInRange(Vector2Int center, int range)
     {
-        List<Vector2Int> allPositionsInRange = GetAllPositionsAround(center, range);
+        List<Vector2Int> allPositionsInRange = GetAllPositionsInRange(center, range);
         return allPositionsInRange[Random.Range(0, allPositionsInRange.Count)];
     }
 
@@ -155,12 +155,30 @@ public static class HelperFunctions
     /// <summary>
     /// Returns all coordinates around a center point within a maximum range. Source position is included.
     /// </summary>
-    public static List<Vector2Int> GetAllPositionsAround(Vector2Int center, int range)
+    public static List<Vector2Int> GetAllPositionsInRange(Vector2Int center, int range)
     {
         List<Vector2Int> positions = new List<Vector2Int>();
         for(int x = -range; x < range + 1; x++)
             for(int y = -range; y < range + 1; y++)
                 positions.Add(center + new Vector2Int(x, y)); 
+
+        return positions;
+    }
+
+    /// <summary>
+    /// Returns all coordinates that have an exact distance to a source position.
+    /// </summary>
+    public static List<Vector2Int> GetAllPositionsWithRange(Vector2Int center, int range)
+    {
+        List<Vector2Int> positions = new List<Vector2Int>();
+        for (int x = -range; x < range + 1; x++)
+        {
+            for (int y = -range; y < range + 1; y++)
+            {
+                if (x > -range && x < range && y > -range && y < range) continue;
+                positions.Add(center + new Vector2Int(x, y));
+            }
+        }
 
         return positions;
     }

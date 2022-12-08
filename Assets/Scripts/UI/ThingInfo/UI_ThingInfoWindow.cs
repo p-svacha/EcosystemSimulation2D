@@ -116,7 +116,7 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
                 text += "\n" + mod.Description + ":\tx" + mod.Value;
             text += "\n\nFinal Value:\t" + numAtt.GetValue();
         }
-        else if(SelectedAttribute.Type == AttributeType.Static)
+        else
         {
             text += SelectedAttribute.GetValueString();
         }

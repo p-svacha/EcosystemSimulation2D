@@ -56,7 +56,7 @@ public class WorldTile : IThing
         if (sourceThing is VisibleTileObject tileObject)
         {
             int index = TileObjects.IndexOf(tileObject);
-            if (index == TileObjects.Count - 1) UIHandler.Singleton.AddSelectionWindow(this);
+            if (index == TileObjects.Count - 1) UIHandler.Singleton.AddSelectionWindow(TileObjects[0]);
             else UIHandler.Singleton.AddSelectionWindow(TileObjects[index + 1]);
         }
     }
@@ -90,8 +90,8 @@ public class WorldTile : IThing
     }
 
     /// <summary>
-    /// Calculates the exact MovementCost of a specified Thing on this tile.
-    /// <br/> The higher the cost, the slower the thing will move on the tile.
+    /// Calculates the exact MovementCost of an animal on this tile.
+    /// <br/> The higher the cost, the slower the animal will move on the tile.
     /// </summary>
     public float GetMovementCost(Animal animal)
     {
