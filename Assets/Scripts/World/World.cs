@@ -69,7 +69,6 @@ public class World : MonoBehaviour
     /// </summary>
     public void SpawnTileObject(WorldTile tile, TileObjectType tileObjectType)
     {
-        if (tile.TileObjects.Any(x => x.Type == tileObjectType)) return;
         VisibleTileObject newObject = TileObjectFactory.CreateObject(tileObjectType);
         newObject.transform.position = tile.WorldPosition3;
         tile.AddObject(newObject);
@@ -81,7 +80,15 @@ public class World : MonoBehaviour
 
     public void RemoveObjects(WorldTile tile)
     {
-        foreach(VisibleTileObject obj in tile.TileObjects) Destroy(obj.gameObject);
+        foreach (TileObject tileObject in tile.TileObjects)
+        {
+            if (tileObject is VisibleTileObject visibleObject) Destroy(visibleObject.gameObject);
+
+            UIHandler.Singleton.CloseSelectionWindow(tileObject);
+            UIHandler.Singleton.CloseThingInfoWindow(tileObject);
+
+            Simulation.Singleton.UnregisterObject(tileObject);
+        }
         tile.TileObjects.Clear();
     }
 
@@ -91,7 +98,7 @@ public class World : MonoBehaviour
     public void RemoveObject(TileObject tileObject)
     {
         tileObject.Tile.RemoveObject(tileObject);
-        Destroy(tileObject.gameObject);
+        if(tileObject is VisibleTileObject visibleObject) Destroy(visibleObject.gameObject);
 
         // Close UI windows showing this object
         UIHandler.Singleton.CloseSelectionWindow(tileObject);

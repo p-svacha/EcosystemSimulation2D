@@ -1,10 +1,11 @@
 SINCE LAST COMMIT
 -------------------
-- age
+- pregnancy, offspring
 
 UP NEXT
 -------------
-- Animals should be able to reproduce
+- pregnancy statusdisplay
+- pregnancy debuffs to hungerrate and movementspeed
 - add life expectancy death of old age
 - Animals should drink water and have Thirst
 - Add mountains
@@ -39,7 +40,23 @@ UP NEXT
 - add carrier animal that brings shoreggs to wofoxes and eat wool
 - add herbivour bears that eat everything
 - add drowning when an animal that cant swim is in water
+- add eventframework:
+	- eventmanager that can trigger random events
+	- events that do something when triggered
+- add "animals wander in" event
+- dynamic attribute pregnancy chance based on age, health, etc.
+- dynamic attribute miscarriagechance to all animals
+	- add miscarriages
+- allow creating objects with certain values already set
+	- maybe make a virtual OnSpawn function for TileObject that sets desired attributes for newly spawned objects
+	- TileFactory would call that function
+	- additionally params can added to TileFactory.CreateObject that get passed on to OnSpawn, necessary to know where the spawning is from
+		- newborn and event spawn have different effects for example
 
-PERFORMANCE INCREASES
+IDEAS FOR PERFORMANCE INCREASES
 ------------------------
-- not everything needs to update every tick (death, status displays)
+- Don't process every entity each frame.
+- Split processing into stuff that needs doing often and stuff that does not need doing often.
+- Spread long-running algorithms across multiple frames so that they don't block processing in other systems.
+- Ensure that efficient algorithms and data structures are used.
+- Cache the results of expensive calculations if they are likely to be used again.

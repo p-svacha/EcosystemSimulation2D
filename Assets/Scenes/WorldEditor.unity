@@ -1391,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 310
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1427,7 +1427,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 160
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -6368,7 +6368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27671cd62b61d46418c31667c053fd08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Simulation: {fileID: 1799129366}
   TerrainLayer: {fileID: 561278667}
 --- !u!1 &538349970
 GameObject:
@@ -19316,7 +19315,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 310
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_SizeDelta.y
@@ -19352,7 +19351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 160
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7345848144556897696, guid: 6ca9277ac069a654cb27d2d6a1b7303c, type: 3}
       propertyPath: m_AnchoredPosition.y

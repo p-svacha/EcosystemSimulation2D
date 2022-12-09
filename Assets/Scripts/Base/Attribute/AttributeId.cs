@@ -75,4 +75,28 @@ public enum AttributeId
 
     /// <summary> How difficult an object is to eat generally. 1 means it takes 1 hour for the full thing to be eaten. </summary>
     EatingDifficulty,
+
+    /// <summary> Minimum age at which an animal can get pregnant. </summary>
+    PregnancyMinAge,
+
+    /// <summary> Maximum age at which an animal can get pregnant. </summary>
+    PregnancyMaxAge,
+
+    /// <summary> Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health. </summary>
+    BasePregnancyChance,
+
+    /// <summary> Actual chance per hour that an animal gets pregnant. </summary>
+    PregnancyChance,
+
+    /// <summary> How long an animal is pregnant for. </summary>
+    PregnancyDuration,
+
+    /// <summary> How long an animal has been pregnant for. </summary>
+    PregnancyProgress,
+
+    /// <summary> Minimum amount of children an animal will produce when giving birth. </summary>
+    MinNumOffspring,
+
+    /// <summary> Maximum amount of children an animal will produce when giving birth. </summary>
+    MaxNumOffspring,
 }

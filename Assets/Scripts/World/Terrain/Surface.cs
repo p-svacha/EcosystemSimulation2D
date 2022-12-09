@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -55,7 +56,7 @@ public abstract class Surface : IThing
         if(Attributes.TryGetValue(AttributeId.TallGrassSpawnChance, out att))
         {
             float spawnChance = hoursSinceLastUpdate * att.GetValue();
-            if (Random.value < spawnChance) World.SpawnTileObject(tile, TileObjectType.TallGrass);
+            if (Random.value < spawnChance && tile.TileObjects.Where(x => x.Type == TileObjectType.TallGrass).Count() == 0) World.SpawnTileObject(tile, TileObjectType.TallGrass);
         }
     }
 }

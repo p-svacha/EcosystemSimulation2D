@@ -54,7 +54,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     /// </summary>
     public virtual void Tick()
     {
-        Age.IncreaseTime(Simulation.Singleton.TickHours);
+        Age.IncreaseTime(Simulation.Singleton.TickTime);
 
         UpdateStatusDisplays();
         UpdateDeath();
@@ -127,6 +127,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     public SimulationTime Age => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.Age]).GetStaticValue();
     public float MaxHealth => ((RangeAttribute)Attributes[AttributeId.Health]).MaxValue;
     public float Health => Attributes[AttributeId.Health].GetValue();
+    public float HealthRatio => ((RangeAttribute)Attributes[AttributeId.Health]).Ratio;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
     public float NutrientValue => Attributes[AttributeId.NutrientValue].GetValue();
     public float EatingDifficulty => Attributes[AttributeId.EatingDifficulty].GetValue();

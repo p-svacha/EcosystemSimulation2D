@@ -14,7 +14,7 @@ public class Simulation : MonoBehaviour
     /// <summary>
     /// The exact amount of hours in the SimulationTime that have passed in this tick.
     /// </summary>
-    public float TickHours { get; private set; }
+    public float TickTime { get; private set; }
     public const int SPEED0_MODIFIER = 0; // Pause
     public const int SPEED1_MODIFIER = 1;
     public const int SPEED2_MODIFIER = 2;
@@ -24,6 +24,7 @@ public class Simulation : MonoBehaviour
 
     // Update List
     private List<TileObject> SimulatedObjects = new List<TileObject>(); // if performance needs to improve further, change this to an array
+    private List<TileObject> RegisteredObjects = new List<TileObject>();
     private List<TileObject> UnregisteredObjects = new List<TileObject>();
     public int NumObjects => SimulatedObjects.Count;
 
@@ -79,8 +80,8 @@ public class Simulation : MonoBehaviour
 
     private void UpdateTime()
     {
-        TickHours = (Time.deltaTime / RealSecondsPerHour) * SpeedModifier;
-        CurrentTime.IncreaseTime(TickHours);
+        TickTime = (Time.deltaTime / RealSecondsPerHour) * SpeedModifier;
+        CurrentTime.IncreaseTime(TickTime);
         UI_TimeControls.Singleton.SetTimeDisplay(CurrentTime);
     }
 
@@ -111,16 +112,20 @@ public class Simulation : MonoBehaviour
     private void UpdateSimulation()
     {
         if (IsPaused) return;
-
+        
         // Surfaces
         UpdateSurfaces();
 
-        // Objects
-        foreach (TileObject obj in SimulatedObjects) obj.Tick();
+        // Add newly registered objects
+        foreach (TileObject obj in RegisteredObjects) SimulatedObjects.Add(obj);
+        RegisteredObjects.Clear();
 
         // Remove unregistered objects
-        foreach(TileObject obj in UnregisteredObjects) SimulatedObjects.Remove(obj);
+        foreach (TileObject obj in UnregisteredObjects) SimulatedObjects.Remove(obj);
         UnregisteredObjects.Clear();
+
+        // Objects
+        foreach (TileObject obj in SimulatedObjects) obj.Tick();
     }
 
     /// <summary>
@@ -145,7 +150,7 @@ public class Simulation : MonoBehaviour
     /// </summary>
     public void RegisterObject(TileObject obj)
     {
-        SimulatedObjects.Add(obj);
+        RegisteredObjects.Add(obj);
     }
 
     /// <summary>

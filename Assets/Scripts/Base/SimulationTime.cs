@@ -73,24 +73,54 @@ public class SimulationTime
         }
     }
 
+    public void Reset()
+    {
+        Year = 0;
+        Month = 0;
+        Day = 0;
+        Hour = 0;
+        HourSplit = 0;
+    }
+
 
     public string FullString { get { return Day + "." + Month + "." + Year + " " + Hour + "h"; } }
     /// <summary>
     /// Amount of started months since the start of the game
     /// </summary>
-    public int AbsoluteMonth { get { return (Year - 1) * MonthsPerYear + Month; } }
+    public int AbsoluteMonth { get { return (Year * MonthsPerYear) + Month; } }
     /// <summary>
     /// Amount of started days since the start of the game
     /// </summary>
-    public int AbsoluteDay { get { return (Year - 1) * MonthsPerYear * DaysPerMonth + (Month - 1) * DaysPerMonth + Day; } }
+    public int AbsoluteDay { get { return (Year * MonthsPerYear * DaysPerMonth) + (Month * DaysPerMonth) + Day; } }
     /// <summary>
     /// Amount of started hours since the start of the game
     /// </summary>
-    public int AbsoluteHour { get { return (Year - 1) * MonthsPerYear * DaysPerMonth * HoursPerDay + (Month - 1) * DaysPerMonth * HoursPerDay + (Day - 1) * HoursPerDay + Hour; } }
+    public int AbsoluteHour { get { return (Year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (Month * DaysPerMonth * HoursPerDay) + (Day * HoursPerDay) + Hour; } }
     /// <summary>
     /// Exact amount of hours since start of the game, including decimal values.
     /// </summary>
-    public float ExactTime { get { return (Year - 1) * MonthsPerYear * DaysPerMonth * HoursPerDay + (Month - 1) * DaysPerMonth * HoursPerDay + (Day - 1) * HoursPerDay + (Hour - 1) + HourSplit; } }
+    public float ExactTime { get { return (Year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (Month * DaysPerMonth * HoursPerDay) + (Day * HoursPerDay) + Hour + HourSplit; } }
+
+    #region Operators
+
+    public static bool operator <(SimulationTime l, SimulationTime f)
+    {
+        return l.ExactTime < f.ExactTime;
+    }
+    public static bool operator >(SimulationTime l, SimulationTime f)
+    {
+        return l.ExactTime > f.ExactTime;
+    }
+    public static bool operator <=(SimulationTime l, SimulationTime f)
+    {
+        return l.ExactTime <= f.ExactTime;
+    }
+    public static bool operator >=(SimulationTime l, SimulationTime f)
+    {
+        return l.ExactTime >= f.ExactTime;
+    }
+
+    #endregion
 
     public override string ToString()
     {
@@ -98,7 +128,8 @@ public class SimulationTime
         if (Year > 0) text += Year + "Years ";
         if (Month > 0) text += Month + " Months ";
         if (Day > 0) text += Day + " Days ";
-        text += Hour + HourSplit.ToString("#.#") + " Hours";
+        if (Hour != 0 || HourSplit != 0) text += Hour + HourSplit.ToString("#.#") + " Hours";
+        if (text == "") return "0 Hours";
         return text;
     }
 
