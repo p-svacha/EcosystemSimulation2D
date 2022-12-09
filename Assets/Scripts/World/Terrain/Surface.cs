@@ -47,9 +47,9 @@ public abstract class Surface : IThing
     }
 
     /// <summary>
-    /// Gets called every n'th frame. Gets called every n'th frame. See Simulation > TILE_UPDATE_POTS.
+    /// Gets called every n'th frame.
     /// </summary>
-    public void Update(WorldTile tile, float hoursSinceLastUpdate)
+    public void Tick(WorldTile tile, float hoursSinceLastUpdate)
     {
         Attribute att;
         if(Attributes.TryGetValue(AttributeId.TallGrassSpawnChance, out att))

@@ -6,8 +6,8 @@ using UnityEngine;
 public static class WorldGenerator
 {
     // Increase Simulation.TILE_UPDATE_POTS with bigger map sizes and performance keeps being good (16 for 200x200) (128 for 400x400)
-    public static int MAP_WIDTH => 200;
-    public static int MAP_HEIGHT => 200;
+    public static int MAP_WIDTH => 250;
+    public static int MAP_HEIGHT => 250;
 
     private static WorldGenerationInfo Info;
     private static World World;

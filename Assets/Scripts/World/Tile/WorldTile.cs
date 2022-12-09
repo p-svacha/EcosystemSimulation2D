@@ -42,11 +42,11 @@ public class WorldTile : IThing
     }
 
     /// <summary>
-    /// Gets called every n'th frame. See Simulation > TILE_UPDATE_POTS.
+    /// Gets called every n'th frame.
     /// </summary>
-    public void Update(float hoursSinceLastUpdate)
+    public void Tick(float hoursSinceLastUpdate)
     {
-        Surface.Update(this, hoursSinceLastUpdate);
+        Surface.Tick(this, hoursSinceLastUpdate);
     }
 
     #region UI

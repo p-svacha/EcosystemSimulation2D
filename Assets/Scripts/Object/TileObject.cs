@@ -30,9 +30,6 @@ public abstract class TileObject : MonoBehaviour, IThing
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
     protected List<StatusDisplay> StatusDisplays = new List<StatusDisplay>();
-
-    // Simulation
-    public bool IsSimulated { get; private set; }
     public WorldTile Tile { get; private set; }
 
     #region Initialize
@@ -51,23 +48,18 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     #region Update
 
-    private void Update()
+    /// <summary>
+    /// Tick gets called every frame when the simulation is running.
+    /// </summary>
+    public virtual void Tick()
     {
-        if (!IsSimulated) return;
-
         UpdateStatusDisplays();
         UpdateDeath();
-        UpdateSelf();
     }
-
-    /// <summary>
-    /// Contains all individual logic of how this specific TileObject behaves.
-    /// <br/> Always use this function and never "Update", since that is used to handle basic simulation aspects.
-    /// </summary>
-    protected virtual void UpdateSelf() { }
 
     private void UpdateStatusDisplays()
     {
+        if (StatusDisplays.Count == 0) return;
         int numActiveStatusDisplays = StatusDisplays.Where(x => x.ShouldShow()).Count();
         int index = 0;
         foreach (StatusDisplay sd in StatusDisplays)
@@ -123,10 +115,6 @@ public abstract class TileObject : MonoBehaviour, IThing
     {
         Tile = tile;
     }
-    public void SetIsSimulated(bool value)
-    {
-        IsSimulated = value;
-    }
 
     #endregion
 
@@ -154,8 +142,6 @@ public abstract class TileObject : MonoBehaviour, IThing
     /// </summary>
     public float GetEatingSpeed(Animal animal)
     {
-        float es = (1f / EatingDifficulty) * animal.EatingSpeed;
-        Debug.Log(es);
         return (1f / EatingDifficulty) * animal.EatingSpeed;
     }
 

@@ -50,9 +50,9 @@ public abstract class Animal : VisibleTileObject
 
     #region Update
 
-    protected override void UpdateSelf()
+    public override void Tick()
     {
-        base.UpdateSelf();
+        base.Tick();
 
         UpdateNeeds();
         UpdateHealth();
@@ -64,7 +64,30 @@ public abstract class Animal : VisibleTileObject
     {
         if (IsMoving)
         {
-            transform.position = Vector3.MoveTowards(transform.position, CurrentPath[1].WorldPosition, (1f / Tile.GetMovementCost(this)) * Simulation.MOVEMENT_SPEED_MODIFIER * Simulation.Singleton.LastFrameHoursPassed);
+            WorldTile previousTile = CurrentPath[0]; // We are moving from this tile
+            WorldTile nextTile = CurrentPath[1]; // We are moving to this tile
+
+            // Check if the tile we are moving towards is still passable. If not, go back
+            if (!nextTile.IsPassable(this))
+            {
+                if (!previousTile.IsPassable(this)) // If previous tile is also not reachable anymore, find another way out
+                {
+                    List<WorldTile> stuckEscapePath = Pathfinder.GetRandomPath(this, previousTile, 1);
+                    if (stuckEscapePath == null || stuckEscapePath.Count == 1) // We are stuck with no way out
+                    {
+                        Die();
+                        return;
+                    }
+                    SetMovementPath(stuckEscapePath);
+                    return;
+                }
+                // Go back to previous tile
+                SetMovementPath(new List<WorldTile>() { nextTile, previousTile });
+                return;
+            }
+
+            // Move towards next tile
+            transform.position = Vector3.MoveTowards(transform.position, nextTile.WorldPosition, (1f / Tile.GetMovementCost(this)) * Simulation.MOVEMENT_SPEED_MODIFIER * Simulation.Singleton.TickHours);
 
             // Check on which tile the animal is at this moment exactly. Update tile references accordingly.
             WorldTile currentTile = World.Singleton.GetTile(transform.position);
@@ -75,11 +98,10 @@ public abstract class Animal : VisibleTileObject
                 Tile.AddObject(this);
             }
 
-            if (transform.position == CurrentPath[1].WorldPosition3) // Character arrived at tile center
+            if (transform.position == nextTile.WorldPosition3) // We arrived at tile center of next tile
             {
-                // Update position
-                transform.position = CurrentPath[1].WorldPosition;
-                if (CurrentPath.Count == 2) // Arrived at destination
+                // Arrived at destination OR next tile is not passable => stop moving
+                if (CurrentPath.Count == 2 || !CurrentPath[2].IsPassable(this)) 
                 {
                     CurrentPath = null;
                     IsMoving = false;
@@ -87,10 +109,12 @@ public abstract class Animal : VisibleTileObject
                 else
                 {
                     CurrentPath.RemoveAt(0);
+                    WorldTile newPreviousTile = CurrentPath[0];
+                    WorldTile newNextTile = CurrentPath[1];
 
                     // Sprite Orientation
-                    if (CurrentPath[1].Coordinates.x > CurrentPath[0].Coordinates.x) GetComponent<SpriteRenderer>().flipX = false;
-                    else if (CurrentPath[1].Coordinates.x < CurrentPath[0].Coordinates.x) GetComponent<SpriteRenderer>().flipX = true;
+                    if (newNextTile.Coordinates.x > newPreviousTile.Coordinates.x) GetComponent<SpriteRenderer>().flipX = false;
+                    else if (newNextTile.Coordinates.x < newPreviousTile.Coordinates.x) GetComponent<SpriteRenderer>().flipX = true;
                 }
             }
         }
@@ -98,13 +122,13 @@ public abstract class Animal : VisibleTileObject
     private void UpdateNeeds()
     {
         // Nutrition
-        ChangeAttribute(AttributeId.Nutrition, -(HungerRate * Simulation.Singleton.LastFrameHoursPassed), 0f, MaxNutrition); // Decrease Nutrition by HungerRate
-        if (Nutrition == 0) ChangeAttribute(AttributeId.Malnutrition, MALNUTRITION_RATE * Simulation.Singleton.LastFrameHoursPassed, 0f, 1000f); // Increase malnutrition
-        else ChangeAttribute(AttributeId.Malnutrition, -(MALNUTRITION_REGENERATION_RATE * Simulation.Singleton.LastFrameHoursPassed), 0f, 1000f); // Decrease malnutrition
+        ChangeAttribute(AttributeId.Nutrition, -(HungerRate * Simulation.Singleton.TickHours), 0f, MaxNutrition); // Decrease Nutrition by HungerRate
+        if (Nutrition == 0) ChangeAttribute(AttributeId.Malnutrition, MALNUTRITION_RATE * Simulation.Singleton.TickHours, 0f, 1000f); // Increase malnutrition
+        else ChangeAttribute(AttributeId.Malnutrition, -(MALNUTRITION_REGENERATION_RATE * Simulation.Singleton.TickHours), 0f, 1000f); // Decrease malnutrition
     }
     private void UpdateHealth()
     {
-        if (Malnutrition > 0) ChangeAttribute(AttributeId.Health, -(Malnutrition * Simulation.Singleton.LastFrameHoursPassed), 0f, MaxHealth); // Decrease health by malnutrition
+        if (Malnutrition > 0) ChangeAttribute(AttributeId.Health, -(Malnutrition * Simulation.Singleton.TickHours), 0f, MaxHealth); // Decrease health by malnutrition
     }
 
     private void UpdateActivity()
@@ -136,29 +160,15 @@ public abstract class Animal : VisibleTileObject
         }
 
         // If there are no important tasks to do, have a chance to wander around
-        if (Random.value < 0.001f)
+        if (Random.value < 0.003f)
         {
-            SetMovementPath(Pathfinder.GetRandomPath(this, Tile, 3));
+            SetMovementPath(Pathfinder.GetRandomPath(this, Tile, 8));
             CurrentActivity = "Wandering around aimlessly";
             return;
         }
 
         CurrentActivity = "Standing";
         return;
-    }
-
-    private void Eat(TileObject obj)
-    {
-        // Calculate how much % of the object gets consumed this frame
-        float chunkEaten = obj.GetEatingSpeed(this) * Simulation.Singleton.LastFrameHoursPassed;
-
-        // Reduces objects health by that amount
-        float lostHealth = obj.MaxHealth * chunkEaten;
-        obj.ChangeAttribute(AttributeId.Health, -lostHealth, 0f, obj.MaxHealth);
-
-        // Increase animals nutrition by that amount
-        float gainedNutrition = obj.NutrientValue * chunkEaten;
-        ChangeAttribute(AttributeId.Nutrition, gainedNutrition, 0f, MaxNutrition);
     }
 
     #endregion
@@ -188,17 +198,17 @@ public abstract class Animal : VisibleTileObject
     protected TileObject FindClosestFood(int maxRange)
     {
         int range = 0;
-        List<Vector2Int> currentRangePositions = new List<Vector2Int>() { Tile.Coordinates };
+        List<WorldTile> currentRangeTiles = new List<WorldTile>() { Tile };
         while (range < maxRange)
         {
-            foreach (Vector2Int pos in currentRangePositions)
+            foreach (WorldTile tile in currentRangeTiles)
             {
-                WorldTile tile = World.Singleton.GetTile(pos);
                 foreach (TileObject obj in tile.TileObjects)
                     if (obj.GetNutrientsForAnimal(this) > 0) return obj;
             }
             range++;
-            currentRangePositions = HelperFunctions.GetAllPositionsWithRange(Tile.Coordinates, range);
+            currentRangeTiles = Pathfinder.GetAllReachablePositionsWithRange(this, Tile, range);
+            if (currentRangeTiles == null) return null; // No tiles reachable with that range (we are in a closed space)
         }
         return null;
     }
@@ -212,6 +222,20 @@ public abstract class Animal : VisibleTileObject
         foreach (TileObject obj in Tile.TileObjects)
             if (obj.GetNutrientsForAnimal(this) > 0) return obj;
         return null;
+    }
+
+    protected void Eat(TileObject obj)
+    {
+        // Calculate how much % of the object gets consumed this frame
+        float chunkEaten = obj.GetEatingSpeed(this) * Simulation.Singleton.TickHours;
+
+        // Reduces objects health by that amount
+        float lostHealth = obj.MaxHealth * chunkEaten;
+        obj.ChangeAttribute(AttributeId.Health, -lostHealth, 0f, obj.MaxHealth);
+
+        // Increase animals nutrition by that amount
+        float gainedNutrition = obj.NutrientValue * chunkEaten;
+        ChangeAttribute(AttributeId.Nutrition, gainedNutrition, 0f, MaxNutrition);
     }
 
     #endregion

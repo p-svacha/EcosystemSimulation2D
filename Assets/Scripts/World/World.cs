@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class World : MonoBehaviour
 {
-    public Simulation Simulation;
-
     // Tiles are stored in a dictionary, where the key is their coordinates
     public Dictionary<Vector2Int, WorldTile> Tiles = new Dictionary<Vector2Int, WorldTile>();
 
@@ -33,14 +31,14 @@ public class World : MonoBehaviour
     {
         ClearGrid();
         TileUpdatePots.Clear();
-        for (int i = 0; i < Simulation.TILE_UPDATE_POTS; i++) TileUpdatePots.Add(i, new List<WorldTile>());
+        for (int i = 0; i < Simulation.NUM_TILE_UPDATE_POTS; i++) TileUpdatePots.Add(i, new List<WorldTile>());
 
         Tiles = tiles;
 
         foreach (WorldTile tile in Tiles.Values)
         {
             TileUpdatePots[CurrentTilePot++].Add(tile);
-            if (CurrentTilePot >= Simulation.TILE_UPDATE_POTS) CurrentTilePot = 0;
+            if (CurrentTilePot >= Simulation.NUM_TILE_UPDATE_POTS) CurrentTilePot = 0;
 
             // Surface Tiles
             TerrainLayer.DrawSurface(tile.Coordinates, tile.Surface, refreshAdjacentTransitions: false);
@@ -57,26 +55,6 @@ public class World : MonoBehaviour
 
     #endregion
 
-    #region Update
-
-    private Dictionary<int, SimulationTime> LastTileUpdateTime = new Dictionary<int, SimulationTime>();
-
-    private void Update()
-    {
-        if (Simulation.IsPaused) return;
-
-        float hoursSinceLastUpdate;
-        if (!LastTileUpdateTime.ContainsKey(CurrentTilePot)) hoursSinceLastUpdate = Simulation.LastFrameHoursPassed;
-        else hoursSinceLastUpdate = Simulation.CurrentTime.ExactTime - LastTileUpdateTime[CurrentTilePot].ExactTime;
-        LastTileUpdateTime[CurrentTilePot] = new SimulationTime(Simulation.CurrentTime);
-
-        foreach (WorldTile tile in TileUpdatePots[CurrentTilePot++]) tile.Update(hoursSinceLastUpdate);
-        if (CurrentTilePot >= Simulation.TILE_UPDATE_POTS) CurrentTilePot = 0;
-    }
-
-
-    #endregion
-
     #region Setters
 
     public void SetTerrain(WorldTile tile, Surface surface)
@@ -86,6 +64,9 @@ public class World : MonoBehaviour
         TerrainLayer.DrawSurface(tile.Coordinates, surface, refreshAdjacentTransitions: true);
     }
 
+    /// <summary>
+    /// Spawns a new tileobject in the world.
+    /// </summary>
     public void SpawnTileObject(WorldTile tile, TileObjectType tileObjectType)
     {
         if (tile.TileObjects.Any(x => x.Type == tileObjectType)) return;
@@ -93,7 +74,9 @@ public class World : MonoBehaviour
         newObject.transform.position = tile.WorldPosition3;
         tile.AddObject(newObject);
         newObject.SetTile(tile);
-        newObject.SetIsSimulated(true);
+
+        // Register to the simulation
+        Simulation.Singleton.RegisterObject(newObject);
     }
 
     public void RemoveObjects(WorldTile tile)
@@ -102,6 +85,9 @@ public class World : MonoBehaviour
         tile.TileObjects.Clear();
     }
 
+    /// <summary>
+    /// Destroys and removes a tileobject from the world.
+    /// </summary>
     public void RemoveObject(TileObject tileObject)
     {
         tileObject.Tile.RemoveObject(tileObject);
@@ -110,6 +96,9 @@ public class World : MonoBehaviour
         // Close UI windows showing this object
         UIHandler.Singleton.CloseSelectionWindow(tileObject);
         UIHandler.Singleton.CloseThingInfoWindow(tileObject);
+
+        // Unregister from simulation
+        Simulation.Singleton.UnregisterObject(tileObject);
     }
 
     #endregion

@@ -11,12 +11,13 @@ public static class Pathfinder
     /// <summary>
     /// Returns the optimal path for the given animal from a source tile to a target tile.
     /// <br/> Returned path contains both source and target tile.
+    /// <br/> Returns null if no path is found.
     /// </summary>
     public static List<WorldTile> GetPath(Animal animal, WorldTile from, WorldTile to)
     {
-        if (to == null) return new List<WorldTile>();
-        if (from == to) return new List<WorldTile>();
-        if (!to.IsPassable(animal)) return new List<WorldTile>();
+        if (to == null) return null;
+        if (from == to) return null;
+        if (!to.IsPassable(animal)) return null;
 
         List<WorldTile> openList = new List<WorldTile>() { from }; // tiles that are queued for searching
         List<WorldTile> closedList = new List<WorldTile>(); // tiles that have already been searched
@@ -63,6 +64,7 @@ public static class Pathfinder
     /// <summary>
     /// Returns a random path that is no longer than the given range.
     /// <br/> The path is not optimized towards a tile, it's just randomly wandering.
+    /// <br/> Returns null if no path is found.
     /// </summary>
     public static List<WorldTile> GetRandomPath(Animal animal, WorldTile source, int maxRange)
     {
@@ -89,6 +91,40 @@ public static class Pathfinder
         }
 
         return path;
+    }
+
+    /// <summary>
+    /// Returns all tiles can be reached by traversing an exact amount of tiles (range) from a source position.
+    /// <br/> Checks shortest path and tiles that can reached earlier than range are not included.
+    /// </summary>
+    public static List<WorldTile> GetAllReachablePositionsWithRange(Animal animal, WorldTile center, int range)
+    {
+        int currentRange = 0;
+        List<WorldTile> currentRangeTiles = new List<WorldTile>() { center };
+        List<WorldTile> allCheckedTiles = new List<WorldTile>() { center };
+        while (currentRange < range)
+        {
+            List<WorldTile> newRangeTiles = new List<WorldTile>();
+            foreach (WorldTile tile in currentRangeTiles)
+            {
+                foreach (WorldTile neighbour in tile.GetAdjacentTiles())
+                {
+                    if (allCheckedTiles.Contains(neighbour)) continue;
+                    if (!neighbour.IsPassable(animal)) continue;
+
+                    newRangeTiles.Add(neighbour);
+                    allCheckedTiles.Add(neighbour);
+                }
+            }
+
+            if (newRangeTiles.Count == 0) return null; // No tiles reachable with exactly this range.
+
+            currentRangeTiles = newRangeTiles;
+
+            currentRange++;
+        }
+
+        return currentRangeTiles;
     }
 
     #endregion

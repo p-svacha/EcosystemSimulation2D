@@ -11,13 +11,21 @@ public class Simulation : MonoBehaviour
     private const float RealSecondsPerHour = 4f; // Time at 1x speed
     private float SpeedModifier = 1f;
 
-    public float LastFrameHoursPassed { get; private set; }
+    /// <summary>
+    /// The exact amount of hours in the SimulationTime that have passed in this tick.
+    /// </summary>
+    public float TickHours { get; private set; }
     public const int SPEED0_MODIFIER = 0; // Pause
     public const int SPEED1_MODIFIER = 1;
     public const int SPEED2_MODIFIER = 2;
     public const int SPEED3_MODIFIER = 4;
 
     public bool IsPaused => SpeedModifier == SPEED0_MODIFIER;
+
+    // Update List
+    private List<TileObject> SimulatedObjects = new List<TileObject>(); // if performance needs to improve further, change this to an array
+    private List<TileObject> UnregisteredObjects = new List<TileObject>();
+    public int NumObjects => SimulatedObjects.Count;
 
     // Simulation Constants
     public const float MOVEMENT_SPEED_MODIFIER = 30f;
@@ -27,7 +35,9 @@ public class Simulation : MonoBehaviour
     /// <br/> During world generation tiles get assigned into one of n pots and each frame one pot of tiles gets updated.
     /// <br/> Objects are not affected.
     /// </summary>
-    public const int TILE_UPDATE_POTS = 16;
+    public const int NUM_TILE_UPDATE_POTS = 16;
+    private int CurrentTilePot = 0;
+    private Dictionary<int, SimulationTime> LastPotUpdateTimes = new Dictionary<int, SimulationTime>();
 
     /// <summary>
     /// The Thing the mouse is currently hovering over. This does not include WorldTiles.
@@ -51,6 +61,7 @@ public class Simulation : MonoBehaviour
         CameraHandler.Singleton.FocusPosition(new Vector2(World.CenterWorldX, World.CenterWorldY));
 
         CurrentTime = new SimulationTime(year: 1, month: 1, day: 1, hour: 0);
+        for (int i = 0; i < NUM_TILE_UPDATE_POTS; i++) LastPotUpdateTimes.Add(i, CurrentTime.Copy());
         SetSpeed(SPEED1_MODIFIER);
     }
 
@@ -62,12 +73,14 @@ public class Simulation : MonoBehaviour
     {
         UpdateTime();
         UpdateHoveredObjects();
+
+        UpdateSimulation();
     }
 
     private void UpdateTime()
     {
-        LastFrameHoursPassed = (Time.deltaTime / RealSecondsPerHour) * SpeedModifier;
-        CurrentTime.IncreaseTime(LastFrameHoursPassed);
+        TickHours = (Time.deltaTime / RealSecondsPerHour) * SpeedModifier;
+        CurrentTime.IncreaseTime(TickHours);
         UI_TimeControls.Singleton.SetTimeDisplay(CurrentTime);
     }
 
@@ -89,6 +102,58 @@ public class Simulation : MonoBehaviour
 
         // Update currently hovered Battle Map Tile
         HoveredWorldTile = World.GetTile(mouseWorldPosition);
+    }
+
+    /// <summary>
+    /// This is the master update method that manages all other update calls. All tiles, surfaces and object updates are called from this class and nowhere else.
+    /// <br/> Centralized update is important for good optimization
+    /// </summary>
+    private void UpdateSimulation()
+    {
+        if (IsPaused) return;
+
+        // Surfaces
+        UpdateSurfaces();
+
+        // Objects
+        foreach (TileObject obj in SimulatedObjects) obj.Tick();
+
+        // Remove unregistered objects
+        foreach(TileObject obj in UnregisteredObjects) SimulatedObjects.Remove(obj);
+        UnregisteredObjects.Clear();
+    }
+
+    /// <summary>
+    /// Updates surfaces for this tick. For performance reasons not all tiles are updated each tick.
+    /// <br/> There are NUM_TILE_UPDATE_POTS pots with tiles and only one pot gets updated each tick.
+    /// </summary>
+    private void UpdateSurfaces()
+    {
+        float hoursSinceLastUpdate = CurrentTime.ExactTime - LastPotUpdateTimes[CurrentTilePot].ExactTime;
+        LastPotUpdateTimes[CurrentTilePot] = CurrentTime.Copy();
+
+        foreach (WorldTile tile in World.TileUpdatePots[CurrentTilePot++]) tile.Tick(hoursSinceLastUpdate);
+        if (CurrentTilePot >= NUM_TILE_UPDATE_POTS) CurrentTilePot = 0;
+    }
+
+    #endregion
+
+    #region Object Registration
+
+    /// <summary>
+    /// Registers an object to be part of the simulation.
+    /// </summary>
+    public void RegisterObject(TileObject obj)
+    {
+        SimulatedObjects.Add(obj);
+    }
+
+    /// <summary>
+    /// Unregisters an object from the simulation.
+    /// </summary>
+    public void UnregisterObject(TileObject obj)
+    {
+        UnregisteredObjects.Add(obj);
     }
 
     #endregion

@@ -39,16 +39,9 @@ public class SimulationTime
     }
 
     /// <summary>
-    /// Create a static timestamp from another time.
+    /// Returns a copy / timestamp from this time.
     /// </summary>
-    public SimulationTime(SimulationTime time)
-    {
-        Year = time.Year;
-        Month = time.Month;
-        Day = time.Day;
-        Hour = time.Hour;
-        HourSplit = time.HourSplit;
-    }
+    public SimulationTime Copy() => new SimulationTime(Year, Month, Day, Hour, HourSplit);
 
     public void IncreaseTime(float hourSplitInterval)
     {

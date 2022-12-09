@@ -1,13 +1,10 @@
 SINCE LAST COMMIT
 -------------------
-- Range attribute
-- Animal activity
-- vision, eating mechanic
+- performance optimizations
+- animal behaviour improvement
 
 UP NEXT
 -------------
-- FIndClosestFood doesn't check if food is reachable
-- increase chance of random wandering
 - Animals should be able to reproduce
 - Add RangeAttribute - a static attribute that has a min value, current value and max value and can return ratio
 - Change Health and Nutrition to RangeAttribute
@@ -20,6 +17,9 @@ UP NEXT
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
+- add StatusDisplays to selectionwindow
+- add tooltips to statusdisplays in selectionwindow
+- add tooltips for buttons in selectionwindow
 - add particle effect when eating
 - add path visualization to show where animals are walking to atm
 - status effects on animals
@@ -30,9 +30,15 @@ UP NEXT
 - add speed4 button with modifier 10
 - add statusdisplay displays in SelectionWindow for Animals
 - control simulation speed with space 0/1/2/3/4 keys
+- editor: rightclick removes active tool
 - add scrollbar to thinginfo window with maxlength
 - split thingId into Animal, Plant etc. and make editorwindow dynamically sort into categories
 - add shoreeggs, eggs that spawn in water on shore
 - add wofox - woolfox that eats shoreeggs but is afraid of water, they produce wool
 - add carrier animal that brings shoreggs to wofoxes and eat wool
 - add herbivour bears that eat everything
+- add drowning when an animal that cant swim is in water
+
+PERFORMANCE INCREASES
+------------------------
+- not everything needs to update every tick (death, status displays)

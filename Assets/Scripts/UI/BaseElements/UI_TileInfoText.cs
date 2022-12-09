@@ -34,7 +34,7 @@ public class UI_TileInfoText : MonoBehaviour
         // Add FPS
         deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
         float fps = 1.0f / deltaTime;
-        text += "\n" + Mathf.Ceil(fps).ToString() + " FPS";
+        text += "\n" + Mathf.Ceil(fps).ToString() + " FPS (" + Simulation.Singleton.NumObjects + " Objects)";
 
 
         TileInfoText.text = text;
