@@ -1,18 +1,19 @@
 SINCE LAST COMMIT
 -------------------
-- performance optimizations
-- animal behaviour improvement
+- age
 
 UP NEXT
 -------------
 - Animals should be able to reproduce
-- Add RangeAttribute - a static attribute that has a min value, current value and max value and can return ratio
-- Change Health and Nutrition to RangeAttribute
+- add life expectancy death of old age
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
 - rename Animal to AnimalBase
 - add plantsBase class between VisibleTileObject and TallGrass
+- plants should spawn with 1 health
+- plants should have slow health regeneration
+- plants scale size with health
 - add berries
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
@@ -25,7 +26,7 @@ UP NEXT
 - status effects on animals
 - draw ordering layer for tileobjects
 - thinginfo window: display floats with only one decimal
-- create TileObjectClass that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
+- create TilemapTileObject class that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
 	- update tileobjectfactory
 - add speed4 button with modifier 10
 - add statusdisplay displays in SelectionWindow for Animals

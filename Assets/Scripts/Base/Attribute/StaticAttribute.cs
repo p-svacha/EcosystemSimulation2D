@@ -47,6 +47,11 @@ public class StaticAttribute<T> : Attribute
         throw new System.Exception("GetValue is not supported for StaticAttributes with type " + typeof(T).ToString() + ".");
     }
 
+    public T GetStaticValue()
+    {
+        return Value;
+    }
+
     public override string GetValueString()
     {
         return Value.ToString();

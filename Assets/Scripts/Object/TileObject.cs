@@ -36,7 +36,8 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     public virtual void Init()
     {
-        // Init health attributes
+        // Init attributes
+        _Attributes.Add(AttributeId.Age, new StaticAttribute<SimulationTime>(this, AttributeId.Age, "General", "Age", "How long an object has been existing in the world.", new SimulationTime()));
         _Attributes.Add(AttributeId.Health, new RangeAttribute(this, AttributeId.Health, "Health", "Health", "Current and maximum amount of HP an object has.", MAX_HEALTH, MAX_HEALTH));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
@@ -53,6 +54,8 @@ public abstract class TileObject : MonoBehaviour, IThing
     /// </summary>
     public virtual void Tick()
     {
+        Age.IncreaseTime(Simulation.Singleton.TickHours);
+
         UpdateStatusDisplays();
         UpdateDeath();
     }
@@ -121,6 +124,7 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     #region Getters
 
+    public SimulationTime Age => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.Age]).GetStaticValue();
     public float MaxHealth => ((RangeAttribute)Attributes[AttributeId.Health]).MaxValue;
     public float Health => Attributes[AttributeId.Health].GetValue();
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;

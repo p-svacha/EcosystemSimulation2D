@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// A RangeAttribute is a static float attribute within a minimum value of 0 and a maximum value.
+/// <br/> Only use this when the max value is absolutely constant and will NEVER change.
 /// </summary>
 public class RangeAttribute : StaticAttribute<float>
 {

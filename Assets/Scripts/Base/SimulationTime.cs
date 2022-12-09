@@ -29,6 +29,11 @@ public class SimulationTime
     private const int DaysPerMonth = 10;
     private const int HoursPerDay = 24;
 
+    /// <summary>
+    /// SimulationTime initialized at 0.
+    /// </summary>
+    public SimulationTime() { }
+
     public SimulationTime(int year, int month, int day, int hour, float hourSplit = 0f)
     {
         Year = year;
@@ -86,6 +91,16 @@ public class SimulationTime
     /// Exact amount of hours since start of the game, including decimal values.
     /// </summary>
     public float ExactTime { get { return (Year - 1) * MonthsPerYear * DaysPerMonth * HoursPerDay + (Month - 1) * DaysPerMonth * HoursPerDay + (Day - 1) * HoursPerDay + (Hour - 1) + HourSplit; } }
+
+    public override string ToString()
+    {
+        string text = "";
+        if (Year > 0) text += Year + "Years ";
+        if (Month > 0) text += Month + " Months ";
+        if (Day > 0) text += Day + " Days ";
+        text += Hour + HourSplit.ToString("#.#") + " Hours";
+        return text;
+    }
 
 
 }

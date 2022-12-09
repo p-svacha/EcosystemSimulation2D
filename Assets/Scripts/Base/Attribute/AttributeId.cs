@@ -33,6 +33,9 @@ public enum AttributeId
     MovementCost,
 
 
+    /// <summary> How long an object has been existing in the world. </summary>
+    Age,
+
     /// <summary> Current and maximum amount of HP an object has. </summary>
     Health,
 
