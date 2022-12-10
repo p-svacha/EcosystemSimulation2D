@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using UnityEngine;
 
 public abstract class Animal : VisibleTileObject
@@ -64,20 +65,45 @@ public abstract class Animal : VisibleTileObject
 
         // Status Displays
         StatusDisplays.Add(new SD_Malnutrition(this));
+        StatusDisplays.Add(new SD_Pregnancy(this));
     }
 
     #region Update
 
+    static readonly ProfilerMarker pm_animalAll = new ProfilerMarker("Animal FULL");
+    static readonly ProfilerMarker pm_animalNeeds = new ProfilerMarker("Animal Needs");
+    static readonly ProfilerMarker pm_animalHealth = new ProfilerMarker("Animal Health");
+    static readonly ProfilerMarker pm_animalReproduction = new ProfilerMarker("Animal Reproduction");
+    static readonly ProfilerMarker pm_animalActivity = new ProfilerMarker("Animal Activity");
+    static readonly ProfilerMarker pm_animalMovement = new ProfilerMarker("Animal Movement");
+
     public override void Tick()
     {
+        pm_animalAll.Begin();
         base.Tick();
 
+        pm_animalNeeds.Begin();
         UpdateNeeds();
-        UpdateHealth();
-        UpdateReproduction();
+        pm_animalNeeds.End();
 
+        pm_animalHealth.Begin();
+        UpdateHealth();
+        pm_animalHealth.End();
+
+        pm_animalReproduction.Begin();
+        UpdateReproduction();
+        pm_animalReproduction.End();
+
+
+        pm_animalActivity.Begin();
         UpdateActivity();
+        pm_animalActivity.End();
+
+        pm_animalMovement.Begin();
         UpdateMovement();
+        pm_animalMovement.End();
+
+        pm_animalAll.End();
     }
 
     private void UpdateReproduction()
@@ -126,7 +152,7 @@ public abstract class Animal : VisibleTileObject
         }
 
         // Actively for food when hungry
-        if (NutritionRatio < 0.25f)
+        if (NutritionRatio < 0.4f)
         {
             TileObject closestFood = FindClosestFood((int)VisionRange);
             if (closestFood != null)
@@ -278,7 +304,7 @@ public abstract class Animal : VisibleTileObject
     protected void GiveBirth()
     {
         int numOffspring = Random.Range(MinNumOffspring, MaxNumOffspring + 1);
-        for(int i = 0; i < numOffspring + 1; i++) World.Singleton.SpawnTileObject(Tile, Type);
+        for(int i = 0; i < numOffspring; i++) World.Singleton.SpawnTileObject(Tile, Type);
     }
 
     #endregion

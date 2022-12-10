@@ -22,9 +22,12 @@ public class ResourceManager : MonoBehaviour
 
     private Dictionary<TileObjectType, Sprite> TileObjectSprites;
 
-    [Header("Status Display Sprites")]
+    [Header("Status Display")]
+    public StatusDisplayObject StatusDisplayWorldPrefab;
+    public UI_StatusDisplay StatusDisplayUIPrefab;
     public Sprite SD_Malnutrition;
     public Sprite SD_Dehydration;
+    public Sprite SD_Pregnancy;
 
     [Header("Materials")]
     public Material DefaultSpriteRenderMaterial;
@@ -44,9 +47,7 @@ public class ResourceManager : MonoBehaviour
     [Header("Selection Window Content")]
     public UI_SWC_TileObjectBase SWC_TileObjectBase;
     public UI_SWC_AnimalBase SWC_AnimalBase;
-
-    [Header("Misc Prefabs")]
-    public StatusDisplayObject StatusDisplayPrefab;
+    
 
     void Awake()
     {

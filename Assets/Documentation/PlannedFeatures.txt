@@ -1,11 +1,16 @@
 SINCE LAST COMMIT
 -------------------
-- pregnancy, offspring
+- status display in selection window, added pregnancy display
 
 UP NEXT
 -------------
-- pregnancy statusdisplay
-- pregnancy debuffs to hungerrate and movementspeed
+- decide on and add colorscheme for statusdisplays
+- add new dynamicattributemodifier "overwrite" with a "priority" value
+	- overwrite modifiers overwrite the base value and all other modifiers. if there are multiple, priority decides which to take
+- hediff framework
+	- hediffs have a name and contain dynamicattributemodifiers of the object they are attached to
+- pregnancy hediff that debuffs hungerrate and movementspeed
+
 - add life expectancy death of old age
 - Animals should drink water and have Thirst
 - Add mountains
@@ -19,14 +24,16 @@ UP NEXT
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
-- add StatusDisplays to selectionwindow
 - add tooltips to statusdisplays in selectionwindow
 - add tooltips for buttons in selectionwindow
 - add particle effect when eating
 - add path visualization to show where animals are walking to atm
 - status effects on animals
 - draw ordering layer for tileobjects
-- thinginfo window: display floats with only one decimal
+- thinginfo window:
+	- display floats with only one decimal
+	- max height
+	- make categories collapsable
 - create TilemapTileObject class that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
 	- update tileobjectfactory
 - add speed4 button with modifier 10
@@ -52,6 +59,7 @@ UP NEXT
 	- TileFactory would call that function
 	- additionally params can added to TileFactory.CreateObject that get passed on to OnSpawn, necessary to know where the spawning is from
 		- newborn and event spawn have different effects for example
+- fix display of HourSplit in SimulationTime.ToString so it always just shows ".#"
 
 IDEAS FOR PERFORMANCE INCREASES
 ------------------------

@@ -29,7 +29,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     // General
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
-    protected List<StatusDisplay> StatusDisplays = new List<StatusDisplay>();
+    public List<StatusDisplay> StatusDisplays { get; private set; }
     public WorldTile Tile { get; private set; }
 
     #region Initialize
@@ -43,6 +43,9 @@ public abstract class TileObject : MonoBehaviour, IThing
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
         _Attributes.Add(AttributeId.NutrientValue, new StaticAttribute<float>(this, AttributeId.NutrientValue, "Nutrition", "Nutrients", "How much nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE));
         _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(this, AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
+
+        // Status displays
+        StatusDisplays = new List<StatusDisplay>();
     }
 
     #endregion

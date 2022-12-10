@@ -12,6 +12,7 @@ public abstract class StatusDisplay
     public abstract bool DoShowDisplayValue { get; }
 
     public StatusDisplayObject WorldDisplayObject { get; private set; }
+    public UI_StatusDisplay SelectionWindowObject { get; private set; }
 
     /// <summary>
     /// Requirement check if the status display should be displayed.
@@ -24,8 +25,17 @@ public abstract class StatusDisplay
     {
         if (WorldDisplayObject != null) return WorldDisplayObject;
 
-        WorldDisplayObject = GameObject.Instantiate(ResourceManager.Singleton.StatusDisplayPrefab, parent);
+        WorldDisplayObject = GameObject.Instantiate(ResourceManager.Singleton.StatusDisplayWorldPrefab, parent);
         WorldDisplayObject.Init(this, index, numElements);
         return WorldDisplayObject;
+    }
+
+    public UI_StatusDisplay CreateUIDisplay(Transform parent)
+    {
+        if (WorldDisplayObject != null) return SelectionWindowObject;
+
+        SelectionWindowObject = GameObject.Instantiate(ResourceManager.Singleton.StatusDisplayUIPrefab, parent);
+        SelectionWindowObject.Init(this);
+        return SelectionWindowObject;
     }
 }
