@@ -29,7 +29,9 @@ public abstract class TileObject : MonoBehaviour, IThing
     // General
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
-    public List<StatusDisplay> StatusDisplays { get; private set; }
+    public List<StatusEffect> StatusEffects { get; private set; }
+    public List<StatusDisplay> StatusEffectDisplays { get; private set; }
+    public List<ConditionalStatusDisplay> ConditionalStatusDisplays { get; private set; }
     public WorldTile Tile { get; private set; }
 
     #region Initialize
@@ -44,8 +46,12 @@ public abstract class TileObject : MonoBehaviour, IThing
         _Attributes.Add(AttributeId.NutrientValue, new StaticAttribute<float>(this, AttributeId.NutrientValue, "Nutrition", "Nutrients", "How much nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE));
         _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(this, AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
 
+        // Status effects
+        StatusEffects = new List<StatusEffect>();
+
         // Status displays
-        StatusDisplays = new List<StatusDisplay>();
+        StatusEffectDisplays = new List<StatusDisplay>();
+        ConditionalStatusDisplays = new List<ConditionalStatusDisplay>();
     }
 
     #endregion
@@ -65,21 +71,29 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     private void UpdateStatusDisplays()
     {
-        if (StatusDisplays.Count == 0) return;
-        int numActiveStatusDisplays = StatusDisplays.Where(x => x.ShouldShow()).Count();
+        // Conditional
+        int numActiveStatusDisplays = ConditionalStatusDisplays.Where(x => x.ShouldShow()).Count();
         int index = 0;
-        foreach (StatusDisplay sd in StatusDisplays)
+        foreach (ConditionalStatusDisplay csd in ConditionalStatusDisplays)
         {
-            if (sd.ShouldShow())
+            if (csd.ShouldShow())
             {
-                if (sd.WorldDisplayObject != null) sd.WorldDisplayObject.UpdateDisplay(index, numActiveStatusDisplays);
-                else sd.CreateWorldDisplay(transform, index, numActiveStatusDisplays);
+                if (csd.WorldDisplayObject != null) csd.WorldDisplayObject.UpdateDisplay(index, numActiveStatusDisplays);
+                else csd.CreateWorldDisplay(transform, index, numActiveStatusDisplays);
                 index++;
             }
             else
             {
-                if (sd.WorldDisplayObject != null) Destroy(sd.WorldDisplayObject.gameObject);
+                if (csd.WorldDisplayObject != null) Destroy(csd.WorldDisplayObject.gameObject);
             }
+        }
+
+        // from Status Effect
+        foreach(StatusDisplay sd in StatusEffectDisplays)
+        {
+            if (sd.WorldDisplayObject != null) sd.WorldDisplayObject.UpdateDisplay(index, numActiveStatusDisplays);
+            else sd.CreateWorldDisplay(transform, index, numActiveStatusDisplays);
+            index++;
         }
     }
 
@@ -122,10 +136,26 @@ public abstract class TileObject : MonoBehaviour, IThing
         Tile = tile;
     }
 
+    public void AddStatusEffect(StatusEffect statusEffect)
+    {
+        statusEffect.Init(this);
+        StatusEffects.Add(statusEffect);
+        StatusEffectDisplays.Add(statusEffect.Display);
+    }
+
+    public void RemoveStatusEffect(StatusEffect statusEffect)
+    {
+        statusEffect.End();
+        StatusEffects.Remove(statusEffect);
+        StatusEffectDisplays.Remove(statusEffect.Display);
+    }
+
     #endregion
 
 
     #region Getters
+
+    public bool HasStatusEffect(StatusEffectId id) => StatusEffects.Any(x => x.Id == id);
 
     public SimulationTime Age => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.Age]).GetStaticValue();
     public float MaxHealth => ((RangeAttribute)Attributes[AttributeId.Health]).MaxValue;

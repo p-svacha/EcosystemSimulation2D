@@ -19,21 +19,18 @@ public class Att_PregnancyChance : DynamicAttribute
         Animal = animal;
     }
 
-    public override List<DynamicAttributeModifier> GetValueModifiers()
+    public override List<AttributeModifier> GetDynamicValueModifiers()
     {
         if(Animal.Age < Animal.PregnancyMinAge)
-            return new List<DynamicAttributeModifier>() { new DynamicAttributeModifier("Below minimum pregnancy age", 0, AttributeModifierType.BaseValue) };
+            return new List<AttributeModifier>() { new AttributeModifier("Below minimum pregnancy age", 0, AttributeModifierType.BaseValue) };
 
         if (Animal.Age > Animal.PregnancyMaxAge)
-            return new List<DynamicAttributeModifier>() { new DynamicAttributeModifier("Above maximum pregnancy age", 0, AttributeModifierType.BaseValue) };
+            return new List<AttributeModifier>() { new AttributeModifier("Above maximum pregnancy age", 0, AttributeModifierType.BaseValue) };
 
-        if (Animal.IsPregnant)
-            return new List<DynamicAttributeModifier>() { new DynamicAttributeModifier("Already pregnant", 0, AttributeModifierType.BaseValue) };
-
-        List<DynamicAttributeModifier> mods = new List<DynamicAttributeModifier>();
-        mods.Add(new DynamicAttributeModifier("Base Chance", Animal.Attributes[AttributeId.BasePregnancyChance].GetValue(), AttributeModifierType.BaseValue));
+        List<AttributeModifier> mods = new List<AttributeModifier>();
+        mods.Add(new AttributeModifier("Base Chance", Animal.Attributes[AttributeId.PregnancyChanceBase].GetValue(), AttributeModifierType.BaseValue));
         if(Animal.HealthRatio < 1f)
-            mods.Add(new DynamicAttributeModifier("Injured", Animal.HealthRatio, AttributeModifierType.Multiply));
+            mods.Add(new AttributeModifier("Injured", Animal.HealthRatio, AttributeModifierType.Multiply));
 
         return mods;
     }

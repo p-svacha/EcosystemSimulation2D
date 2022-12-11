@@ -19,12 +19,12 @@ public class Att_MovementCost : DynamicAttribute
         Tile = tile;
     }
 
-    public override List<DynamicAttributeModifier> GetValueModifiers()
+    public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        List<DynamicAttributeModifier> mods = new List<DynamicAttributeModifier>();
+        List<AttributeModifier> mods = new List<AttributeModifier>();
 
-        mods.Add(new DynamicAttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue));
-        mods.Add(new DynamicAttributeModifier(Tile.Surface.Name + " Surface", Tile.Surface.MovementCost, AttributeModifierType.Multiply));
+        mods.Add(new AttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue));
+        mods.Add(new AttributeModifier(Tile.Surface.Name + " Surface", Tile.Surface.MovementCost, AttributeModifierType.Multiply));
 
         return mods;
     }

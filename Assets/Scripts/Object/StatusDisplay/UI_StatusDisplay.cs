@@ -17,11 +17,11 @@ public class UI_StatusDisplay : MonoBehaviour
         StatusDisplay = statusDisplay;
         Icon.sprite = statusDisplay.DisplaySprite;
         if (!statusDisplay.DoShowDisplayValue) Text.gameObject.SetActive(false);
-        else Text.text = statusDisplay.GetDisplayValue();
+        else Text.text = statusDisplay.DisplayValue;
     }
 
     public void UpdateDisplay()
     {
-        if (StatusDisplay.DoShowDisplayValue) Text.text = StatusDisplay.GetDisplayValue();
+        if (StatusDisplay.DoShowDisplayValue) Text.text = StatusDisplay.DisplayValue;
     }
 }

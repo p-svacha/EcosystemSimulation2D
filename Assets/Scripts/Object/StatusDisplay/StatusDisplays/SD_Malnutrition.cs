@@ -10,13 +10,6 @@ public class SD_Malnutrition : StatusDisplay
     public override bool DoShowDisplayValue => true;
 
     // Individual
-    private Animal Animal;
-
-    public SD_Malnutrition(Animal animal)
-    {
-        Animal = animal;
-    }
-
-    public override string GetDisplayValue() => Animal.Malnutrition.ToString("F0");
-    public override bool ShouldShow() => Animal.Malnutrition > 0;
+    public SD_Malnutrition(TileObject obj) : base(obj) { }
+    public override string DisplayValue => TileObject.Attributes[AttributeId.Malnutrition].GetValue().ToString("F0");
 }

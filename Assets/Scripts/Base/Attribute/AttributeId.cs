@@ -42,8 +42,11 @@ public enum AttributeId
 
 
 
-    /// <summary> Speed at which an animal moves on land. </summary>
-    MovementSpeed,
+    /// <summary> Base speed at which an animal moves on land. </summary>
+    LandMovementSpeedBase,
+
+    /// <summary> Actual speed at which an animal moves on land. </summary>
+    LandMovementSpeed,
 
     /// <summary> Speed at which an animal moves on water. </summary>
     WaterMovementSpeed,
@@ -55,7 +58,10 @@ public enum AttributeId
     /// <summary> Current and maximum amount of nutrition an animal has. </summary>
     Nutrition,
 
-    /// <summary> Amount at which the nutrition of an animal drops per hour. </summary>
+    /// <summary> Base amount at which the nutrition of an animal drops per hour. </summary>
+    HungerRateBase,
+
+    /// <summary> Actual amount at which the nutrition of an animal drops per hour. </summary>
     HungerRate,
 
     /// <summary> How advanced the malnutrition of an animal is. The higher it is, the more health it loses. </summary>
@@ -83,7 +89,7 @@ public enum AttributeId
     PregnancyMaxAge,
 
     /// <summary> Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health. </summary>
-    BasePregnancyChance,
+    PregnancyChanceBase,
 
     /// <summary> Actual chance per hour that an animal gets pregnant. </summary>
     PregnancyChance,

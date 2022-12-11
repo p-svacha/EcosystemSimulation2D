@@ -32,19 +32,22 @@ public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
 
     private void UpdateStatusDisplays()
     {
-        if (Animal.StatusDisplays.Count == 0) return;
+        // Collect all displays
+        List<StatusDisplay> statusDisplaysToShow = new List<StatusDisplay>();
 
-        foreach (StatusDisplay sd in Animal.StatusDisplays)
-        {
-            if (sd.ShouldShow())
-            {
-                if (sd.SelectionWindowObject != null) sd.SelectionWindowObject.UpdateDisplay();
-                else sd.CreateUIDisplay(StatusDisplayContainer.transform);
-            }
-            else
-            {
-                if (sd.SelectionWindowObject != null) Destroy(sd.SelectionWindowObject.gameObject);
-            }
-        }
+        // from StatusEffect
+        foreach (StatusEffect statusEffect in Animal.StatusEffects)
+            statusDisplaysToShow.Add(statusEffect.Display);
+
+        // Conditional
+        foreach (ConditionalStatusDisplay csd in Animal.ConditionalStatusDisplays)
+            if (csd.ShouldShow())
+                statusDisplaysToShow.Add(csd);
+
+        // Display them
+        HelperFunctions.DestroyAllChildredImmediately(StatusDisplayContainer);
+
+        foreach (StatusDisplay display in statusDisplaysToShow)
+            display.CreateUIDisplay(StatusDisplayContainer.transform);
     }
 }

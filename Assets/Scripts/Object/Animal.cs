@@ -9,15 +9,15 @@ public abstract class Animal : VisibleTileObject
     public override UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_AnimalBase;
 
     // Required Attributes
-    protected abstract float MOVEMENT_SPEED { get; }
+    protected abstract float MOVEMENT_SPEED_BASE { get; }
     protected abstract float WATER_MOVEMENT_SPEED { get; }
     protected abstract float MAX_NUTRITION { get; }
-    protected abstract float HUNGER_RATE { get; }
+    protected abstract float HUNGER_RATE_BASE { get; }
     protected abstract List<NutrientType> DIET { get; }
     protected abstract float VISION_RANGE { get; }
     protected abstract SimulationTime PREGNANCY_MIN_AGE { get; }
     protected abstract SimulationTime PREGNANCY_MAX_AGE { get; }
-    protected abstract float BASE_PREGNANCY_CHANCE { get; }
+    protected abstract float PREGNANCY_CHANCE_BASE { get; }
     protected abstract SimulationTime PREGNANCY_DURATION { get; }
     protected abstract int MIN_NUM_OFFSPRING { get; }
     protected abstract int MAX_NUM_OFFSPRING { get; }
@@ -26,7 +26,7 @@ public abstract class Animal : VisibleTileObject
     protected virtual float EATING_SPEED => 1f;
 
     // Constant Values (could be replaced by attributes if necessary)
-    private float MALNUTRITION_RATE => HUNGER_RATE; // How much malnutrition increases per hour when out of food. 1 Malnutrition = -1 Health per hour
+    private float MALNUTRITION_RATE => HUNGER_RATE_BASE; // How much malnutrition increases per hour when out of food. 1 Malnutrition = -1 Health per hour
     private float MALNUTRITION_REGENERATION_RATE => 1f; // How much malnutrition decreases per hour when not out of food. 1 Malnutrition = -1 Health per hour
     private float PREGNANCY_HUNGER_RATE_MODIFER => 1.5f;
     private float PREGNANCY_MOVEMENT_SPEED_MODIFIER => 0.75f;
@@ -40,16 +40,18 @@ public abstract class Animal : VisibleTileObject
     {
         base.Init();
 
-        if (MOVEMENT_SPEED >= 1f) Debug.LogWarning("Movement Speed of an animal is not allowed to be greater than 1 because it breaks Pathfinding.");
+        if (MOVEMENT_SPEED_BASE >= 1f) Debug.LogWarning("Movement Speed of an animal is not allowed to be greater than 1 because it breaks Pathfinding.");
 
         // Attributes
-        _Attributes.Add(AttributeId.MovementSpeed, new StaticAttribute<float>(this, AttributeId.MovementSpeed, "General", "Movement Speed", "How fast this animal is moving.", MOVEMENT_SPEED));
-        _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "General", "Water Movement Speed", "How fast this animal is moving on water.", WATER_MOVEMENT_SPEED));
+        _Attributes.Add(AttributeId.LandMovementSpeedBase, new StaticAttribute<float>(this, AttributeId.LandMovementSpeedBase, "General", "Base Movement Speed", "Base speed at which an animal moves on land.", MOVEMENT_SPEED_BASE));
+        _Attributes.Add(AttributeId.LandMovementSpeed, new Att_MovementSpeed(this));
+        _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "General", "Water Movement Speed", "Base speed at which an animal moves on water.", WATER_MOVEMENT_SPEED));
         _Attributes.Add(AttributeId.VisionRange, new StaticAttribute<float>(this, AttributeId.VisionRange, "General", "Vision Range", "How many tiles an animal can see in all directions and detect specific objects.", VISION_RANGE));
 
         _Attributes.Add(AttributeId.Diet, new Att_Diet(this, DIET));
         _Attributes.Add(AttributeId.Nutrition, new RangeAttribute(this, AttributeId.Nutrition, "Needs", "Nutrition", "Current and maximum amount of nutrition an animal has.", MAX_NUTRITION, MAX_NUTRITION));
-        _Attributes.Add(AttributeId.HungerRate, new StaticAttribute<float>(this, AttributeId.HungerRate, "Needs", "Hunger Rate", "Amount at which the nutrition of an animal drops per hour.", HUNGER_RATE));
+        _Attributes.Add(AttributeId.HungerRateBase, new StaticAttribute<float>(this, AttributeId.HungerRateBase, "Needs", "Base Hunger Rate", "Base amount at which the nutrition of an animal drops per hour.", HUNGER_RATE_BASE));
+        _Attributes.Add(AttributeId.HungerRate, new Att_HungerRate(this));
         _Attributes.Add(AttributeId.Malnutrition, new StaticAttribute<float>(this, AttributeId.Malnutrition, "Needs", "Malnutrition", "How advanced the malnutrition of an animal is. The higher it is, the more health it loses.", 0f));
         _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(this, AttributeId.EatingSpeed, "Needs", "Eating Speed", "How fast an animal is at eating food generally.", EATING_SPEED));
 
@@ -57,22 +59,23 @@ public abstract class Animal : VisibleTileObject
         _Attributes.Add(AttributeId.PregnancyMaxAge, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
         _Attributes.Add(AttributeId.PregnancyDuration, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
         _Attributes.Add(AttributeId.PregnancyProgress, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
-        _Attributes.Add(AttributeId.BasePregnancyChance, new StaticAttribute<float>(this, AttributeId.BasePregnancyChance, "Reproduction", "Base Pregnancy Chance", "Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health.", BASE_PREGNANCY_CHANCE));
+        _Attributes.Add(AttributeId.PregnancyChanceBase, new StaticAttribute<float>(this, AttributeId.PregnancyChanceBase, "Reproduction", "Base Pregnancy Chance", "Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health.", PREGNANCY_CHANCE_BASE));
         _Attributes.Add(AttributeId.PregnancyChance, new Att_PregnancyChance(this));
         _Attributes.Add(AttributeId.MinNumOffspring, new StaticAttribute<int>(this, AttributeId.MinNumOffspring, "Reproduction", "Minimum amount of offspring", "Minimum amount of children an animal will produce when giving birth.", MIN_NUM_OFFSPRING));
         _Attributes.Add(AttributeId.MaxNumOffspring, new StaticAttribute<int>(this, AttributeId.MaxNumOffspring, "Reproduction", "Maximum amount of offspring", "Minimum amount of children an animal will produce when giving birth.", MAX_NUM_OFFSPRING));
 
 
         // Status Displays
-        StatusDisplays.Add(new SD_Malnutrition(this));
-        StatusDisplays.Add(new SD_Pregnancy(this));
+        ConditionalStatusDisplays.Add(new SD_LowHealth(this));
     }
 
     #region Update
 
+    // Performance Profilers
     static readonly ProfilerMarker pm_animalAll = new ProfilerMarker("Animal FULL");
     static readonly ProfilerMarker pm_animalNeeds = new ProfilerMarker("Animal Needs");
     static readonly ProfilerMarker pm_animalHealth = new ProfilerMarker("Animal Health");
+    static readonly ProfilerMarker pm_animalStatusEffects = new ProfilerMarker("Animal Status Effects");
     static readonly ProfilerMarker pm_animalReproduction = new ProfilerMarker("Animal Reproduction");
     static readonly ProfilerMarker pm_animalActivity = new ProfilerMarker("Animal Activity");
     static readonly ProfilerMarker pm_animalMovement = new ProfilerMarker("Animal Movement");
@@ -89,6 +92,10 @@ public abstract class Animal : VisibleTileObject
         pm_animalHealth.Begin();
         UpdateHealth();
         pm_animalHealth.End();
+
+        pm_animalStatusEffects.Begin();
+        UpdateStatusEffects();
+        pm_animalStatusEffects.End();
 
         pm_animalReproduction.Begin();
         UpdateReproduction();
@@ -133,6 +140,11 @@ public abstract class Animal : VisibleTileObject
     private void UpdateHealth()
     {
         if (Malnutrition > 0) ChangeAttribute(AttributeId.Health, -(Malnutrition * Simulation.Singleton.TickTime), 0f, MaxHealth); // Decrease health by malnutrition
+    }
+    private void UpdateStatusEffects()
+    {
+        if (Malnutrition > 0 && !HasStatusEffect(StatusEffectId.Malnutrition)) AddStatusEffect(new SE_Malnutrition());
+        if (PregnancyProgress.ExactTime > 0 && !HasStatusEffect(StatusEffectId.Pregnancy)) AddStatusEffect(new SE_Pregnancy());
     }
 
     private void UpdateActivity()
@@ -312,7 +324,7 @@ public abstract class Animal : VisibleTileObject
     #region Getters
 
     public float VisionRange => Attributes[AttributeId.VisionRange].GetValue();
-    public float MovementSpeed => Attributes[AttributeId.MovementSpeed].GetValue();
+    public float MovementSpeed => Attributes[AttributeId.LandMovementSpeed].GetValue();
     public float WaterMovementSpeed => Attributes[AttributeId.WaterMovementSpeed].GetValue();
     public bool CanSwim => Attributes[AttributeId.WaterMovementSpeed].GetValue() > 0f;
 

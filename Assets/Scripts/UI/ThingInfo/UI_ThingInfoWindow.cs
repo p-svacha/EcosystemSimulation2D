@@ -104,17 +104,29 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 
         if (SelectedAttribute.Type == AttributeType.Dynamic)
         {
-            DynamicAttribute numAtt = (DynamicAttribute)SelectedAttribute;
-            List<DynamicAttributeModifier> modifiers = numAtt.GetValueModifiers();
+            DynamicAttribute att = (DynamicAttribute)SelectedAttribute;
+            
 
-            DynamicAttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
-            text += baseMod.Description + ":\t" + baseMod.Value + "\n";
+            // Overwrite active
+            AttributeModifier overwriteModifier = att.GetActiveOverwriteModifier();
+            if (overwriteModifier != null)
+            {
+                text += overwriteModifier.Source + ":\t" + overwriteModifier.Value + " (Forced)\n";
+            }
+            // Default calculation
+            else
+            {
+                List<AttributeModifier> modifiers = att.GetAllModifiers();
 
-            foreach (DynamicAttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add))
-                text += "\n" + mod.Description + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
-            foreach (DynamicAttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
-                text += "\n" + mod.Description + ":\tx" + mod.Value;
-            text += "\n\nFinal Value:\t" + numAtt.GetValue();
+                AttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
+                text += baseMod.Source + ":\t" + baseMod.Value + "\n";
+
+                foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add))
+                    text += "\n" + mod.Source + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
+                foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
+                    text += "\n" + mod.Source + ":\tx" + mod.Value;
+                text += "\n\nFinal Value:\t" + att.GetValue();
+            }
         }
         else
         {

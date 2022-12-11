@@ -6,7 +6,7 @@ using TMPro;
 /// <summary>
 /// The visualization of a StatusDisplay in world space.
 /// </summary>
-public class StatusDisplayObject : MonoBehaviour
+public class World_StatusDisplay : MonoBehaviour
 {
     [Header("Elements")]
     public SpriteRenderer SpriteDisplay;
@@ -19,7 +19,7 @@ public class StatusDisplayObject : MonoBehaviour
         StatusDisplay = statusDisplay;
         SpriteDisplay.sprite = statusDisplay.DisplaySprite;
         if (!statusDisplay.DoShowDisplayValue) ValueDisplay.gameObject.SetActive(false);
-        else ValueDisplay.text = statusDisplay.GetDisplayValue();
+        else ValueDisplay.text = statusDisplay.DisplayValue;
 
         UpdateDisplay(index, numElements);
     }
@@ -27,7 +27,7 @@ public class StatusDisplayObject : MonoBehaviour
     public void UpdateDisplay(int index, int numElements)
     {
         // Update Value
-        if (StatusDisplay.DoShowDisplayValue) ValueDisplay.text = StatusDisplay.GetDisplayValue();
+        if (StatusDisplay.DoShowDisplayValue) ValueDisplay.text = StatusDisplay.DisplayValue;
 
         // Calculate world position based on how many status displays there are
         float yPos = 1f;

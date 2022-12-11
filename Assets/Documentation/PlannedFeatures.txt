@@ -1,15 +1,20 @@
 SINCE LAST COMMIT
 -------------------
-- status display in selection window, added pregnancy display
+
 
 UP NEXT
 -------------
-- decide on and add colorscheme for statusdisplays
 - add new dynamicattributemodifier "overwrite" with a "priority" value
 	- overwrite modifiers overwrite the base value and all other modifiers. if there are multiple, priority decides which to take
-- hediff framework
-	- hediffs have a name and contain dynamicattributemodifiers of the object they are attached to
-- pregnancy hediff that debuffs hungerrate and movementspeed
+- StatusEffect framework (basically hediffs from rimworld)
+	- StatusEffect have a name and contain dynamicattributemodifiers for specific attributes of the object they are attached to
+- rename statusdisplay to statuseffectdisplay and attach them to statuseffects
+- decide on and add colorscheme for statusdisplays
+- change pregnancy to statuseffect
+	- add debuff to movement speed and hungerrate
+- change malnutrition to statuseffect
+	- add debuff to hungerrate
+- conditional status display low health
 
 - add life expectancy death of old age
 - Animals should drink water and have Thirst
@@ -60,6 +65,7 @@ UP NEXT
 	- additionally params can added to TileFactory.CreateObject that get passed on to OnSpawn, necessary to know where the spawning is from
 		- newborn and event spawn have different effects for example
 - fix display of HourSplit in SimulationTime.ToString so it always just shows ".#"
+- change selection window focus button to fastly move to target instead of instant jump
 
 IDEAS FOR PERFORMANCE INCREASES
 ------------------------

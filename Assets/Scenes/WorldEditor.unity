@@ -11357,6 +11357,7 @@ MonoBehaviour:
   SD_Malnutrition: {fileID: 21300000, guid: 9fa7e87504e052d4bba1509860eed312, type: 3}
   SD_Dehydration: {fileID: 21300000, guid: b476bbdc46de3b54398a14fd07fef396, type: 3}
   SD_Pregnancy: {fileID: 21300000, guid: 27723ed5bd1545e4eacce882641f6318, type: 3}
+  SD_LowHealth: {fileID: 21300000, guid: cc5c523774dd5bf49bd215bc1ce9394b, type: 3}
   DefaultSpriteRenderMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   WhiteTile: {fileID: 11400000, guid: 170566555b3ba0b4db8a1503ad9d7f32, type: 2}
   RemoveSprite: {fileID: 21300000, guid: 3634036589cb0774fbef959e794b6370, type: 3}

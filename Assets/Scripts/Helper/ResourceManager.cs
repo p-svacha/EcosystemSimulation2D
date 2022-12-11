@@ -23,11 +23,12 @@ public class ResourceManager : MonoBehaviour
     private Dictionary<TileObjectType, Sprite> TileObjectSprites;
 
     [Header("Status Display")]
-    public StatusDisplayObject StatusDisplayWorldPrefab;
+    public World_StatusDisplay StatusDisplayWorldPrefab;
     public UI_StatusDisplay StatusDisplayUIPrefab;
     public Sprite SD_Malnutrition;
     public Sprite SD_Dehydration;
     public Sprite SD_Pregnancy;
+    public Sprite SD_LowHealth;
 
     [Header("Materials")]
     public Material DefaultSpriteRenderMaterial;
