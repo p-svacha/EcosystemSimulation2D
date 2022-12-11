@@ -27,9 +27,7 @@ public abstract class Animal : VisibleTileObject
 
     // Constant Values (could be replaced by attributes if necessary)
     private float MALNUTRITION_RATE => HUNGER_RATE_BASE; // How much malnutrition increases per hour when out of food. 1 Malnutrition = -1 Health per hour
-    private float MALNUTRITION_REGENERATION_RATE => 1f; // How much malnutrition decreases per hour when not out of food. 1 Malnutrition = -1 Health per hour
-    private float PREGNANCY_HUNGER_RATE_MODIFER => 1.5f;
-    private float PREGNANCY_MOVEMENT_SPEED_MODIFIER => 0.75f;
+    private float MALNUTRITION_REGENERATION_RATE => HUNGER_RATE_BASE; // How much malnutrition decreases per hour when not out of food. 1 Malnutrition = -1 Health per hour
 
     // Behaviour Logic
     protected List<WorldTile> CurrentPath;
@@ -74,8 +72,6 @@ public abstract class Animal : VisibleTileObject
     // Performance Profilers
     static readonly ProfilerMarker pm_animalAll = new ProfilerMarker("Animal FULL");
     static readonly ProfilerMarker pm_animalNeeds = new ProfilerMarker("Animal Needs");
-    static readonly ProfilerMarker pm_animalHealth = new ProfilerMarker("Animal Health");
-    static readonly ProfilerMarker pm_animalStatusEffects = new ProfilerMarker("Animal Status Effects");
     static readonly ProfilerMarker pm_animalReproduction = new ProfilerMarker("Animal Reproduction");
     static readonly ProfilerMarker pm_animalActivity = new ProfilerMarker("Animal Activity");
     static readonly ProfilerMarker pm_animalMovement = new ProfilerMarker("Animal Movement");
@@ -88,14 +84,6 @@ public abstract class Animal : VisibleTileObject
         pm_animalNeeds.Begin();
         UpdateNeeds();
         pm_animalNeeds.End();
-
-        pm_animalHealth.Begin();
-        UpdateHealth();
-        pm_animalHealth.End();
-
-        pm_animalStatusEffects.Begin();
-        UpdateStatusEffects();
-        pm_animalStatusEffects.End();
 
         pm_animalReproduction.Begin();
         UpdateReproduction();
@@ -115,18 +103,9 @@ public abstract class Animal : VisibleTileObject
 
     private void UpdateReproduction()
     {
-        if (IsPregnant) // Progress active pregnancy
+        if (PregnancyChance > 0 && Random.value < (PregnancyChance * Simulation.Singleton.TickTime) && !HasStatusEffect(StatusEffectId.Pregnancy)) // Get pregnant
         {
-            PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
-            if (PregnancyProgress >= PregnancyDuration)
-            {
-                GiveBirth();
-                PregnancyProgress.Reset();
-            }
-        }
-        else if (PregnancyChance > 0 && Random.value < (PregnancyChance * Simulation.Singleton.TickTime)) // Get pregnant
-        {
-            PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
+            AddStatusEffect(new SE_Pregnancy());
         }
     }
     
@@ -136,15 +115,8 @@ public abstract class Animal : VisibleTileObject
         ChangeAttribute(AttributeId.Nutrition, -(HungerRate * Simulation.Singleton.TickTime), 0f, MaxNutrition); // Decrease Nutrition by HungerRate
         if (Nutrition == 0) ChangeAttribute(AttributeId.Malnutrition, MALNUTRITION_RATE * Simulation.Singleton.TickTime, 0f, 1000f); // Increase malnutrition
         else ChangeAttribute(AttributeId.Malnutrition, -(MALNUTRITION_REGENERATION_RATE * Simulation.Singleton.TickTime), 0f, 1000f); // Decrease malnutrition
-    }
-    private void UpdateHealth()
-    {
-        if (Malnutrition > 0) ChangeAttribute(AttributeId.Health, -(Malnutrition * Simulation.Singleton.TickTime), 0f, MaxHealth); // Decrease health by malnutrition
-    }
-    private void UpdateStatusEffects()
-    {
-        if (Malnutrition > 0 && !HasStatusEffect(StatusEffectId.Malnutrition)) AddStatusEffect(new SE_Malnutrition());
-        if (PregnancyProgress.ExactTime > 0 && !HasStatusEffect(StatusEffectId.Pregnancy)) AddStatusEffect(new SE_Pregnancy());
+
+        if (Malnutrition > 0 && !HasStatusEffect(StatusEffectId.Malnutrition)) AddStatusEffect(new SE_Malnutrition()); // Malnutrition status effect
     }
 
     private void UpdateActivity()
@@ -313,7 +285,7 @@ public abstract class Animal : VisibleTileObject
         ChangeAttribute(AttributeId.Nutrition, gainedNutrition, 0f, MaxNutrition);
     }
 
-    protected void GiveBirth()
+    public void GiveBirth()
     {
         int numOffspring = Random.Range(MinNumOffspring, MaxNumOffspring + 1);
         for(int i = 0; i < numOffspring; i++) World.Singleton.SpawnTileObject(Tile, Type);
@@ -340,7 +312,7 @@ public abstract class Animal : VisibleTileObject
     public SimulationTime PregnancyMaxAge => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyMaxAge]).GetStaticValue();
     public SimulationTime PregnancyDuration => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyDuration]).GetStaticValue();
     public SimulationTime PregnancyProgress => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyProgress]).GetStaticValue();
-    public bool IsPregnant => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyProgress]).GetStaticValue().ExactTime > 0f;
+    public bool IsPregnant => HasStatusEffect(StatusEffectId.Pregnancy);
     public float PregnancyChance => Attributes[AttributeId.PregnancyChance].GetValue();
     public int MinNumOffspring => (int)Attributes[AttributeId.MinNumOffspring].GetValue();
     public int MaxNumOffspring => (int)Attributes[AttributeId.MaxNumOffspring].GetValue();

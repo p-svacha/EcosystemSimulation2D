@@ -10,6 +10,5 @@ public class SD_Malnutrition : StatusDisplay
     public override bool DoShowDisplayValue => true;
 
     // Individual
-    public SD_Malnutrition(TileObject obj) : base(obj) { }
     public override string DisplayValue => TileObject.Attributes[AttributeId.Malnutrition].GetValue().ToString("F0");
 }

@@ -11,6 +11,5 @@ public class SD_LowHealth : ConditionalStatusDisplay
 
     // Individual
     public SD_LowHealth(TileObject obj) : base(obj) { }
-
     public override bool ShouldShow() => (TileObject.Attributes[AttributeId.Health] as RangeAttribute).Ratio < 0.2f;
 }

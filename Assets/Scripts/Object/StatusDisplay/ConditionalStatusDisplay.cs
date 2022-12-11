@@ -13,5 +13,8 @@ public abstract class ConditionalStatusDisplay : StatusDisplay
     /// </summary>
     public abstract bool ShouldShow();
 
-    public ConditionalStatusDisplay(TileObject obj) : base(obj) { }
+    public ConditionalStatusDisplay(TileObject obj)
+    {
+        Init(obj);
+    }
 }

@@ -30,6 +30,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
     public List<StatusEffect> StatusEffects { get; private set; }
+    private List<StatusEffect> StatusEffectsToRemove; // used to not break iterator
     public List<StatusDisplay> StatusEffectDisplays { get; private set; }
     public List<ConditionalStatusDisplay> ConditionalStatusDisplays { get; private set; }
     public WorldTile Tile { get; private set; }
@@ -48,6 +49,7 @@ public abstract class TileObject : MonoBehaviour, IThing
 
         // Status effects
         StatusEffects = new List<StatusEffect>();
+        StatusEffectsToRemove = new List<StatusEffect>();
 
         // Status displays
         StatusEffectDisplays = new List<StatusDisplay>();
@@ -65,15 +67,32 @@ public abstract class TileObject : MonoBehaviour, IThing
     {
         Age.IncreaseTime(Simulation.Singleton.TickTime);
 
+        UpdateStatusEffects();
         UpdateStatusDisplays();
         UpdateDeath();
     }
 
+    private void UpdateStatusEffects()
+    {
+        foreach (StatusEffect statusEffect in StatusEffects) statusEffect.Tick();
+        foreach (StatusEffect toRemove in StatusEffectsToRemove) StatusEffects.Remove(toRemove);
+        StatusEffectsToRemove.Clear();
+    }
+
     private void UpdateStatusDisplays()
     {
-        // Conditional
-        int numActiveStatusDisplays = ConditionalStatusDisplays.Where(x => x.ShouldShow()).Count();
+        int numActiveStatusDisplays = ConditionalStatusDisplays.Where(x => x.ShouldShow()).Count() + StatusEffectDisplays.Count;
         int index = 0;
+
+        // from Status Effect
+        foreach (StatusDisplay sd in StatusEffectDisplays)
+        {
+            if (sd.WorldDisplayObject != null) sd.WorldDisplayObject.UpdateDisplay(index, numActiveStatusDisplays);
+            else sd.CreateWorldDisplay(transform, index, numActiveStatusDisplays);
+            index++;
+        }
+
+        // Conditional
         foreach (ConditionalStatusDisplay csd in ConditionalStatusDisplays)
         {
             if (csd.ShouldShow())
@@ -86,14 +105,6 @@ public abstract class TileObject : MonoBehaviour, IThing
             {
                 if (csd.WorldDisplayObject != null) Destroy(csd.WorldDisplayObject.gameObject);
             }
-        }
-
-        // from Status Effect
-        foreach(StatusDisplay sd in StatusEffectDisplays)
-        {
-            if (sd.WorldDisplayObject != null) sd.WorldDisplayObject.UpdateDisplay(index, numActiveStatusDisplays);
-            else sd.CreateWorldDisplay(transform, index, numActiveStatusDisplays);
-            index++;
         }
     }
 
@@ -146,7 +157,10 @@ public abstract class TileObject : MonoBehaviour, IThing
     public void RemoveStatusEffect(StatusEffect statusEffect)
     {
         statusEffect.End();
-        StatusEffects.Remove(statusEffect);
+        StatusEffectsToRemove.Add(statusEffect);
+
+        // Display
+        if (statusEffect.Display.WorldDisplayObject != null) Destroy(statusEffect.Display.WorldDisplayObject.gameObject);
         StatusEffectDisplays.Remove(statusEffect.Display);
     }
 

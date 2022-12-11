@@ -18,7 +18,7 @@ public abstract class StatusDisplay
 
     public virtual string DisplayValue => "";
 
-    public StatusDisplay(TileObject obj)
+    public void Init(TileObject obj)
     {
         TileObject = obj;
     }

@@ -4,19 +4,13 @@ SINCE LAST COMMIT
 
 UP NEXT
 -------------
-- add new dynamicattributemodifier "overwrite" with a "priority" value
-	- overwrite modifiers overwrite the base value and all other modifiers. if there are multiple, priority decides which to take
-- StatusEffect framework (basically hediffs from rimworld)
-	- StatusEffect have a name and contain dynamicattributemodifiers for specific attributes of the object they are attached to
-- rename statusdisplay to statuseffectdisplay and attach them to statuseffects
-- decide on and add colorscheme for statusdisplays
-- change pregnancy to statuseffect
-	- add debuff to movement speed and hungerrate
-- change malnutrition to statuseffect
-	- add debuff to hungerrate
-- conditional status display low health
-
 - add life expectancy death of old age
+	- add lifeexpectancy of plants
+	- decrease grass spawn rate
+	- make world generation spawn with some grass
+ ==> check performance
+
+- add second animal
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
@@ -66,6 +60,7 @@ UP NEXT
 		- newborn and event spawn have different effects for example
 - fix display of HourSplit in SimulationTime.ToString so it always just shows ".#"
 - change selection window focus button to fastly move to target instead of instant jump
+- add mouseover for statusdisplays in selectionwindow that show modifiers
 
 IDEAS FOR PERFORMANCE INCREASES
 ------------------------

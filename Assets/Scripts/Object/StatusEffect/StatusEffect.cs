@@ -22,6 +22,7 @@ public abstract class StatusEffect
     public void Init(TileObject obj)
     {
         TileObject = obj;
+        Display.Init(obj);
 
         // Add attribute modifiers to attached thing
         foreach(KeyValuePair<AttributeId, AttributeModifier> modifiers in AttributeModifiers)
@@ -46,7 +47,7 @@ public abstract class StatusEffect
     }
 
     /// <summary>
-    /// Termine a StatusEffect
+    /// Terminate a StatusEffect
     /// </summary>
     public void End()
     {

@@ -10,6 +10,5 @@ public class SD_Pregnancy : StatusDisplay
     public override bool DoShowDisplayValue => true;
 
     // Individual
-    public SD_Pregnancy(TileObject obj) : base(obj) { }
     public override string DisplayValue => (TileObject as Animal).PregnancyProgress.AbsoluteDay + " / " + (TileObject as Animal).PregnancyDuration.AbsoluteDay;
 }
