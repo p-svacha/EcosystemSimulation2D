@@ -40,7 +40,7 @@ public class UI_TimeControls : MonoBehaviour
 
     public void SetTimeDisplay(SimulationTime time)
     {
-        TimeText.text = time.FullString;
+        TimeText.text = time.DateString;
     }
 
     public static UI_TimeControls Singleton { get { return GameObject.Find("TimeControls").GetComponent<UI_TimeControls>(); } }

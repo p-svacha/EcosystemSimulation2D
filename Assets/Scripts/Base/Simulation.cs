@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Profiling;
 using UnityEngine;
 
 public class Simulation : MonoBehaviour
@@ -61,7 +62,7 @@ public class Simulation : MonoBehaviour
         CameraHandler.Singleton.SetBounds(World.MinWorldX, World.MinWorldY, World.MaxWorldX, World.MaxWorldY);
         CameraHandler.Singleton.FocusPosition(new Vector2(World.CenterWorldX, World.CenterWorldY));
 
-        CurrentTime = new SimulationTime(year: 1, month: 1, day: 1, hour: 0);
+        CurrentTime = new SimulationTime();
         for (int i = 0; i < NUM_TILE_UPDATE_POTS; i++) LastPotUpdateTimes.Add(i, CurrentTime.Copy());
         SetSpeed(SPEED1_MODIFIER);
     }
@@ -70,12 +71,26 @@ public class Simulation : MonoBehaviour
 
     #region Flow / Update
 
+    // Performance Profilers
+    static readonly ProfilerMarker pm_time = new ProfilerMarker("Update Time");
+    static readonly ProfilerMarker pm_hoveredObjects = new ProfilerMarker("Update HoveredObjects");
+    static readonly ProfilerMarker pm_simulation = new ProfilerMarker("Update Simulation");
+    static readonly ProfilerMarker pm_surfaces = new ProfilerMarker("Update Surfaces");
+    static readonly ProfilerMarker pm_objects = new ProfilerMarker("Update Objects");
+
     private void Update()
     {
+        pm_time.Begin();
         UpdateTime();
-        UpdateHoveredObjects();
+        pm_time.End();
 
+        pm_hoveredObjects.Begin();
+        UpdateHoveredObjects();
+        pm_hoveredObjects.End();
+
+        pm_simulation.Begin();
         UpdateSimulation();
+        pm_simulation.End();
     }
 
     private void UpdateTime()
@@ -112,10 +127,13 @@ public class Simulation : MonoBehaviour
     private void UpdateSimulation()
     {
         if (IsPaused) return;
-        
-        // Surfaces
-        UpdateSurfaces();
 
+        // Surfaces
+        pm_surfaces.Begin();
+        UpdateSurfaces();
+        pm_surfaces.End();
+
+        pm_objects.Begin();
         // Add newly registered objects
         foreach (TileObjectBase obj in RegisteredObjects) SimulatedObjects.Add(obj);
         RegisteredObjects.Clear();
@@ -126,6 +144,7 @@ public class Simulation : MonoBehaviour
 
         // Objects
         foreach (TileObjectBase obj in SimulatedObjects) obj.Tick();
+        pm_objects.End();
     }
 
     /// <summary>
@@ -134,7 +153,7 @@ public class Simulation : MonoBehaviour
     /// </summary>
     private void UpdateSurfaces()
     {
-        float hoursSinceLastUpdate = CurrentTime.ExactTime - LastPotUpdateTimes[CurrentTilePot].ExactTime;
+        float hoursSinceLastUpdate = CurrentTime - LastPotUpdateTimes[CurrentTilePot];
         LastPotUpdateTimes[CurrentTilePot] = CurrentTime.Copy();
 
         foreach (WorldTile tile in World.TileUpdatePots[CurrentTilePot++]) tile.Tick(hoursSinceLastUpdate);

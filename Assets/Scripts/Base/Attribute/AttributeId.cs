@@ -33,16 +33,22 @@ public enum AttributeId
     MovementCost,
 
 
+    /// <summary> Time at which an object has been created. </summary>
+    CreatedAt,
+
     /// <summary> How long an object has been existing in the world. </summary>
     Age,
 
     /// <summary> The age at which an organism reaches full size. Animals are able to get pregnant at that point. </summary>
     MaturityAge,
 
-    /// <summary> Current and maximum amount of HP an object has. </summary>
+    /// <summary> Base max health of an object. </summary>
+    HealthBase,
+
+    /// <summary> Current and maximum amount of HP an object currently has. </summary>
     Health,
 
-    /// <summary> Size of an organism. Affects various other attributes. </summary>
+    /// <summary> How big an organism is compared to its default size. </summary>
     Size,
 
 
@@ -60,6 +66,9 @@ public enum AttributeId
     /// <summary> How many tiles an animal can see in all directions and detect specific objects. </summary>
     VisionRange,
 
+
+    /// <summary> Base amount of nutrition an animal can store. </summary>
+    NutritionBase,
 
     /// <summary> Current and maximum amount of nutrition an animal has. </summary>
     Nutrition,

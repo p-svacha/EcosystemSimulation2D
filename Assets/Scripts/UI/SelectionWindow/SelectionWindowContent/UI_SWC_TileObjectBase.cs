@@ -17,7 +17,7 @@ public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
 
     protected virtual void Update()
     {
-        HealthBar.SetValue(TileObject.Health, TileObject.MaxHealth);
+        HealthBar.SetValue(TileObject.Health.Value, TileObject.Health.MaxValue);
     }
 
     public override bool CanFocusCamera() => true;

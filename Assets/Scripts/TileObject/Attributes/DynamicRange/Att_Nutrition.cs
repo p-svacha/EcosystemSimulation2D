@@ -2,29 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Att_HungerRate : DynamicAttribute
+public class Att_Nutrition : DynamicRangeAttribute
 {
-    // Attribute Base
-    public override string Name => "Hunger Rate";
-    public override string Description => "Actual amount at which the nutrition of an animal drops per hour.";
-    public override AttributeId Id => AttributeId.HungerRate;
+    // Base
+    public override string Name => "Nutrition";
+    public override string Description => "Current and maximum amount of nutrition an animal has.";
+    public override AttributeId Id => AttributeId.Nutrition;
     public override string Category => "Needs";
-    public override IThing Thing => Thing;
+    public override IThing Thing => Animal;
+
+    protected override bool KeepValueRatio => false;
 
     // Individual
     private readonly AnimalBase Animal;
 
-    public Att_HungerRate(AnimalBase animal)
+    public Att_Nutrition(AnimalBase animal)
     {
         Animal = animal;
     }
-
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
         List<AttributeModifier> mods = new List<AttributeModifier>();
 
-        mods.Add(new AttributeModifier("Base Hunger Rate", Animal.Attributes[AttributeId.HungerRateBase].GetValue(), AttributeModifierType.BaseValue));
+        mods.Add(new AttributeModifier("Base Nutrition", Animal.GetFloatAttribute(AttributeId.NutritionBase), AttributeModifierType.BaseValue));
 
         if (Animal.GetFloatAttribute(AttributeId.Size) != 1f)
             mods.Add(new AttributeModifier("Size", Animal.GetFloatAttribute(AttributeId.Size), AttributeModifierType.Multiply));

@@ -4,31 +4,29 @@ using UnityEngine;
 
 public class SimulationTime
 {
+    public float AbsoluteTime { get; private set; }
     /// <summary>
-    /// Year since the start of the game. Starts at 1.
+    /// Amount of full years
     /// </summary>
-    public int Year { get; private set; }
+    public int Year => (int)(AbsoluteTime / HoursPerDay / DaysPerMonth / MonthsPerYear);
     /// <summary>
-    /// Month of the year. Starts at 1.
+    /// Amount of full months of the Year
     /// </summary>
-    public int Month { get; private set; }
+    public int Month => AbsoluteMonth % MonthsPerYear;
     /// <summary>
-    /// Day of the quadrum. Starts at 1.
+    /// Amount of full days of the month
     /// </summary>
-    public int Day { get; private set; }
+    public int Day => AbsoluteDay % DaysPerMonth;
     /// <summary>
-    /// Hour of the day. Starts at 0.
+    /// Amount of full and partial hours of the day
     /// </summary>
-    public int Hour { get; private set; }
-    /// <summary>
-    /// Hidden attribute between 0 and 1 that defines how much of the current hour has passed already.
-    /// </summary>
-    public float HourSplit { get; private set; }
+    public float Hour => AbsoluteTime % HoursPerDay;
 
     private const int MonthsPerYear = 4;
     private const int DaysPerMonth = 10;
     private const int HoursPerDay = 24;
 
+    private readonly string[] MonthNames = { "January", "April", "Juli", "October"};
     /// <summary>
     /// SimulationTime initialized at 0.
     /// </summary>
@@ -36,88 +34,96 @@ public class SimulationTime
 
     public SimulationTime(int year, int month, int day, int hour, float hourSplit = 0f)
     {
-        Year = year;
-        Month = month;
-        Day = day;
-        Hour = hour;
-        HourSplit = hourSplit;
+        AbsoluteTime = (year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (month * DaysPerMonth * HoursPerDay) + (day * HoursPerDay) + hour + hourSplit;
+    }
+
+    public SimulationTime(float absoluteTime)
+    {
+        AbsoluteTime = absoluteTime;
     }
 
     /// <summary>
     /// Returns a copy / timestamp from this time.
     /// </summary>
-    public SimulationTime Copy() => new SimulationTime(Year, Month, Day, Hour, HourSplit);
+    public SimulationTime Copy() => new SimulationTime(AbsoluteTime);
+
 
     public void IncreaseTime(float hourSplitInterval)
     {
-        HourSplit += hourSplitInterval;
-        if(HourSplit >= 1)
-        {
-            HourSplit -= 1;
-            Hour++;
-            if(Hour >= HoursPerDay)
-            {
-                Hour = 0;
-                Day++;
-                if(Day > DaysPerMonth)
-                {
-                    Day = 1;
-                    Month++;
-                    if(Month > MonthsPerYear)
-                    {
-                        Month = 1;
-                        Year++;
-                    }
-                }
-            }
-        }
+        AbsoluteTime += hourSplitInterval;
     }
 
     public void Reset()
     {
-        Year = 0;
-        Month = 0;
-        Day = 0;
-        Hour = 0;
-        HourSplit = 0;
+        AbsoluteTime = 0;
     }
 
 
-    public string FullString { get { return Day + "." + Month + "." + Year + " " + Hour + "h"; } }
+    public string DateString { get { return (Day + 1) + HelperFunctions.GetOrdinalSuffix(Day + 1) + " of " + MonthNames[Month] + ", Year " + Year + " | " + (int)Hour + "h"; } }
+
     /// <summary>
-    /// Amount of started months since the start of the game
+    /// Amount of fully completed months
     /// </summary>
-    public int AbsoluteMonth { get { return (Year * MonthsPerYear) + Month; } }
+    public int AbsoluteMonth => (int)(AbsoluteTime / DaysPerMonth / HoursPerDay);
     /// <summary>
-    /// Amount of started days since the start of the game
+    /// Amount of fully completed days
     /// </summary>
-    public int AbsoluteDay { get { return (Year * MonthsPerYear * DaysPerMonth) + (Month * DaysPerMonth) + Day; } }
+    public int AbsoluteDay => (int)(AbsoluteTime / HoursPerDay);
     /// <summary>
     /// Amount of started hours since the start of the game
     /// </summary>
-    public int AbsoluteHour { get { return (Year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (Month * DaysPerMonth * HoursPerDay) + (Day * HoursPerDay) + Hour; } }
-    /// <summary>
-    /// Exact amount of hours since start of the game, including decimal values.
-    /// </summary>
-    public float ExactTime { get { return (Year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (Month * DaysPerMonth * HoursPerDay) + (Day * HoursPerDay) + Hour + HourSplit; } }
+    public int AbsoluteHour => (int)AbsoluteTime;
 
     #region Operators
 
+    public static float operator +(SimulationTime l, SimulationTime f)
+    {
+        return l.AbsoluteTime + f.AbsoluteTime;
+    }
+    public static float operator -(SimulationTime l, SimulationTime f)
+    {
+        return l.AbsoluteTime - f.AbsoluteTime;
+    }
+    public static float operator /(SimulationTime l, SimulationTime f)
+    {
+        return l.AbsoluteTime / f.AbsoluteTime;
+    }
+    public static float operator *(SimulationTime l, SimulationTime f)
+    {
+        return l.AbsoluteTime * f.AbsoluteTime;
+    }
     public static bool operator <(SimulationTime l, SimulationTime f)
     {
-        return l.ExactTime < f.ExactTime;
+        return l.AbsoluteTime < f.AbsoluteTime;
     }
     public static bool operator >(SimulationTime l, SimulationTime f)
     {
-        return l.ExactTime > f.ExactTime;
+        return l.AbsoluteTime > f.AbsoluteTime;
     }
     public static bool operator <=(SimulationTime l, SimulationTime f)
     {
-        return l.ExactTime <= f.ExactTime;
+        return l.AbsoluteTime <= f.AbsoluteTime;
     }
     public static bool operator >=(SimulationTime l, SimulationTime f)
     {
-        return l.ExactTime >= f.ExactTime;
+        return l.AbsoluteTime >= f.AbsoluteTime;
+    }
+
+    public static bool operator <(SimulationTime l, float f)
+    {
+        return l.AbsoluteTime < f;
+    }
+    public static bool operator >(SimulationTime l, float f)
+    {
+        return l.AbsoluteTime > f;
+    }
+    public static bool operator <=(SimulationTime l, float f)
+    {
+        return l.AbsoluteTime <= f;
+    }
+    public static bool operator >=(SimulationTime l, float f)
+    {
+        return l.AbsoluteTime >= f;
     }
 
     #endregion
@@ -125,10 +131,10 @@ public class SimulationTime
     public override string ToString()
     {
         string text = "";
-        if (Year > 0) text += Year + "Years ";
+        if (Year > 0) text += Year + " Years ";
         if (Month > 0) text += Month + " Months ";
         if (Day > 0) text += Day + " Days ";
-        if (Hour != 0 || HourSplit != 0) text += Hour + HourSplit.ToString("#.#") + " Hours";
+        if (Hour != 0) text += Hour.ToString("F1") + " Hours";
         if (text == "") return "0 Hours";
         return text;
     }

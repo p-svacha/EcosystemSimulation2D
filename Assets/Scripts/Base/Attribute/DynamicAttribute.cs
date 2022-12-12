@@ -19,31 +19,58 @@ public abstract class DynamicAttribute : Attribute
     /// </summary>
     private List<AttributeModifier> StatusEffectModifiers = new List<AttributeModifier>();
 
-    /// <summary>
-    /// Returns the current value of this attribute, calculated from all modifiers (dynamic modifiers + StatusEffect modifiers).
-    /// </summary>
     public override float GetValue()
     {
+        return CalculateCurrentValue();
+    }
+
+    /// <summary>
+    /// Returns the current value of this attribute, calculated from all modifiers (dynamic modifiers + StatusEffect modifiers).
+    /// <br/> Code is not beautiful but as performant as possible.
+    /// </summary>
+    protected float CalculateCurrentValue()
+    {
+        List<AttributeModifier> overwriteMods = new List<AttributeModifier>();
+        List<AttributeModifier> addMods = new List<AttributeModifier>();
+        List<AttributeModifier> multiplyMods = new List<AttributeModifier>();
+        AttributeModifier baseValueMod = null;
+
+        foreach (AttributeModifier mod in GetDynamicValueModifiers())
+        {
+            switch(mod.Type)
+            {
+                case AttributeModifierType.Overwrite: overwriteMods.Add(mod); break;
+                case AttributeModifierType.Add: addMods.Add(mod); break;
+                case AttributeModifierType.Multiply: multiplyMods.Add(mod); break;
+                case AttributeModifierType.BaseValue: baseValueMod = mod; break;
+            };
+        }
+        foreach (AttributeModifier mod in StatusEffectModifiers)
+        {
+            switch (mod.Type)
+            {
+                case AttributeModifierType.Overwrite: overwriteMods.Add(mod); break;
+                case AttributeModifierType.Add: addMods.Add(mod); break;
+                case AttributeModifierType.Multiply: multiplyMods.Add(mod); break;
+                case AttributeModifierType.BaseValue: baseValueMod = mod; break;
+            };
+        }
+
         // Check for overwrite
-        AttributeModifier overwriteModifier = GetActiveOverwriteModifier();
-        if (overwriteModifier != null) return overwriteModifier.Value;
+        if(overwriteMods.Count == 1) return overwriteMods[0].Value;
+        if (overwriteMods.Count > 1) return overwriteMods.OrderBy(x => x.Priority).First().Value;
 
         // Default calculation
         List<AttributeModifier> modifiers = GetAllModifiers();
 
-        if (modifiers.Where(x => x.Type == AttributeModifierType.BaseValue).Count() != 1) throw new System.Exception("A numeric attribute must have exactly 1 BaseValue modifier!");
-
-        float value = modifiers.First(x => x.Type == AttributeModifierType.BaseValue).Value;
-        foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add)) value += mod.Value;
-        foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply)) value *= mod.Value;
+        float value = baseValueMod.Value;
+        foreach (AttributeModifier mod in addMods) value += mod.Value;
+        foreach (AttributeModifier mod in multiplyMods) value *= mod.Value;
 
         return value;
     }
 
-    public override string GetValueString()
-    {
-        return GetValue().ToString();
-    }
+    public override string GetValueString() => GetValue().ToString();
 
     /// <summary>
     /// Returns all modifiers of this attribute.

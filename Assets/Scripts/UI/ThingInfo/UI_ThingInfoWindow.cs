@@ -102,10 +102,11 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         if(SelectedAttribute.Description != "") text += SelectedAttribute.Description + "\n\n";
 
 
-        if (SelectedAttribute.Type == AttributeType.Dynamic)
+        if (SelectedAttribute.Type == AttributeType.Dynamic || SelectedAttribute.Type == AttributeType.DynamicRange)
         {
             DynamicAttribute att = (DynamicAttribute)SelectedAttribute;
-            
+
+            if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "Calculation of max value:\n\n";
 
             // Overwrite active
             AttributeModifier overwriteModifier = att.GetActiveOverwriteModifier();
@@ -125,8 +126,11 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
                     text += "\n" + mod.Source + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
                 foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
                     text += "\n" + mod.Source + ":\tx" + mod.Value;
-                text += "\n\nFinal Value:\t" + att.GetValue();
+                if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "\n\nMax Value:\t" + ((DynamicRangeAttribute)att).MaxValue;
+                else text += "\n\nFinal Value:\t" + att.GetValue();
             }
+
+            if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "\nCurrent Value:\t" + ((DynamicRangeAttribute)att).Value + "\n\n" + ((DynamicRangeAttribute)att).Value + " / " + ((DynamicRangeAttribute)att).MaxValue;
         }
         else
         {

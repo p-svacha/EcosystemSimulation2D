@@ -42,8 +42,9 @@ public class StaticAttribute<T> : Attribute
 
     public override float GetValue()
     {
-        if (Value is int) return (int)(object)Value;
         if (Value is float) return (float)(object)Value;
+        if (Value is int) return (int)(object)Value;
+        if (Value is SimulationTime) return (Value as SimulationTime).AbsoluteTime;
         throw new System.Exception("GetValue is not supported for StaticAttributes with type " + typeof(T).ToString() + ".");
     }
 

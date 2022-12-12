@@ -18,15 +18,18 @@ public static class TileObjectFactory
             TileObjectType.Creer => newObject.AddComponent<Creer>(),
             _ => throw new System.Exception("TileObjectType " + type.ToString() + " not handled in TileObjectFactory."),
         };
-        tileObject.Init();
 
+#pragma 
         SpriteRenderer renderer = newObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = tileObject.Sprite;
+        renderer.sprite = ResourceManager.Singleton.GetTileObjectSprite(type);
+        renderer.drawMode = SpriteDrawMode.Sliced; // Used to be able to set size without changing transform.scale
         renderer.sortingLayerName = "Object";
         renderer.material = ResourceManager.Singleton.DefaultSpriteRenderMaterial;
 
         newObject.AddComponent<BoxCollider2D>();
 
+        tileObject.Init();
+        tileObject.LateInit();
         return tileObject;
     }
 

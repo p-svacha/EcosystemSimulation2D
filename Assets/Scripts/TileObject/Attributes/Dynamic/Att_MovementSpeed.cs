@@ -23,7 +23,7 @@ public class Att_MovementSpeed : DynamicAttribute
     {
         List<AttributeModifier> mods = new List<AttributeModifier>();
 
-        mods.Add(new AttributeModifier("Base Land Movement Speed", Animal.Attributes[AttributeId.LandMovementSpeedBase].GetValue(), AttributeModifierType.BaseValue));
+        mods.Add(new AttributeModifier("Base Land Movement Speed", Animal.GetFloatAttribute(AttributeId.LandMovementSpeedBase), AttributeModifierType.BaseValue));
 
         return mods;
     }

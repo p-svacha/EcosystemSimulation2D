@@ -20,7 +20,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     // Required Attributes
     protected abstract string ObjectName { get; }
     protected abstract string ObjectDescription { get; }
-    protected abstract int MAX_HEALTH { get; }
+    protected abstract int HEALTH_BASE { get; }
 
     // Optional Attributes
     protected virtual NutrientType NUTRIENT_TYPE => NutrientType.None;
@@ -28,6 +28,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     protected virtual float EATING_DIFFICULTY => 1f;
 
     // General
+    protected int NumTicks;
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
     protected Dictionary<AttributeId, float> FloatAttributeCache = new Dictionary<AttributeId, float>();
@@ -39,11 +40,16 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     #region Initialize
 
+    /// <summary>
+    /// Gets called when a new TileObject gets created.
+    /// </summary>
     public virtual void Init()
     {
         // Init attributes
-        _Attributes.Add(AttributeId.Age, new StaticAttribute<SimulationTime>(this, AttributeId.Age, "General", "Age", "How long an object has been existing in the world.", new SimulationTime()));
-        _Attributes.Add(AttributeId.Health, new RangeAttribute(this, AttributeId.Health, "Health", "Health", "Current and maximum amount of HP an object has.", MAX_HEALTH, MAX_HEALTH));
+        _Attributes.Add(AttributeId.CreatedAt, new StaticAttribute<SimulationTime>(this, AttributeId.CreatedAt, "General", "Created At", "Time at which an object has been created.", Simulation.Singleton.CurrentTime.Copy()));
+        _Attributes.Add(AttributeId.Age, new Att_Age(this));
+        _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(this, AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
+        _Attributes.Add(AttributeId.Health, new Att_Health(this));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
         _Attributes.Add(AttributeId.NutrientValue, new StaticAttribute<float>(this, AttributeId.NutrientValue, "Nutrition", "Nutrients", "How much nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE));
@@ -58,6 +64,14 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         ConditionalStatusDisplays = new List<ConditionalStatusDisplay>();
     }
 
+    /// <summary>
+    /// Triggers after all Init calls are done.
+    /// </summary>
+    public virtual void LateInit()
+    {
+        Health.Init(initialRatio: 1f);
+    }
+
     #endregion
 
     #region Update
@@ -65,10 +79,9 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     // Performance Profilers
     static readonly ProfilerMarker pm_all = new ProfilerMarker("Update TileObject");
     static readonly ProfilerMarker pm_cache = new ProfilerMarker("Clear Attribute Cache");
-    static readonly ProfilerMarker pm_age = new ProfilerMarker("Update Age");
     static readonly ProfilerMarker pm_statusEffects = new ProfilerMarker("Update Status Effects");
     static readonly ProfilerMarker pm_statusDisplays = new ProfilerMarker("Update Status Displays");
-    static readonly ProfilerMarker pm_death = new ProfilerMarker("TileObjectBase Death");
+    static readonly ProfilerMarker pm_health = new ProfilerMarker("Update Health");
 
     /// <summary>
     /// Tick gets called every frame when the simulation is running.
@@ -76,14 +89,15 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public virtual void Tick()
     {
         pm_all.Begin();
+        NumTicks++;
 
         pm_cache.Begin();
         ClearAttributeCache();
         pm_cache.End();
 
-        pm_age.Begin();
-        Age.IncreaseTime(Simulation.Singleton.TickTime);
-        pm_age.End();
+        pm_health.Begin();
+        if(NumTicks % 60 == 0) UpdateHealth();
+        pm_health.End();
 
         pm_statusEffects.Begin();
         UpdateStatusEffects();
@@ -92,10 +106,6 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         pm_statusDisplays.Begin();
         UpdateStatusDisplays();
         pm_statusDisplays.End();
-
-        pm_death.Begin();
-        UpdateDeath();
-        pm_death.End();
 
         pm_all.End();
     }
@@ -107,6 +117,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     private void UpdateStatusEffects()
     {
+        if (StatusEffects.Count == 0) return;
         foreach (StatusEffect statusEffect in StatusEffects) statusEffect.Tick();
         foreach (StatusEffect toRemove in StatusEffectsToRemove) StatusEffects.Remove(toRemove);
         StatusEffectsToRemove.Clear();
@@ -142,9 +153,13 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         }
     }
 
-    private void UpdateDeath()
+    /// <summary>
+    /// Updates the maximum health and makes a check if the object is dead.
+    /// </summary>
+    private void UpdateHealth()
     {
-        if (Health == 0) Die();
+        Health.CalculateNewValues();
+        if (Health.Value == 0) Die();
     }
 
     protected void Die()
@@ -169,7 +184,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     /// Changes the value of a static float attribute and clamps it to a range.
     /// <br/> Throws an error if the attribute doesn't exist or isn't a StaticAtttribute with type float.
     /// </summary>
-    public void ChangeAttribute(AttributeId id, float deltaValue, float minValue, float maxValue)
+    public void ChangeStaticAttribute(AttributeId id, float deltaValue, float minValue, float maxValue)
     {
         float newValue = Attributes[id].GetValue() + deltaValue;
         newValue = Mathf.Clamp(newValue, minValue, maxValue);
@@ -206,7 +221,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     /// <summary>
     /// Returns the value of a DynamicAttribute and caches it for the remainder of the frame.
     /// </summary>
-    protected float GetFloatAttribute(AttributeId id)
+    public float GetFloatAttribute(AttributeId id)
     {
         if (FloatAttributeCache.TryGetValue(id, out float cachedValue)) return cachedValue;
 
@@ -217,10 +232,8 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     public bool HasStatusEffect(StatusEffectId id) => StatusEffects.Any(x => x.Id == id);
 
-    public SimulationTime Age => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.Age]).GetStaticValue();
-    public float MaxHealth => ((RangeAttribute)Attributes[AttributeId.Health]).MaxValue;
-    public float Health => Attributes[AttributeId.Health].GetValue();
-    public float HealthRatio => ((RangeAttribute)Attributes[AttributeId.Health]).Ratio;
+    public float Age => GetFloatAttribute(AttributeId.Age);
+    public DynamicRangeAttribute Health => Attributes[AttributeId.Health] as DynamicRangeAttribute;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
     public float NutrientValue => GetFloatAttribute(AttributeId.NutrientValue);
     public float EatingDifficulty => GetFloatAttribute(AttributeId.EatingDifficulty);

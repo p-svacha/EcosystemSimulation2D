@@ -27,11 +27,12 @@ public class SE_Pregnancy : StatusEffect
         {
             { AttributeId.HungerRate, new AttributeModifier(Name, 1.5f, AttributeModifierType.Multiply) },
             { AttributeId.LandMovementSpeed, new AttributeModifier(Name, 0.5f, AttributeModifierType.Multiply) },
+            { AttributeId.Size, new AttributeModifier(Name, 1.1f, AttributeModifierType.Multiply) },
             { AttributeId.PregnancyChance, new AttributeModifier(Name, 0f, AttributeModifierType.Overwrite, 100) }
         };
     }
 
-    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).PregnancyProgress.ExactTime >= (TileObject as AnimalBase).PregnancyDuration.ExactTime;
+    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).PregnancyProgress >= (TileObject as AnimalBase).PregnancyDuration;
     protected override void OnTick()
     {
         (TileObject as AnimalBase).PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);

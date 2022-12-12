@@ -28,9 +28,9 @@ public class Att_PregnancyChance : DynamicAttribute
             return new List<AttributeModifier>() { new AttributeModifier("Above maximum pregnancy age", 0, AttributeModifierType.BaseValue) };
 
         List<AttributeModifier> mods = new List<AttributeModifier>();
-        mods.Add(new AttributeModifier("Base Chance", Animal.Attributes[AttributeId.PregnancyChanceBase].GetValue(), AttributeModifierType.BaseValue));
-        if(Animal.HealthRatio < 1f)
-            mods.Add(new AttributeModifier("Injured", Animal.HealthRatio, AttributeModifierType.Multiply));
+        mods.Add(new AttributeModifier("Base Chance", Animal.GetFloatAttribute(AttributeId.PregnancyChanceBase), AttributeModifierType.BaseValue));
+        if(Animal.Health.Ratio < 1f)
+            mods.Add(new AttributeModifier("Injured", Animal.Health.Ratio, AttributeModifierType.Multiply));
 
         return mods;
     }
