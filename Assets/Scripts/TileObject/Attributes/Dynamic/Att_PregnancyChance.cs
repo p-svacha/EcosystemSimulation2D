@@ -12,17 +12,17 @@ public class Att_PregnancyChance : DynamicAttribute
     public override IThing Thing => Animal;
 
     // Individual
-    private readonly Animal Animal;
+    private readonly AnimalBase Animal;
 
-    public Att_PregnancyChance(Animal animal)
+    public Att_PregnancyChance(AnimalBase animal)
     {
         Animal = animal;
     }
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        if(Animal.Age < Animal.PregnancyMinAge)
-            return new List<AttributeModifier>() { new AttributeModifier("Below minimum pregnancy age", 0, AttributeModifierType.BaseValue) };
+        if(Animal.Age < Animal.MaturityAge)
+            return new List<AttributeModifier>() { new AttributeModifier("Below maturity age", 0, AttributeModifierType.BaseValue) };
 
         if (Animal.Age > Animal.PregnancyMaxAge)
             return new List<AttributeModifier>() { new AttributeModifier("Above maximum pregnancy age", 0, AttributeModifierType.BaseValue) };

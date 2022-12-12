@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Profiling;
 using UnityEngine;
 
 /// <summary>
 /// A TileObject is an object/agent in a specific location on the map. TileObjects can have inherent logic and act by themselves.
 /// <br/> TileObjects can either be own GameObjects with SpriteRenderes (see VisibleTileObject) or part of the TileMap (see TilemapTileObject).
 /// </summary>
-public abstract class TileObject : MonoBehaviour, IThing
+public abstract class TileObjectBase : MonoBehaviour, IThing
 {
     // IThing
     public ThingId Id => ThingId.Object;
@@ -29,6 +30,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     // General
     public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
+    protected Dictionary<AttributeId, float> FloatAttributeCache = new Dictionary<AttributeId, float>();
     public List<StatusEffect> StatusEffects { get; private set; }
     private List<StatusEffect> StatusEffectsToRemove; // used to not break iterator
     public List<StatusDisplay> StatusEffectDisplays { get; private set; }
@@ -60,16 +62,47 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     #region Update
 
+    // Performance Profilers
+    static readonly ProfilerMarker pm_all = new ProfilerMarker("Update TileObject");
+    static readonly ProfilerMarker pm_cache = new ProfilerMarker("Clear Attribute Cache");
+    static readonly ProfilerMarker pm_age = new ProfilerMarker("Update Age");
+    static readonly ProfilerMarker pm_statusEffects = new ProfilerMarker("Update Status Effects");
+    static readonly ProfilerMarker pm_statusDisplays = new ProfilerMarker("Update Status Displays");
+    static readonly ProfilerMarker pm_death = new ProfilerMarker("TileObjectBase Death");
+
     /// <summary>
     /// Tick gets called every frame when the simulation is running.
     /// </summary>
     public virtual void Tick()
     {
-        Age.IncreaseTime(Simulation.Singleton.TickTime);
+        pm_all.Begin();
 
+        pm_cache.Begin();
+        ClearAttributeCache();
+        pm_cache.End();
+
+        pm_age.Begin();
+        Age.IncreaseTime(Simulation.Singleton.TickTime);
+        pm_age.End();
+
+        pm_statusEffects.Begin();
         UpdateStatusEffects();
+        pm_statusEffects.End();
+
+        pm_statusDisplays.Begin();
         UpdateStatusDisplays();
+        pm_statusDisplays.End();
+
+        pm_death.Begin();
         UpdateDeath();
+        pm_death.End();
+
+        pm_all.End();
+    }
+
+    private void ClearAttributeCache()
+    {
+        FloatAttributeCache.Clear();
     }
 
     private void UpdateStatusEffects()
@@ -81,6 +114,7 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     private void UpdateStatusDisplays()
     {
+        if (ConditionalStatusDisplays.Count == 0 && StatusEffectDisplays.Count == 0) return;
         int numActiveStatusDisplays = ConditionalStatusDisplays.Where(x => x.ShouldShow()).Count() + StatusEffectDisplays.Count;
         int index = 0;
 
@@ -169,6 +203,18 @@ public abstract class TileObject : MonoBehaviour, IThing
 
     #region Getters
 
+    /// <summary>
+    /// Returns the value of a DynamicAttribute and caches it for the remainder of the frame.
+    /// </summary>
+    protected float GetFloatAttribute(AttributeId id)
+    {
+        if (FloatAttributeCache.TryGetValue(id, out float cachedValue)) return cachedValue;
+
+        float value = Attributes[id].GetValue();
+        FloatAttributeCache[id] = value;
+        return value;
+    }
+
     public bool HasStatusEffect(StatusEffectId id) => StatusEffects.Any(x => x.Id == id);
 
     public SimulationTime Age => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.Age]).GetStaticValue();
@@ -176,13 +222,13 @@ public abstract class TileObject : MonoBehaviour, IThing
     public float Health => Attributes[AttributeId.Health].GetValue();
     public float HealthRatio => ((RangeAttribute)Attributes[AttributeId.Health]).Ratio;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
-    public float NutrientValue => Attributes[AttributeId.NutrientValue].GetValue();
-    public float EatingDifficulty => Attributes[AttributeId.EatingDifficulty].GetValue();
+    public float NutrientValue => GetFloatAttribute(AttributeId.NutrientValue);
+    public float EatingDifficulty => GetFloatAttribute(AttributeId.EatingDifficulty);
 
     /// <summary>
     /// Returns how much nutrients this object would provide to an animal.
     /// </summary>
-    public float GetNutrientsForAnimal(Animal animal)
+    public float GetNutrientsForAnimal(AnimalBase animal)
     {
         if (!animal.Diet.Contains(NutrientType)) return 0f;
         else return NutrientValue;
@@ -192,7 +238,7 @@ public abstract class TileObject : MonoBehaviour, IThing
     /// Calculates and returns the exact speed of an animal eating this object.
     /// <br/> 1 means {Simulation.EATING_SPEED_MODIFIER %} of the object will be eaten per hour, providing the same % of its nutrients to the animal.
     /// </summary>
-    public float GetEatingSpeed(Animal animal)
+    public float GetEatingSpeed(AnimalBase animal)
     {
         return (1f / EatingDifficulty) * animal.EatingSpeed;
     }

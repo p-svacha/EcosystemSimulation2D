@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Profiling;
 using UnityEngine;
 
-public abstract class Animal : VisibleTileObject
+public abstract class AnimalBase : OrganismBase
 {
     // IThing
     public override UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_AnimalBase;
@@ -15,7 +15,6 @@ public abstract class Animal : VisibleTileObject
     protected abstract float HUNGER_RATE_BASE { get; }
     protected abstract List<NutrientType> DIET { get; }
     protected abstract float VISION_RANGE { get; }
-    protected abstract SimulationTime PREGNANCY_MIN_AGE { get; }
     protected abstract SimulationTime PREGNANCY_MAX_AGE { get; }
     protected abstract float PREGNANCY_CHANCE_BASE { get; }
     protected abstract SimulationTime PREGNANCY_DURATION { get; }
@@ -33,6 +32,8 @@ public abstract class Animal : VisibleTileObject
     protected List<WorldTile> CurrentPath;
     protected bool IsMoving;
     public string CurrentActivity { get; protected set; }
+
+    #region Initialize
 
     public override void Init()
     {
@@ -53,7 +54,6 @@ public abstract class Animal : VisibleTileObject
         _Attributes.Add(AttributeId.Malnutrition, new StaticAttribute<float>(this, AttributeId.Malnutrition, "Needs", "Malnutrition", "How advanced the malnutrition of an animal is. The higher it is, the more health it loses.", 0f));
         _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(this, AttributeId.EatingSpeed, "Needs", "Eating Speed", "How fast an animal is at eating food generally.", EATING_SPEED));
 
-        _Attributes.Add(AttributeId.PregnancyMinAge, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyMinAge, "Reproduction", "Minimum Age for Pregnancy", "Minimum age at which an animal can get pregnan.t", PREGNANCY_MIN_AGE));
         _Attributes.Add(AttributeId.PregnancyMaxAge, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
         _Attributes.Add(AttributeId.PregnancyDuration, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
         _Attributes.Add(AttributeId.PregnancyProgress, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
@@ -67,38 +67,40 @@ public abstract class Animal : VisibleTileObject
         ConditionalStatusDisplays.Add(new SD_LowHealth(this));
     }
 
+    #endregion
+
     #region Update
 
     // Performance Profilers
-    static readonly ProfilerMarker pm_animalAll = new ProfilerMarker("Animal FULL");
-    static readonly ProfilerMarker pm_animalNeeds = new ProfilerMarker("Animal Needs");
-    static readonly ProfilerMarker pm_animalReproduction = new ProfilerMarker("Animal Reproduction");
-    static readonly ProfilerMarker pm_animalActivity = new ProfilerMarker("Animal Activity");
-    static readonly ProfilerMarker pm_animalMovement = new ProfilerMarker("Animal Movement");
+    static readonly ProfilerMarker pm_all = new ProfilerMarker("Update AnimalBase");
+    static readonly ProfilerMarker pm_needs = new ProfilerMarker("Update Needs");
+    static readonly ProfilerMarker pm_reproduction = new ProfilerMarker("Update Reproduction");
+    static readonly ProfilerMarker pm_activity = new ProfilerMarker("Update Activity");
+    static readonly ProfilerMarker pm_movement = new ProfilerMarker("Update Movement");
 
     public override void Tick()
     {
-        pm_animalAll.Begin();
+        pm_all.Begin();
         base.Tick();
 
-        pm_animalNeeds.Begin();
+        pm_needs.Begin();
         UpdateNeeds();
-        pm_animalNeeds.End();
+        pm_needs.End();
 
-        pm_animalReproduction.Begin();
+        pm_reproduction.Begin();
         UpdateReproduction();
-        pm_animalReproduction.End();
+        pm_reproduction.End();
 
 
-        pm_animalActivity.Begin();
+        pm_activity.Begin();
         UpdateActivity();
-        pm_animalActivity.End();
+        pm_activity.End();
 
-        pm_animalMovement.Begin();
+        pm_movement.Begin();
         UpdateMovement();
-        pm_animalMovement.End();
+        pm_movement.End();
 
-        pm_animalAll.End();
+        pm_all.End();
     }
 
     private void UpdateReproduction()
@@ -126,7 +128,7 @@ public abstract class Animal : VisibleTileObject
         // If standing on food and not full, eat that
         if(NutritionRatio < 1f)
         {
-            TileObject currentFood = GetCurrentFood();
+            TileObjectBase currentFood = GetCurrentFood();
             if (currentFood != null)
             {
                 Eat(currentFood);
@@ -136,9 +138,9 @@ public abstract class Animal : VisibleTileObject
         }
 
         // Actively for food when hungry
-        if (NutritionRatio < 0.4f)
+        if (NutritionRatio < 0.5f)
         {
-            TileObject closestFood = FindClosestFood((int)VisionRange);
+            TileObjectBase closestFood = FindClosestFood((int)VisionRange);
             if (closestFood != null)
             {
                 MoveTo(closestFood.Tile);
@@ -242,7 +244,7 @@ public abstract class Animal : VisibleTileObject
     /// <summary>
     /// Finds the closest object that is edible for this animal.
     /// </summary>
-    protected TileObject FindClosestFood(int maxRange)
+    protected TileObjectBase FindClosestFood(int maxRange)
     {
         int range = 0;
         List<WorldTile> currentRangeTiles = new List<WorldTile>() { Tile };
@@ -250,7 +252,7 @@ public abstract class Animal : VisibleTileObject
         {
             foreach (WorldTile tile in currentRangeTiles)
             {
-                foreach (TileObject obj in tile.TileObjects)
+                foreach (TileObjectBase obj in tile.TileObjects)
                     if (obj.GetNutrientsForAnimal(this) > 0) return obj;
             }
             range++;
@@ -263,15 +265,15 @@ public abstract class Animal : VisibleTileObject
     /// <summary>
     /// Returns an edible object the animal is standing on and that can started to be consumed immediately.
     /// </summary>
-    protected TileObject GetCurrentFood()
+    protected TileObjectBase GetCurrentFood()
     {
         if (IsMoving) return null;
-        foreach (TileObject obj in Tile.TileObjects)
+        foreach (TileObjectBase obj in Tile.TileObjects)
             if (obj.GetNutrientsForAnimal(this) > 0) return obj;
         return null;
     }
 
-    protected void Eat(TileObject obj)
+    protected void Eat(TileObjectBase obj)
     {
         // Calculate how much % of the object gets consumed this frame
         float chunkEaten = obj.GetEatingSpeed(this) * Simulation.Singleton.TickTime;
@@ -295,25 +297,24 @@ public abstract class Animal : VisibleTileObject
 
     #region Getters
 
-    public float VisionRange => Attributes[AttributeId.VisionRange].GetValue();
-    public float MovementSpeed => Attributes[AttributeId.LandMovementSpeed].GetValue();
-    public float WaterMovementSpeed => Attributes[AttributeId.WaterMovementSpeed].GetValue();
-    public bool CanSwim => Attributes[AttributeId.WaterMovementSpeed].GetValue() > 0f;
+    public float VisionRange => GetFloatAttribute(AttributeId.VisionRange);
+    public float MovementSpeed => GetFloatAttribute(AttributeId.LandMovementSpeed);
+    public float WaterMovementSpeed => GetFloatAttribute(AttributeId.WaterMovementSpeed);
+    public bool CanSwim => GetFloatAttribute(AttributeId.WaterMovementSpeed) > 0f;
 
     public List<NutrientType> Diet => ((Att_Diet)Attributes[AttributeId.Diet]).Diet;
     public float MaxNutrition => ((RangeAttribute)Attributes[AttributeId.Nutrition]).MaxValue;
     public float Nutrition => Attributes[AttributeId.Nutrition].GetValue();
     public float NutritionRatio => ((RangeAttribute)Attributes[AttributeId.Nutrition]).Ratio;
-    public float HungerRate => Attributes[AttributeId.HungerRate].GetValue();
-    public float Malnutrition => Attributes[AttributeId.Malnutrition].GetValue();
-    public float EatingSpeed => Attributes[AttributeId.EatingSpeed].GetValue();
+    public float HungerRate => GetFloatAttribute(AttributeId.HungerRate);
+    public float Malnutrition => GetFloatAttribute(AttributeId.Malnutrition);
+    public float EatingSpeed => GetFloatAttribute(AttributeId.EatingSpeed);
 
-    public SimulationTime PregnancyMinAge => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyMinAge]).GetStaticValue();
     public SimulationTime PregnancyMaxAge => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyMaxAge]).GetStaticValue();
     public SimulationTime PregnancyDuration => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyDuration]).GetStaticValue();
     public SimulationTime PregnancyProgress => ((StaticAttribute<SimulationTime>)Attributes[AttributeId.PregnancyProgress]).GetStaticValue();
     public bool IsPregnant => HasStatusEffect(StatusEffectId.Pregnancy);
-    public float PregnancyChance => Attributes[AttributeId.PregnancyChance].GetValue();
+    public float PregnancyChance => GetFloatAttribute(AttributeId.PregnancyChance);
     public int MinNumOffspring => (int)Attributes[AttributeId.MinNumOffspring].GetValue();
     public int MaxNumOffspring => (int)Attributes[AttributeId.MaxNumOffspring].GetValue();
 

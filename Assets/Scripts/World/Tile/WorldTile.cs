@@ -23,11 +23,11 @@ public class WorldTile : IThing
 
     // Content
     public Surface Surface { get; private set; }
-    public List<TileObject> TileObjects = new List<TileObject>();
+    public List<TileObjectBase> TileObjects = new List<TileObjectBase>();
 
     // Attributes
     private Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
-    private float MovementCost => Attributes[AttributeId.MovementCost].GetValue();
+    protected Dictionary<AttributeId, float> FloatAttributeCache = new Dictionary<AttributeId, float>();
 
     public WorldTile(World world, Vector2Int coordinates)
     {
@@ -46,6 +46,7 @@ public class WorldTile : IThing
     /// </summary>
     public void Tick(float hoursSinceLastUpdate)
     {
+        FloatAttributeCache.Clear();
         Surface.Tick(this, hoursSinceLastUpdate);
     }
 
@@ -53,7 +54,7 @@ public class WorldTile : IThing
 
     public void SelectNextLayer(IThing sourceThing)
     {
-        if (sourceThing is VisibleTileObject tileObject)
+        if (sourceThing is VisibleTileObjectBase tileObject)
         {
             int index = TileObjects.IndexOf(tileObject);
             if (index == TileObjects.Count - 1) UIHandler.Singleton.AddSelectionWindow(TileObjects[0]);
@@ -64,6 +65,20 @@ public class WorldTile : IThing
     #endregion
 
     #region Getters
+
+    /// <summary>
+    /// Returns the value of a DynamicAttribute and caches it for the remainder of the frame.
+    /// </summary>
+    protected float GetFloatAttribute(AttributeId id)
+    {
+        if (FloatAttributeCache.TryGetValue(id, out float cachedValue)) return cachedValue;
+
+        float value = Attributes[id].GetValue();
+        FloatAttributeCache[id] = value;
+        return value;
+    }
+    private float MovementCost => GetFloatAttribute(AttributeId.MovementCost);
+
 
     /// <summary>
     /// Returns all existing adjacent tiles of this tile.
@@ -83,7 +98,7 @@ public class WorldTile : IThing
     /// <summary>
     /// Returns if a specified thing can traverse this tile.
     /// </summary>
-    public bool IsPassable(Animal animal)
+    public bool IsPassable(AnimalBase animal)
     {
         if (Surface.RequiresSwimming && !animal.CanSwim) return false;
         return true;
@@ -93,7 +108,7 @@ public class WorldTile : IThing
     /// Calculates the exact MovementCost of an animal on this tile.
     /// <br/> The higher the cost, the slower the animal will move on the tile.
     /// </summary>
-    public float GetMovementCost(Animal animal)
+    public float GetMovementCost(AnimalBase animal)
     {
         return MovementCost / animal.MovementSpeed;
     }
@@ -108,12 +123,12 @@ public class WorldTile : IThing
         ((StaticAttribute<string>)_Attributes[AttributeId.Surface]).SetValue(surface.Name);
     }
 
-    public void AddObject(TileObject tileObject)
+    public void AddObject(TileObjectBase tileObject)
     {
         TileObjects.Add(tileObject);
     }
 
-    public void RemoveObject(TileObject obj)
+    public void RemoveObject(TileObjectBase obj)
     {
         TileObjects.Remove(obj);
     }

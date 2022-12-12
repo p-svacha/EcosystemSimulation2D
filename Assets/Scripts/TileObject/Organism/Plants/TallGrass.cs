@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TallGrass : VisibleTileObject
+public class TallGrass : PlantBase
 {
-    // TileObject Base
+    // Base
     protected override string ObjectName => "Tall Grass";
     protected override string ObjectDescription => "Edible Plants that grow randomly.";
     public override TileObjectType Type => TileObjectType.TallGrass;
     protected override int MAX_HEALTH => 10;
+    protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 1, 0, 0);
 
     protected override NutrientType NUTRIENT_TYPE => NutrientType.Plant;
     protected override float NUTRIENT_VALUE => 20;

@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public abstract class StatusDisplay
 {
-    protected TileObject TileObject;
+    protected TileObjectBase TileObject;
 
     public abstract string Name { get; }
     public abstract Sprite DisplaySprite { get; }
@@ -18,7 +18,7 @@ public abstract class StatusDisplay
 
     public virtual string DisplayValue => "";
 
-    public void Init(TileObject obj)
+    public void Init(TileObjectBase obj)
     {
         TileObject = obj;
     }

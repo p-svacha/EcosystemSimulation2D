@@ -12,9 +12,9 @@ public class Att_MovementSpeed : DynamicAttribute
     public override IThing Thing => Animal;
 
     // Individual
-    private readonly Animal Animal;
+    private readonly AnimalBase Animal;
 
-    public Att_MovementSpeed(Animal animal)
+    public Att_MovementSpeed(AnimalBase animal)
     {
         Animal = animal;
     }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Creer : Animal
+public class Creer : AnimalBase
 {
     // TileObject
     protected override string ObjectName => "Creer";
@@ -14,13 +14,13 @@ public class Creer : Animal
     protected override float MOVEMENT_SPEED_BASE => 0.2f;
     protected override float WATER_MOVEMENT_SPEED => 0f;
     protected override int MAX_HEALTH => 120;
+    protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 0, 1, 0);
 
-    protected override float HUNGER_RATE_BASE => 3f;
+    protected override float HUNGER_RATE_BASE => 2f;
     protected override float MAX_NUTRITION => 80;
     protected override List<NutrientType> DIET => new List<NutrientType>() { NutrientType.Plant };
     protected override float EATING_SPEED => 0.9f;
 
-    protected override SimulationTime PREGNANCY_MIN_AGE => new SimulationTime(0, 0, 1, 0);
     protected override SimulationTime PREGNANCY_MAX_AGE => new SimulationTime(1, 0, 0, 0);
     protected override float PREGNANCY_CHANCE_BASE => 0.01f;
     protected override SimulationTime PREGNANCY_DURATION => new SimulationTime(0, 0, 3, 0);

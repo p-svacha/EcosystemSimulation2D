@@ -7,11 +7,11 @@ public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
     [Header("Elements")]
     public UI_ValueBar HealthBar;
 
-    private VisibleTileObject TileObject;
+    private VisibleTileObjectBase TileObject;
 
     public override void Init(IThing thing)
     {
-        TileObject = (VisibleTileObject)thing;
+        TileObject = (VisibleTileObjectBase)thing;
         HealthBar.Init("Health");
     }
 

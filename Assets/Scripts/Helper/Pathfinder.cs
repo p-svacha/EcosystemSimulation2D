@@ -13,7 +13,7 @@ public static class Pathfinder
     /// <br/> Returned path contains both source and target tile.
     /// <br/> Returns null if no path is found.
     /// </summary>
-    public static List<WorldTile> GetPath(Animal animal, WorldTile from, WorldTile to)
+    public static List<WorldTile> GetPath(AnimalBase animal, WorldTile from, WorldTile to)
     {
         if (to == null) return null;
         if (from == to) return null;
@@ -66,7 +66,7 @@ public static class Pathfinder
     /// <br/> The path is not optimized towards a tile, it's just randomly wandering.
     /// <br/> Returns null if no path is found.
     /// </summary>
-    public static List<WorldTile> GetRandomPath(Animal animal, WorldTile source, int maxRange)
+    public static List<WorldTile> GetRandomPath(AnimalBase animal, WorldTile source, int maxRange)
     {
         List<WorldTile> path = new List<WorldTile> { source };
         int chosenRange = Random.Range(1, maxRange + 1);
@@ -97,7 +97,7 @@ public static class Pathfinder
     /// Returns all tiles can be reached by traversing an exact amount of tiles (range) from a source position.
     /// <br/> Checks shortest path and tiles that can reached earlier than range are not included.
     /// </summary>
-    public static List<WorldTile> GetAllReachablePositionsWithRange(Animal animal, WorldTile center, int range)
+    public static List<WorldTile> GetAllReachablePositionsWithRange(AnimalBase animal, WorldTile center, int range)
     {
         int currentRange = 0;
         List<WorldTile> currentRangeTiles = new List<WorldTile>() { center };
@@ -140,7 +140,7 @@ public static class Pathfinder
     /// <summary>
     /// Real cost of going from one node to another. Must be greater or equal to assumed cost.
     /// </summary>
-    private static float GetCCost(Animal animal, WorldTile from, WorldTile to)
+    private static float GetCCost(AnimalBase animal, WorldTile from, WorldTile to)
     {
         float value = (0.5f * (from.GetMovementCost(animal))) + (0.5f * (to.GetMovementCost(animal))) * Vector2.Distance(from.WorldPosition, to.WorldPosition);
         return value;

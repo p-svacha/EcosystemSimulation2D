@@ -31,15 +31,15 @@ public class SE_Pregnancy : StatusEffect
         };
     }
 
-    protected override bool IsEndConditionReached() => (TileObject as Animal).PregnancyProgress.ExactTime >= (TileObject as Animal).PregnancyDuration.ExactTime;
+    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).PregnancyProgress.ExactTime >= (TileObject as AnimalBase).PregnancyDuration.ExactTime;
     protected override void OnTick()
     {
-        (TileObject as Animal).PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
+        (TileObject as AnimalBase).PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
     }
 
     protected override void OnEnd()
     {
-        (TileObject as Animal).GiveBirth();
-        (TileObject as Animal).PregnancyProgress.Reset();
+        (TileObject as AnimalBase).GiveBirth();
+        (TileObject as AnimalBase).PregnancyProgress.Reset();
     }
 }

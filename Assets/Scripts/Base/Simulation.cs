@@ -23,9 +23,9 @@ public class Simulation : MonoBehaviour
     public bool IsPaused => SpeedModifier == SPEED0_MODIFIER;
 
     // Update List
-    private List<TileObject> SimulatedObjects = new List<TileObject>(); // if performance needs to improve further, change this to an array
-    private List<TileObject> RegisteredObjects = new List<TileObject>();
-    private List<TileObject> UnregisteredObjects = new List<TileObject>();
+    private List<TileObjectBase> SimulatedObjects = new List<TileObjectBase>(); // if performance needs to improve further, change this to an array
+    private List<TileObjectBase> RegisteredObjects = new List<TileObjectBase>();
+    private List<TileObjectBase> UnregisteredObjects = new List<TileObjectBase>();
     public int NumObjects => SimulatedObjects.Count;
 
     // Simulation Constants
@@ -117,15 +117,15 @@ public class Simulation : MonoBehaviour
         UpdateSurfaces();
 
         // Add newly registered objects
-        foreach (TileObject obj in RegisteredObjects) SimulatedObjects.Add(obj);
+        foreach (TileObjectBase obj in RegisteredObjects) SimulatedObjects.Add(obj);
         RegisteredObjects.Clear();
 
         // Remove unregistered objects
-        foreach (TileObject obj in UnregisteredObjects) SimulatedObjects.Remove(obj);
+        foreach (TileObjectBase obj in UnregisteredObjects) SimulatedObjects.Remove(obj);
         UnregisteredObjects.Clear();
 
         // Objects
-        foreach (TileObject obj in SimulatedObjects) obj.Tick();
+        foreach (TileObjectBase obj in SimulatedObjects) obj.Tick();
     }
 
     /// <summary>
@@ -148,7 +148,7 @@ public class Simulation : MonoBehaviour
     /// <summary>
     /// Registers an object to be part of the simulation.
     /// </summary>
-    public void RegisterObject(TileObject obj)
+    public void RegisterObject(TileObjectBase obj)
     {
         RegisteredObjects.Add(obj);
     }
@@ -156,7 +156,7 @@ public class Simulation : MonoBehaviour
     /// <summary>
     /// Unregisters an object from the simulation.
     /// </summary>
-    public void UnregisterObject(TileObject obj)
+    public void UnregisterObject(TileObjectBase obj)
     {
         UnregisteredObjects.Add(obj);
     }

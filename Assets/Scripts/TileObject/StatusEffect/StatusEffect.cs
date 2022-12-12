@@ -14,12 +14,12 @@ public abstract class StatusEffect
     public abstract Dictionary<AttributeId, AttributeModifier> AttributeModifiers { get; }
     
 
-    protected TileObject TileObject;
+    protected TileObjectBase TileObject;
 
     /// <summary>
     /// Initialize a StatusEffect
     /// </summary>
-    public void Init(TileObject obj)
+    public void Init(TileObjectBase obj)
     {
         TileObject = obj;
         Display.Init(obj);

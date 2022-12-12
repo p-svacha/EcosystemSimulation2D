@@ -7,7 +7,7 @@ using UnityEngine;
 /// A VisibleTileObject is a TileObject represented as an own visible GameObject in the world with a SpriteRenderer.
 /// <br/> It's one of the two types of TileObjects beside TilemapTileObject.
 /// </summary>
-public abstract class VisibleTileObject : TileObject
+public abstract class VisibleTileObjectBase : TileObjectBase
 {
     // General
     public Sprite Sprite { get; private set; }

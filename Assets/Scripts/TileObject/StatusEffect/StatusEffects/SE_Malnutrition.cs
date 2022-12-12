@@ -27,9 +27,9 @@ public class SE_Malnutrition : StatusEffect
         };
     }
 
-    protected override bool IsEndConditionReached() => (TileObject as Animal).Malnutrition == 0;
+    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).Malnutrition == 0;
     protected override void OnTick()
     {
-        TileObject.ChangeAttribute(AttributeId.Health, -((TileObject as Animal).Malnutrition * Simulation.Singleton.TickTime), 0f, TileObject.MaxHealth);
+        TileObject.ChangeAttribute(AttributeId.Health, -((TileObject as AnimalBase).Malnutrition * Simulation.Singleton.TickTime), 0f, TileObject.MaxHealth);
     }
 }

@@ -36,8 +36,14 @@ public enum AttributeId
     /// <summary> How long an object has been existing in the world. </summary>
     Age,
 
+    /// <summary> The age at which an organism reaches full size. Animals are able to get pregnant at that point. </summary>
+    MaturityAge,
+
     /// <summary> Current and maximum amount of HP an object has. </summary>
     Health,
+
+    /// <summary> Size of an organism. Affects various other attributes. </summary>
+    Size,
 
 
 

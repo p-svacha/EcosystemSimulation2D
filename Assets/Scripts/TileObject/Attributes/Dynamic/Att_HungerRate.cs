@@ -12,9 +12,9 @@ public class Att_HungerRate : DynamicAttribute
     public override IThing Thing => Thing;
 
     // Individual
-    private readonly Animal Animal;
+    private readonly AnimalBase Animal;
 
-    public Att_HungerRate(Animal animal)
+    public Att_HungerRate(AnimalBase animal)
     {
         Animal = animal;
     }

@@ -5,7 +5,7 @@ using TMPro;
 
 public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
 {
-    private Animal Animal;
+    private AnimalBase Animal;
 
     [Header("Elements")]
     public UI_ValueBar FoodBar;
@@ -15,7 +15,7 @@ public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
     public override void Init(IThing thing)
     {
         base.Init(thing);
-        Animal = (Animal)thing;
+        Animal = (AnimalBase)thing;
         FoodBar.Init("Nutrition");
 
         UpdateStatusDisplays();
