@@ -30,8 +30,9 @@ public abstract class AnimalBase : OrganismBase
 
     // Behaviour Logic
     protected List<WorldTile> CurrentPath;
-    protected bool IsMoving;
-    public string CurrentActivity { get; protected set; }
+    public bool IsMoving { get; private set; }
+    private List<Activity> PossibleActivites = new List<Activity>();
+    public Activity CurrentActivity { get; private set; }
 
     #region Initialize
 
@@ -65,6 +66,11 @@ public abstract class AnimalBase : OrganismBase
 
         // Status Displays
         ConditionalStatusDisplays.Add(new SD_LowHealth(this));
+
+        // Activities
+        PossibleActivites.Add(new Act_WanderAround(this));
+        PossibleActivites.Add(new Act_Stand(this));
+        PossibleActivites.Add(new Act_Eat(this));
     }
 
     public override void LateInit()
@@ -121,6 +127,7 @@ public abstract class AnimalBase : OrganismBase
     {
         // Nutrition
         Nutrition.CalculateNewValues();
+
         Nutrition.ChangeValue(-(HungerRate * Simulation.Singleton.TickTime)); // Decrease Nutrition by HungerRate
         if (Nutrition.Value == 0) ChangeStaticAttribute(AttributeId.Malnutrition, MALNUTRITION_RATE * Simulation.Singleton.TickTime, 0f, 1000f); // Increase malnutrition
         else ChangeStaticAttribute(AttributeId.Malnutrition, -(MALNUTRITION_REGENERATION_RATE * Simulation.Singleton.TickTime), 0f, 1000f); // Decrease malnutrition
@@ -130,43 +137,36 @@ public abstract class AnimalBase : OrganismBase
 
     private void UpdateActivity()
     {
-        if (IsMoving) return; // Just keep moving when already moving
-
-        // If standing on food and not full, eat that
-        if(Nutrition.Ratio < 1f)
+        // Find and set new activity when previous one is done
+        if (CurrentActivity == null || !CurrentActivity.IsActive)
         {
-            TileObjectBase currentFood = GetCurrentFood();
-            if (currentFood != null)
+            float highestUrgency = float.MinValue;
+            Activity highestUrgencyActivity = null;
+            foreach (Activity act in PossibleActivites)
             {
-                Eat(currentFood);
-                CurrentActivity = "Eating " + currentFood.Name;
-                return;
+                float urgency = act.GetUrgency();
+                if (urgency > highestUrgency)
+                {
+                    highestUrgency = urgency;
+                    highestUrgencyActivity = act;
+                }
             }
+
+            CurrentActivity = highestUrgencyActivity;
+            highestUrgencyActivity.Start();
         }
 
-        // Actively for food when hungry
-        if (Nutrition.Ratio < 0.5f)
-        {
-            TileObjectBase closestFood = FindClosestFood((int)VisionRange);
-            if (closestFood != null)
-            {
-                MoveTo(closestFood.Tile);
-                CurrentActivity = "Moving to eat " + closestFood.Name;
-                return;
-            }
-        }
-
-        // If there are no important tasks to do, have a chance to wander around
-        if (Random.value < 0.003f)
-        {
-            SetMovementPath(Pathfinder.GetRandomPath(this, Tile, 8));
-            CurrentActivity = "Wandering around aimlessly";
-            return;
-        }
-
-        CurrentActivity = "Standing";
-        return;
+        else CurrentActivity.OnTick();
     }
+
+    /// <summary>
+    /// Forces the animal to instantly end the current activity and look for a new one.
+    /// </summary>
+    protected void ForceEndCurrentActivity()
+    {
+        CurrentActivity.End();
+    }
+
     private void UpdateMovement()
     {
         if (IsMoving)
@@ -231,13 +231,13 @@ public abstract class AnimalBase : OrganismBase
 
     #region Behaviour Logic
 
-    protected void MoveTo(WorldTile target)
+    public void MoveTo(WorldTile target)
     {
         List<WorldTile> pathToTarget = Pathfinder.GetPath(this, Tile, target);
         SetMovementPath(pathToTarget);
     }
 
-    protected void SetMovementPath(List<WorldTile> path)
+    public void SetMovementPath(List<WorldTile> path)
     {
         if (path == null || path.Count <= 1) return; // no path found
 
@@ -246,52 +246,6 @@ public abstract class AnimalBase : OrganismBase
 
         if (CurrentPath[1].Coordinates.x > CurrentPath[0].Coordinates.x) GetComponent<SpriteRenderer>().flipX = false;
         else if (CurrentPath[1].Coordinates.x < CurrentPath[0].Coordinates.x) GetComponent<SpriteRenderer>().flipX = true;
-    }
-
-    /// <summary>
-    /// Finds the closest object that is edible for this animal.
-    /// </summary>
-    protected TileObjectBase FindClosestFood(int maxRange)
-    {
-        int range = 0;
-        List<WorldTile> currentRangeTiles = new List<WorldTile>() { Tile };
-        while (range < maxRange)
-        {
-            foreach (WorldTile tile in currentRangeTiles)
-            {
-                foreach (TileObjectBase obj in tile.TileObjects)
-                    if (obj.GetNutrientsForAnimal(this) > 0) return obj;
-            }
-            range++;
-            currentRangeTiles = Pathfinder.GetAllReachablePositionsWithRange(this, Tile, range);
-            if (currentRangeTiles == null) return null; // No tiles reachable with that range (we are in a closed space)
-        }
-        return null;
-    }
-
-    /// <summary>
-    /// Returns an edible object the animal is standing on and that can started to be consumed immediately.
-    /// </summary>
-    protected TileObjectBase GetCurrentFood()
-    {
-        if (IsMoving) return null;
-        foreach (TileObjectBase obj in Tile.TileObjects)
-            if (obj.GetNutrientsForAnimal(this) > 0) return obj;
-        return null;
-    }
-
-    protected void Eat(TileObjectBase obj)
-    {
-        // Calculate how much % of the object gets consumed this frame
-        float chunkEaten = obj.GetEatingSpeed(this) * Simulation.Singleton.TickTime;
-
-        // Reduces objects health by that amount
-        float lostHealth = obj.Health.MaxValue * chunkEaten;
-        obj.Health.ChangeValue(-lostHealth);
-
-        // Increase animals nutrition by that amount
-        float gainedNutrition = obj.NutrientValue * chunkEaten;
-        Nutrition.ChangeValue(gainedNutrition);
     }
 
     public void GiveBirth()

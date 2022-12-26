@@ -13,7 +13,7 @@ Helper Attributes
 
 Intermediary Attributes
 	- percentage value with a base value of 1 (100%)	 
-	- Value is dynamically calculated from other attributes and/or Status Effects
+	- Value is dynamically calculated from other attributes and/or Status Effects, NO base value
 	- Value is not directly used for any in-game mechanic, but rather influences other attributes that do
 
 	- i.e. Maturity, Size, Motorics, Hunger, Fertility

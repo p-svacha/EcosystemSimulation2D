@@ -4,7 +4,7 @@ SINCE LAST COMMIT
 
 UP NEXT
 -------------
-- rework attribute types
+- rework attribute types (see attributetypes.txt)
 
 - show main attributes in selection window with GetValueString from attributes (update every 20 frames)
 
@@ -14,7 +14,7 @@ UP NEXT
 
 	for SWC_AnimalBase (all in %):
 		size
-		movement
+		motorics
 		hunger rate
 
 
@@ -23,10 +23,7 @@ UP NEXT
 - Add mountains
 - add multiple sprite support for objects (tall grass)
 - rename Animal to AnimalBase
-- add plantsBase class between VisibleTileObject and TallGrass
-- plants should spawn with 1 health
 - plants should have slow health regeneration
-- plants scale size with health
 - add berries
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
@@ -59,7 +56,6 @@ UP NEXT
 	- eventmanager that can trigger random events
 	- events that do something when triggered
 - add "animals wander in" event
-- dynamic attribute pregnancy chance based on age, health, etc.
 - dynamic attribute miscarriagechance to all animals
 	- add miscarriages
 - allow creating objects with certain values already set

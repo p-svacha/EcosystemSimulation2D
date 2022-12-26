@@ -25,7 +25,7 @@ public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
     {
         base.Update();
         FoodBar.SetValue(Animal.Nutrition.Value, Animal.Nutrition.MaxValue);
-        CurrentActivityText.text = Animal.CurrentActivity;
+        CurrentActivityText.text = Animal.CurrentActivity.DisplayString;
 
         UpdateStatusDisplays();
     }

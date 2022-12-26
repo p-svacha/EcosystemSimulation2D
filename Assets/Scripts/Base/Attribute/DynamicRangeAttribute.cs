@@ -33,7 +33,7 @@ public abstract class DynamicRangeAttribute : DynamicAttribute
     }
 
     /// <summary>
-    /// Should be called at the beginning of each frame. Calculates the new max value from all modifiers and derives the new current value from that and the previous ratio.
+    /// Calculates the new max value from all modifiers and derives the new current value from that and the previous ratio.
     /// </summary>
     public void CalculateNewValues()
     {
