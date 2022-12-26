@@ -52,5 +52,5 @@ public abstract class DynamicRangeAttribute : DynamicAttribute
     }
 
     public override float GetValue() => throw new System.Exception("GetValue should not be used for DynamicRangeAttributes. Use Value or MaxValue instead.");
-    public override string GetValueString() => Value + " / " + MaxValue;
+    public override string GetValueString() => Value.ToString("F1") + " / " + MaxValue.ToString("F1");
 }

@@ -24,7 +24,7 @@ public class Att_HungerRate : DynamicAttribute
     {
         List<AttributeModifier> mods = new List<AttributeModifier>();
 
-        mods.Add(new AttributeModifier("Base Hunger Rate", Animal.Attributes[AttributeId.HungerRateBase].GetValue(), AttributeModifierType.BaseValue));
+        mods.Add(new AttributeModifier("Base Hunger Rate", Animal.GetFloatAttribute(AttributeId.HungerRateBase), AttributeModifierType.BaseValue));
 
         if (Animal.GetFloatAttribute(AttributeId.Size) != 1f)
             mods.Add(new AttributeModifier("Size", Animal.GetFloatAttribute(AttributeId.Size), AttributeModifierType.Multiply));

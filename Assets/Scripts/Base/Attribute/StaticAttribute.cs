@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Has a fixed value of a generic type that is not influenced by other attributes.
+/// <br/> For Attributes storing a time use TimeAttribute.
 /// </summary>
 public class StaticAttribute<T> : Attribute
 {
@@ -27,6 +28,8 @@ public class StaticAttribute<T> : Attribute
 
     public StaticAttribute(IThing thing, AttributeId id, string category, string name, string description, T value)
     {
+        if (!(this is TimeAttribute) && value is SimulationTime) throw new System.Exception("Use TimeAttribute instead of StaticAttribute<SimulationTime>");
+
         _Thing = thing;
         _Id = id;
         _Category = category;
@@ -42,10 +45,7 @@ public class StaticAttribute<T> : Attribute
 
     public override float GetValue()
     {
-        if (Value is float) return (float)(object)Value;
-        if (Value is int) return (int)(object)Value;
-        if (Value is SimulationTime) return (Value as SimulationTime).AbsoluteTime;
-        throw new System.Exception("GetValue is not supported for StaticAttributes with type " + typeof(T).ToString() + ".");
+        return (float)(object)Value;
     }
 
     public T GetStaticValue()

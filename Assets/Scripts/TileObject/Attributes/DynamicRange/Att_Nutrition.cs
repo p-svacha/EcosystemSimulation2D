@@ -23,9 +23,10 @@ public class Att_Nutrition : DynamicRangeAttribute
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        List<AttributeModifier> mods = new List<AttributeModifier>();
-
-        mods.Add(new AttributeModifier("Base Nutrition", Animal.GetFloatAttribute(AttributeId.NutritionBase), AttributeModifierType.BaseValue));
+        List<AttributeModifier> mods = new List<AttributeModifier>
+        {
+            new AttributeModifier("Base Nutrition", Animal.GetFloatAttribute(AttributeId.NutritionBase), AttributeModifierType.BaseValue)
+        };
 
         if (Animal.GetFloatAttribute(AttributeId.Size) != 1f)
             mods.Add(new AttributeModifier("Size", Animal.GetFloatAttribute(AttributeId.Size), AttributeModifierType.Multiply));

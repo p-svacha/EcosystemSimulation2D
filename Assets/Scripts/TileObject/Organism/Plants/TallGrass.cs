@@ -12,6 +12,6 @@ public class TallGrass : PlantBase
     protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 1, 0, 0);
 
     protected override NutrientType NUTRIENT_TYPE => NutrientType.Plant;
-    protected override float NUTRIENT_VALUE => 20;
+    protected override float NUTRIENT_VALUE_BASE => 20;
     protected override float EATING_DIFFICULTY => 0.4f;
 }

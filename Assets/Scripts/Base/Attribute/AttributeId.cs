@@ -85,7 +85,10 @@ public enum AttributeId
     /// <summary> What kind of diet is needed to be able to eat an object. </summary>
     NutrientType,
 
-    /// <summary> How much nutrition an object provides at when being eaten from full health to 0. </summary>
+    /// <summary> Base amount of nutrition an object provides at when being eaten from full health to 0. </summary>
+    NutrientValueBase,
+
+    /// <summary> Actual amount of nutrition an object provides at when being eaten from full health to 0. </summary>
     NutrientValue,
 
     /// <summary> What types of food an animal is able to eat. </summary>

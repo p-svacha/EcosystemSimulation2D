@@ -24,7 +24,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     // Optional Attributes
     protected virtual NutrientType NUTRIENT_TYPE => NutrientType.None;
-    protected virtual float NUTRIENT_VALUE => 0f;
+    protected virtual float NUTRIENT_VALUE_BASE => 0f;
     protected virtual float EATING_DIFFICULTY => 1f;
 
     // General
@@ -46,13 +46,14 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public virtual void Init()
     {
         // Init attributes
-        _Attributes.Add(AttributeId.CreatedAt, new StaticAttribute<SimulationTime>(this, AttributeId.CreatedAt, "General", "Created At", "Time at which an object has been created.", Simulation.Singleton.CurrentTime.Copy()));
+        _Attributes.Add(AttributeId.CreatedAt, new TimeAttribute(this, AttributeId.CreatedAt, "General", "Created At", "Time at which an object has been created.", Simulation.Singleton.CurrentTime.Copy()));
         _Attributes.Add(AttributeId.Age, new Att_Age(this));
         _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(this, AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
         _Attributes.Add(AttributeId.Health, new Att_Health(this));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
-        _Attributes.Add(AttributeId.NutrientValue, new StaticAttribute<float>(this, AttributeId.NutrientValue, "Nutrition", "Nutrients", "How much nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE));
+        _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(this, AttributeId.NutrientValueBase, "Nutrition", "Base Nutrient Value", "Base amount of nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE_BASE));
+        _Attributes.Add(AttributeId.NutrientValue, new Att_NutrientValue(this));
         _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(this, AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
 
         // Status effects
@@ -219,7 +220,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     #region Getters
 
     /// <summary>
-    /// Returns the value of a DynamicAttribute and caches it for the remainder of the frame.
+    /// Returns the value of a DynamicAttribute and caches it for the remainder of the tick.
     /// </summary>
     public float GetFloatAttribute(AttributeId id)
     {

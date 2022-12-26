@@ -55,9 +55,9 @@ public abstract class AnimalBase : OrganismBase
         _Attributes.Add(AttributeId.Malnutrition, new StaticAttribute<float>(this, AttributeId.Malnutrition, "Needs", "Malnutrition", "How advanced the malnutrition of an animal is. The higher it is, the more health it loses.", 0f));
         _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(this, AttributeId.EatingSpeed, "Needs", "Eating Speed", "How fast an animal is at eating food generally.", EATING_SPEED));
 
-        _Attributes.Add(AttributeId.PregnancyMaxAge, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
-        _Attributes.Add(AttributeId.PregnancyDuration, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
-        _Attributes.Add(AttributeId.PregnancyProgress, new StaticAttribute<SimulationTime>(this, AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
+        _Attributes.Add(AttributeId.PregnancyMaxAge, new TimeAttribute(this, AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
+        _Attributes.Add(AttributeId.PregnancyDuration, new TimeAttribute(this, AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
+        _Attributes.Add(AttributeId.PregnancyProgress, new TimeAttribute(this, AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
         _Attributes.Add(AttributeId.PregnancyChanceBase, new StaticAttribute<float>(this, AttributeId.PregnancyChanceBase, "Reproduction", "Base Pregnancy Chance", "Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health.", PREGNANCY_CHANCE_BASE));
         _Attributes.Add(AttributeId.PregnancyChance, new Att_PregnancyChance(this));
         _Attributes.Add(AttributeId.MinNumOffspring, new StaticAttribute<int>(this, AttributeId.MinNumOffspring, "Reproduction", "Minimum amount of offspring", "Minimum amount of children an animal will produce when giving birth.", MIN_NUM_OFFSPRING));

@@ -4,11 +4,19 @@ SINCE LAST COMMIT
 
 UP NEXT
 -------------
-- add life expectancy death of old age
-	- add lifeexpectancy of plants
-	- decrease grass spawn rate
-	- make world generation spawn with some grass
- ==> check performance
+- rework attribute types
+
+- show main attributes in selection window with GetValueString from attributes (update every 20 frames)
+
+	for SWC_TileObjectBase:
+		nutrient type
+		nutrient value
+
+	for SWC_AnimalBase (all in %):
+		size
+		movement
+		hunger rate
+
 
 - add second animal
 - Animals should drink water and have Thirst
@@ -33,6 +41,7 @@ UP NEXT
 	- display floats with only one decimal
 	- max height
 	- make categories collapsable
+	- two tabs (sorted by category, sorted by type (with new type system))
 - create TilemapTileObject class that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
 	- update tileobjectfactory
 - add speed4 button with modifier 10
@@ -62,6 +71,7 @@ UP NEXT
 - change selection window focus button to fastly move to target instead of instant jump
 - add mouseover for statusdisplays in selectionwindow that show modifiers
 - sound
+- improve world generation to spawn plants with age and also animals with age
 
 IDEAS FOR PERFORMANCE INCREASES
 ------------------------

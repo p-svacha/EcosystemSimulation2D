@@ -23,11 +23,12 @@ public class Att_Health : DynamicRangeAttribute
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        List<AttributeModifier> mods = new List<AttributeModifier>();
+        List<AttributeModifier> mods = new List<AttributeModifier>
+        {
+            new AttributeModifier("Base Health", Object.GetFloatAttribute(AttributeId.HealthBase), AttributeModifierType.BaseValue)
+        };
 
-        mods.Add(new AttributeModifier("Base Health", Object.GetFloatAttribute(AttributeId.HealthBase), AttributeModifierType.BaseValue));
-
-        if(Object.GetFloatAttribute(AttributeId.Size) != 1f)
+        if (Object.GetFloatAttribute(AttributeId.Size) != 1f)
             mods.Add(new AttributeModifier("Size", Object.GetFloatAttribute(AttributeId.Size), AttributeModifierType.Multiply));
 
         return mods;

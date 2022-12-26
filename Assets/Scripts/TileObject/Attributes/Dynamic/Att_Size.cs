@@ -21,17 +21,23 @@ public class Att_Size : DynamicAttribute
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        List<AttributeModifier> mods = new List<AttributeModifier>();
-
-        mods.Add(new AttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue));
+        List<AttributeModifier> mods = new List<AttributeModifier>
+        {
+            new AttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue)
+        };
 
         if (Organism.Age < Organism.MaturityAge) 
         {
             float ageRatio = Organism.Age / Organism.MaturityAge;
-            float sizeRatio = 0.5f + (0.5f * ageRatio); // 50%-100%
+            float sizeRatio = 0.3f + (0.7f * ageRatio); // 30%-100%
             mods.Add(new AttributeModifier("Age", sizeRatio, AttributeModifierType.Multiply));
         }
 
         return mods;
+    }
+
+    public override string GetValueString()
+    {
+        return (GetValue() * 100).ToString("F1") + "%";
     }
 }

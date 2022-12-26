@@ -1,0 +1,24 @@
+Introduce Attribute Types (old Types get replaced and logic dependent on old type will be moved to attribute child classes):
+
+Base Attributes
+	- Constant, Value is set at creation of the attribute and will NEVER change
+	- Value is not directly used for any in-game mechanic, but rather influences other attributes that do
+	- i.e. Base Land Movement Speed, Base Nutrient Value
+
+Helper Attributes
+	- Fixed values, not dymanically calculated
+	- can change after creation
+	- Value is not directly used for any in-game mechanic, but rather influences other attributes that do
+	- i.e. Age, Pregnancy Progress
+
+Intermediary Attributes
+	- percentage value with a base value of 1 (100%)	 
+	- Value is dynamically calculated from other attributes and/or Status Effects
+	- Value is not directly used for any in-game mechanic, but rather influences other attributes that do
+
+	- i.e. Maturity, Size, Motorics, Hunger, Fertility
+
+Stat Attributes
+	- Attributes that are directly used for an in-game mechanic
+	- usually calculated from base attributes, intermediary attributes and/or status effects
+	- i.e. Land Movement Speed, Hunger Rate
