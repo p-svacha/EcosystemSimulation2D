@@ -110,7 +110,7 @@ public class WorldTile : IThing
     /// </summary>
     public float GetMovementCost(AnimalBase animal)
     {
-        return MovementCost / animal.MovementSpeed;
+        return MovementCost / animal.LandMovementSpeed;
     }
 
     #endregion

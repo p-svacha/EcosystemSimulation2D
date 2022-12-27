@@ -879,7 +879,7 @@ MonoBehaviour:
   AttributeListContainer: {fileID: 4939831831788460037}
   AttributeBreakdownText: {fileID: 4939831831980873866}
   AttributeCategoryPrefab: {fileID: 7712099764485755944, guid: 6f87ba46e8345d34486ced5c45d2d852, type: 3}
-  AttributePrefab: {fileID: 3512368428623438535, guid: 9bc03f4f6bb02034ebcac99ac564fd9b, type: 3}
+  AttributePrefab: {fileID: 4857425740152052060, guid: 9bc03f4f6bb02034ebcac99ac564fd9b, type: 3}
 --- !u!1 &4939831831681237823
 GameObject:
   m_ObjectHideFlags: 0

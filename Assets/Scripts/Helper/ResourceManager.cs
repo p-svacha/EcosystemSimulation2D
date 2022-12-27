@@ -36,18 +36,19 @@ public class ResourceManager : MonoBehaviour
     [Header("Special Tiles")]
     public TileBase WhiteTile;
 
-    [Header("UI Icons")]
+    [Header("UI Basics")]
     public Sprite RemoveSprite;
-
-    [Header("UI Colors")]
     public Color TextButtonDefaultColor;
     public Color IconButtonDefaultColor;
     public Color IconButtonDisabledColor;
     public Color ButtonSelectedColor;
+    public Tooltip Tooltip;
+    public GameObject UiOverlaysContainer;
 
     [Header("Selection Window Content")]
     public UI_SWC_TileObjectBase SWC_TileObjectBase;
     public UI_SWC_AnimalBase SWC_AnimalBase;
+    public UI_SimpleAttributeDisplay SimpleAttributeDisplay;
     
 
     void Awake()

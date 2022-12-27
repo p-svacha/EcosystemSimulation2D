@@ -11,12 +11,17 @@ public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
     public UI_ValueBar FoodBar;
     public TextMeshProUGUI CurrentActivityText;
     public GameObject StatusDisplayContainer;
+    public UI_SimpleAttributeDisplay SizeDisplay;
+    public UI_SimpleAttributeDisplay MovementDisplay;
 
     public override void Init(IThing thing)
     {
         base.Init(thing);
         Animal = (AnimalBase)thing;
         FoodBar.Init("Nutrition");
+
+        SizeDisplay.Init(thing.Attributes[AttributeId.Size]);
+        MovementDisplay.Init(thing.Attributes[AttributeId.Movement]);
 
         UpdateStatusDisplays();
     }
@@ -26,6 +31,9 @@ public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
         base.Update();
         FoodBar.SetValue(Animal.Nutrition.Value, Animal.Nutrition.MaxValue);
         CurrentActivityText.text = Animal.CurrentActivity.DisplayString;
+
+        SizeDisplay.UpdateValue();
+        MovementDisplay.UpdateValue();
 
         UpdateStatusDisplays();
     }

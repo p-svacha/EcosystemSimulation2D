@@ -26,9 +26,9 @@ public class SE_Pregnancy : StatusEffect
         _Modifiers = new Dictionary<AttributeId, AttributeModifier>()
         {
             { AttributeId.HungerRate, new AttributeModifier(Name, 1.5f, AttributeModifierType.Multiply) },
-            { AttributeId.LandMovementSpeed, new AttributeModifier(Name, 0.5f, AttributeModifierType.Multiply) },
+            { AttributeId.Movement, new AttributeModifier(Name, 0.6f, AttributeModifierType.Multiply) },
             { AttributeId.Size, new AttributeModifier(Name, 1.1f, AttributeModifierType.Multiply) },
-            { AttributeId.PregnancyChance, new AttributeModifier(Name, 0f, AttributeModifierType.Overwrite, 100) }
+            { AttributeId.PregnancyChance, new AttributeModifier(Name, 0f, AttributeModifierType.Overwrite, priority: 100) }
         };
     }
 

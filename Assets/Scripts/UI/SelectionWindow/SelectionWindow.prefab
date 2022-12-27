@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5656595193173382785}
   - component: {fileID: 6742463288570429478}
   - component: {fileID: 8320006998578305897}
+  - component: {fileID: 3446010330071321723}
   m_Layer: 5
   m_Name: InfoButton
   m_TagString: Untagged
@@ -121,6 +122,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3446010330071321723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 307758351932609895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fcf996ebea15a40a7d017346041fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  Title: 
+  Text: Info+
+  IsFocussed: 0
+  CurrentDelay: 0
+  Tooltip: {fileID: 0}
 --- !u!1 &946373761149335738
 GameObject:
   m_ObjectHideFlags: 0
@@ -133,6 +152,7 @@ GameObject:
   - component: {fileID: 5240427617864369954}
   - component: {fileID: 4411519495655262427}
   - component: {fileID: 5089337263258817532}
+  - component: {fileID: 1615033308646702782}
   m_Layer: 5
   m_Name: RemoveButton
   m_TagString: Untagged
@@ -242,6 +262,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1615033308646702782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946373761149335738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fcf996ebea15a40a7d017346041fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  Title: 
+  Text: Remove Object
+  IsFocussed: 0
+  CurrentDelay: 0
+  Tooltip: {fileID: 0}
 --- !u!1 &3417044912925229094
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,6 +292,7 @@ GameObject:
   - component: {fileID: 2891504472244698413}
   - component: {fileID: 3278255379896036617}
   - component: {fileID: 6768075612679394204}
+  - component: {fileID: 321488173889620789}
   m_Layer: 5
   m_Name: FocusButton
   m_TagString: Untagged
@@ -363,6 +402,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &321488173889620789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3417044912925229094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fcf996ebea15a40a7d017346041fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  Title: 
+  Text: Focus Camera
+  IsFocussed: 0
+  CurrentDelay: 0
+  Tooltip: {fileID: 0}
 --- !u!1 &3873364861080996531
 GameObject:
   m_ObjectHideFlags: 0
@@ -375,6 +432,7 @@ GameObject:
   - component: {fileID: 1940357656561384446}
   - component: {fileID: 2240904770077397518}
   - component: {fileID: 2789890107660982183}
+  - component: {fileID: 2482482742367171504}
   m_Layer: 5
   m_Name: SelectNextLayerButton
   m_TagString: Untagged
@@ -484,6 +542,24 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2482482742367171504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3873364861080996531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fcf996ebea15a40a7d017346041fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  Title: 
+  Text: Select next object on same tile
+  IsFocussed: 0
+  CurrentDelay: 0
+  Tooltip: {fileID: 0}
 --- !u!1 &7550934991295238787
 GameObject:
   m_ObjectHideFlags: 0
@@ -927,6 +1003,7 @@ GameObject:
   - component: {fileID: 3070116816122670029}
   - component: {fileID: 2443091116302715450}
   - component: {fileID: 4070823014960442279}
+  - component: {fileID: 1818162538631514125}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -1036,3 +1113,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1818162538631514125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8380017668987505559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25fcf996ebea15a40a7d017346041fde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Type: 1
+  Title: 
+  Text: Close window
+  IsFocussed: 0
+  CurrentDelay: 0
+  Tooltip: {fileID: 0}

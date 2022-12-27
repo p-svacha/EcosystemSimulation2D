@@ -1,23 +1,13 @@
-SINCE LAST COMMIT
+NEXT VERSION
 -------------------
-
+added tooltip framework,
+added tooltips to selection window
+added general movement modifier
+added main attributes to animal selection window
 
 UP NEXT
 -------------
 - rework attribute types (see attributetypes.txt)
-
-- show main attributes in selection window with GetValueString from attributes (update every 20 frames)
-
-	for SWC_TileObjectBase:
-		nutrient type
-		nutrient value
-
-	for SWC_AnimalBase (all in %):
-		size
-		motorics
-		hunger rate
-
-
 - add second animal
 - Animals should drink water and have Thirst
 - Add mountains
@@ -28,8 +18,8 @@ UP NEXT
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
-- add tooltips to statusdisplays in selectionwindow
-- add tooltips for buttons in selectionwindow
+- add tooltips to statusdisplays in selectionwindow (statuseffect descirption)
+- add tooltips to bars in selectionwindow (attribute descirption)
 - add particle effect when eating
 - add path visualization to show where animals are walking to atm
 - status effects on animals
@@ -63,7 +53,6 @@ UP NEXT
 	- TileFactory would call that function
 	- additionally params can added to TileFactory.CreateObject that get passed on to OnSpawn, necessary to know where the spawning is from
 		- newborn and event spawn have different effects for example
-- fix display of HourSplit in SimulationTime.ToString so it always just shows ".#"
 - change selection window focus button to fastly move to target instead of instant jump
 - add mouseover for statusdisplays in selectionwindow that show modifiers
 - sound

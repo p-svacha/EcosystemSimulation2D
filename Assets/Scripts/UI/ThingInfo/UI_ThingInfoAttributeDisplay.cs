@@ -8,7 +8,7 @@ using TMPro;
 /// Represents an attribute displayed as a row within the ThingInfoWindow.
 /// Can be clicked on for further information.
 /// </summary>
-public class UI_ThingInfoAttribute : MonoBehaviour
+public class UI_ThingInfoAttributeDisplay : MonoBehaviour
 {
     public TextMeshProUGUI NameText;
     public TextMeshProUGUI ValueText;

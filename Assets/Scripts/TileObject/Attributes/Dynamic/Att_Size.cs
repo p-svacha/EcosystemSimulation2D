@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Att_Size : DynamicAttribute
+public class Att_Size : PercentageAttribute
 {
     // Attribute Base
     public override string Name => "Size";
@@ -21,10 +21,7 @@ public class Att_Size : DynamicAttribute
 
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
-        List<AttributeModifier> mods = new List<AttributeModifier>
-        {
-            new AttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue)
-        };
+        List<AttributeModifier> mods = base.GetDynamicValueModifiers();
 
         if (Organism.Age < Organism.MaturityAge) 
         {
@@ -34,10 +31,5 @@ public class Att_Size : DynamicAttribute
         }
 
         return mods;
-    }
-
-    public override string GetValueString()
-    {
-        return (GetValue() * 100).ToString("F1") + "%";
     }
 }

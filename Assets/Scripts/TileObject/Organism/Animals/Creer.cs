@@ -11,8 +11,8 @@ public class Creer : AnimalBase
 
     // Animal Base
     protected override float VISION_RANGE => 10f;
-    protected override float MOVEMENT_SPEED_BASE => 0.2f;
-    protected override float WATER_MOVEMENT_SPEED => 0f;
+    protected override float LAND_MOVEMENT_SPEED_BASE => 0.2f;
+    protected override float WATER_MOVEMENT_SPEED_BASE => 0f;
     protected override int HEALTH_BASE => 120;
     protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 2, 0, 0);
     

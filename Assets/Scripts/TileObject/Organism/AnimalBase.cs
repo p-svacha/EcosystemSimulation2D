@@ -9,8 +9,8 @@ public abstract class AnimalBase : OrganismBase
     public override UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_AnimalBase;
 
     // Required Attributes
-    protected abstract float MOVEMENT_SPEED_BASE { get; }
-    protected abstract float WATER_MOVEMENT_SPEED { get; }
+    protected abstract float LAND_MOVEMENT_SPEED_BASE { get; }
+    protected abstract float WATER_MOVEMENT_SPEED_BASE { get; }
     protected abstract float NUTRITION_BASE { get; }
     protected abstract float HUNGER_RATE_BASE { get; }
     protected abstract List<NutrientType> DIET { get; }
@@ -40,14 +40,20 @@ public abstract class AnimalBase : OrganismBase
     {
         base.Init();
 
-        if (MOVEMENT_SPEED_BASE >= 1f) Debug.LogWarning("Movement Speed of an animal is not allowed to be greater than 1 because it breaks Pathfinding.");
+        if (LAND_MOVEMENT_SPEED_BASE >= 1f) Debug.LogWarning("Movement Speed of an animal is not allowed to be greater than 1 because it breaks Pathfinding.");
 
         // Attributes
-        _Attributes.Add(AttributeId.LandMovementSpeedBase, new StaticAttribute<float>(this, AttributeId.LandMovementSpeedBase, "General", "Base Movement Speed", "Base speed at which an animal moves on land.", MOVEMENT_SPEED_BASE));
-        _Attributes.Add(AttributeId.LandMovementSpeed, new Att_MovementSpeed(this));
-        _Attributes.Add(AttributeId.WaterMovementSpeed, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "General", "Water Movement Speed", "Base speed at which an animal moves on water.", WATER_MOVEMENT_SPEED));
+        // General
         _Attributes.Add(AttributeId.VisionRange, new StaticAttribute<float>(this, AttributeId.VisionRange, "General", "Vision Range", "How many tiles an animal can see in all directions and detect specific objects.", VISION_RANGE));
 
+        // Movement
+        _Attributes.Add(AttributeId.LandMovementSpeedBase, new StaticAttribute<float>(this, AttributeId.LandMovementSpeedBase, "Movement", "Base Movement Speed", "Base speed at which an animal moves on land.", LAND_MOVEMENT_SPEED_BASE));
+        _Attributes.Add(AttributeId.WaterMovementSpeedBase, new StaticAttribute<float>(this, AttributeId.WaterMovementSpeed, "Movement", "Base Movement Speed", "Base speed at which an animal moves on water.", WATER_MOVEMENT_SPEED_BASE));
+        _Attributes.Add(AttributeId.Movement, new Att_Movement(this));
+        _Attributes.Add(AttributeId.LandMovementSpeed, new Att_LandMovementSpeed(this));
+        _Attributes.Add(AttributeId.WaterMovementSpeed, new Att_WaterMovementSpeed(this));
+
+        // Needs
         _Attributes.Add(AttributeId.Diet, new Att_Diet(this, DIET));
         _Attributes.Add(AttributeId.NutritionBase, new StaticAttribute<float>(this, AttributeId.NutritionBase, "Needs", "Base Nutrition", "Base amount of nutrition an animal can store.", NUTRITION_BASE));
         _Attributes.Add(AttributeId.Nutrition, new Att_Nutrition(this));
@@ -56,6 +62,7 @@ public abstract class AnimalBase : OrganismBase
         _Attributes.Add(AttributeId.Malnutrition, new StaticAttribute<float>(this, AttributeId.Malnutrition, "Needs", "Malnutrition", "How advanced the malnutrition of an animal is. The higher it is, the more health it loses.", 0f));
         _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(this, AttributeId.EatingSpeed, "Needs", "Eating Speed", "How fast an animal is at eating food generally.", EATING_SPEED));
 
+        // Reproduction
         _Attributes.Add(AttributeId.PregnancyMaxAge, new TimeAttribute(this, AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
         _Attributes.Add(AttributeId.PregnancyDuration, new TimeAttribute(this, AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
         _Attributes.Add(AttributeId.PregnancyProgress, new TimeAttribute(this, AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
@@ -259,7 +266,8 @@ public abstract class AnimalBase : OrganismBase
     #region Getters
 
     public float VisionRange => GetFloatAttribute(AttributeId.VisionRange);
-    public float MovementSpeed => GetFloatAttribute(AttributeId.LandMovementSpeed);
+    public float Movement => GetFloatAttribute(AttributeId.Movement);
+    public float LandMovementSpeed => GetFloatAttribute(AttributeId.LandMovementSpeed);
     public float WaterMovementSpeed => GetFloatAttribute(AttributeId.WaterMovementSpeed);
     public bool CanSwim => GetFloatAttribute(AttributeId.WaterMovementSpeed) > 0f;
 

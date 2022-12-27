@@ -17,12 +17,12 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 
     [Header("Prefabs")]
     public GameObject AttributeCategoryPrefab;
-    public UI_ThingInfoAttribute AttributePrefab;
+    public UI_ThingInfoAttributeDisplay AttributePrefab;
 
     private IThing Thing;
 
     // Update / Refresh
-    private List<UI_ThingInfoAttribute> AttributeDisplays = new List<UI_ThingInfoAttribute>(); 
+    private List<UI_ThingInfoAttributeDisplay> AttributeDisplays = new List<UI_ThingInfoAttributeDisplay>(); 
     private Attribute SelectedAttribute;
 
     private void Start()
@@ -63,7 +63,7 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
             catDisplay.GetComponentInChildren<TextMeshProUGUI>().text = attGroup.Key;
             foreach (Attribute att in attGroup.Value)
             {
-                UI_ThingInfoAttribute attDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
+                UI_ThingInfoAttributeDisplay attDisplay = Instantiate(AttributePrefab, AttributeListContainer.transform);
                 attDisplay.Init(att, this);
                 AttributeDisplays.Add(attDisplay);
             }
@@ -76,7 +76,7 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 
     private void UpdateAttributeDisplays()
     {
-        foreach (UI_ThingInfoAttribute attDisplay in AttributeDisplays) attDisplay.UpdateValueDisplay();
+        foreach (UI_ThingInfoAttributeDisplay attDisplay in AttributeDisplays) attDisplay.UpdateValueDisplay();
     }
 
     void Update()

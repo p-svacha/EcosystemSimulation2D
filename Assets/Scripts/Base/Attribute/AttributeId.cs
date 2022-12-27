@@ -53,6 +53,8 @@ public enum AttributeId
 
 
 
+    /// <summary> Modifier of how capable an animal is at moving. </summary>
+    Movement,
 
     /// <summary> Base speed at which an animal moves on land. </summary>
     LandMovementSpeedBase,
@@ -60,7 +62,10 @@ public enum AttributeId
     /// <summary> Actual speed at which an animal moves on land. </summary>
     LandMovementSpeed,
 
-    /// <summary> Speed at which an animal moves on water. </summary>
+    /// <summary> Base speed at which an animal moves on water. </summary>
+    WaterMovementSpeedBase,
+
+    /// <summary> Actual speed at which an animal moves on water </summary>
     WaterMovementSpeed,
 
     /// <summary> How many tiles an animal can see in all directions and detect specific objects. </summary>
