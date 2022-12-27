@@ -67,7 +67,7 @@ public class World : MonoBehaviour
     /// <summary>
     /// Spawns a new tileobject in the world.
     /// </summary>
-    public void SpawnTileObject(WorldTile tile, TileObjectType tileObjectType)
+    public void SpawnTileObject(WorldTile tile, TileObjectId tileObjectType)
     {
         VisibleTileObjectBase newObject = TileObjectFactory.CreateObject(tileObjectType);
         newObject.transform.position = tile.WorldPosition3;

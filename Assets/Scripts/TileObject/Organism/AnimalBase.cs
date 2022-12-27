@@ -258,7 +258,7 @@ public abstract class AnimalBase : OrganismBase
     public void GiveBirth()
     {
         int numOffspring = Random.Range(MinNumOffspring, MaxNumOffspring + 1);
-        for(int i = 0; i < numOffspring; i++) World.Singleton.SpawnTileObject(Tile, Type);
+        for(int i = 0; i < numOffspring; i++) World.Singleton.SpawnTileObject(Tile, ObjectId);
     }
 
     #endregion

@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class TallGrass : PlantBase
 {
-    // Base
+    // TileObject Base
+    public override TileObjectId ObjectId => TileObjectId.TallGrass;
     protected override string ObjectName => "Tall Grass";
     protected override string ObjectDescription => "Edible Plants that grow randomly.";
-    public override TileObjectType Type => TileObjectType.TallGrass;
+    protected override string ObjectCategory => "Plants";
+
+
     protected override int HEALTH_BASE => 10;
     protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 1, 0, 0);
 

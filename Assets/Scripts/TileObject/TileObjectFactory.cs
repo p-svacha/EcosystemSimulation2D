@@ -9,13 +9,14 @@ using UnityEngine;
 public static class TileObjectFactory
 {
 
-    public static VisibleTileObjectBase CreateObject(TileObjectType type)
+    public static VisibleTileObjectBase CreateObject(TileObjectId type)
     {
         GameObject newObject = new GameObject(type.ToString());
         VisibleTileObjectBase tileObject = type switch
         {
-            TileObjectType.TallGrass => newObject.AddComponent<TallGrass>(),
-            TileObjectType.Creer => newObject.AddComponent<Creer>(),
+            TileObjectId.TallGrass => newObject.AddComponent<TallGrass>(),
+            TileObjectId.Creer => newObject.AddComponent<Creer>(),
+            TileObjectId.Wofox => newObject.AddComponent<Wofox>(),
             _ => throw new System.Exception("TileObjectType " + type.ToString() + " not handled in TileObjectFactory."),
         };
 
@@ -34,8 +35,8 @@ public static class TileObjectFactory
     }
 
 
-    public static List<TileObjectType> GetAllObjectTypes()
+    public static List<TileObjectId> GetAllObjectTypes()
     {
-        return System.Enum.GetValues(typeof(TileObjectType)).Cast<TileObjectType>().ToList();
+        return System.Enum.GetValues(typeof(TileObjectId)).Cast<TileObjectId>().ToList();
     }
 }

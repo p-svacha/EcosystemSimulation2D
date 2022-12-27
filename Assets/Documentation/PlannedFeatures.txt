@@ -17,6 +17,15 @@ UP NEXT
 - add berries
 - Add wofox animal
 - add selection marker when something is selected (add spriterenderer as child and scale it)
+- replace "remove object" button in selection window with god mode button that opens a popup menu with different actions
+	- remove object
+	- age 1 month
+	- add healths
+	- remove health
+	- add nutrition
+	- remove nutrition
+	- force new activity
+	- add status effect -> subselection
 - use raycast in RemoveObject tool in editor to exactly remove the object you're aiming at
 - add tooltips to statusdisplays in selectionwindow (statuseffect descirption)
 - add tooltips to bars in selectionwindow (attribute descirption)
@@ -57,6 +66,20 @@ UP NEXT
 - add mouseover for statusdisplays in selectionwindow that show modifiers
 - sound
 - improve world generation to spawn plants with age and also animals with age
+
+FEATURES FOR THE WHEEL (https://wheelofnames.com/)
+----------------------------
+Rework attribute types + Improve ThingInfo
+Add water animal
+Add land animal
+Add drinking (nutrient & hydrient to tiles)
+Add initial objects and age to world generation
+Add berries
+Improve time controls
+Add eating particle effects
+Add selectionmarker when something is selected
+Add tooltips to bars and status displays in selectionwindow
+
 
 IDEAS FOR PERFORMANCE INCREASES
 ------------------------

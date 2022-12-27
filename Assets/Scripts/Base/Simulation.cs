@@ -30,7 +30,7 @@ public class Simulation : MonoBehaviour
     public int NumObjects => SimulatedObjects.Count;
 
     // Simulation Constants
-    public const float MOVEMENT_SPEED_MODIFIER = 30f;
+    public const float MOVEMENT_SPEED_MODIFIER = 20f;
 
     /// <summary>
     /// Every individual WorldTile only gets updated every n'th frame according to this value for performance reasons.

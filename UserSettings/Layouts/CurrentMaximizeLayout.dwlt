@@ -23,7 +23,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 31112
+  controlID: 3729
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 31113
+  controlID: 3730
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 31114
+  controlID: 3731
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 31115
+  controlID: 3732
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -248,9 +248,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: f6710000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 2afbffffa26e0000366f0000
+      m_SelectedIDs: 326f0000
+      m_LastClickedID: 28466
+      m_ExpandedIDs: 22fbffffbe6e0000566f0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -580,9 +580,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 69.14193, y: 206.39198, z: -0.4705806}
+    m_Target: {x: 122.27827, y: 182.25195, z: -0.5656848}
     speed: 2
-    m_Value: {x: 69.14193, y: 206.39198, z: -0.4705806}
+    m_Value: {x: 122.27827, y: 182.25195, z: -0.5656848}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -633,9 +633,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 99.66654
+    m_Target: 22.366747
     speed: 2
-    m_Value: 99.66654
+    m_Value: 22.366747
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -684,7 +684,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 31063
+  controlID: 3700
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -753,22 +753,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/UI/ThingInfo
+    - Assets/Resources/ObjectSprites
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/UI/ThingInfo
+  - Assets/Resources/ObjectSprites
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Workspace\Unity\EcosystemSimulation2D
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 278}
-    m_SelectedIDs: ba880000
-    m_LastClickedID: 35002
-    m_ExpandedIDs: 00000000127700001477000016770000187700001a7700001c7700001e77000020770000dc7c0000187f0000b28300002489000000ca9a3b
+    scrollPos: {x: 0, y: 0}
+    m_SelectedIDs: 34780000
+    m_LastClickedID: 30772
+    m_ExpandedIDs: 00000000c0770000c4770000c6770000c8770000ca770000cc770000d0770000d2770000d4770000d6770000de77000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -796,7 +796,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000127700001477000016770000187700001a7700001c7700001e77000020770000dc7c0000187f0000b28300002489000000ca9a3b
+    m_ExpandedIDs: 00000000c0770000c4770000c6770000c8770000ca770000cc770000d0770000d2770000d4770000d6770000de77000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -821,8 +821,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: f6710000
-    m_LastClickedInstanceID: 29174
+    m_SelectedInstanceIDs: 326f0000
+    m_LastClickedInstanceID: 28466
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
@@ -925,8 +925,8 @@ MonoBehaviour:
     y: 0
     width: 454
     height: 947
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}

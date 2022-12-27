@@ -5,9 +5,10 @@ using UnityEngine;
 public class Creer : AnimalBase
 {
     // TileObject
+    public override TileObjectId ObjectId => TileObjectId.Creer;
     protected override string ObjectName => "Creer";
     protected override string ObjectDescription => "A peaceful animal that eats plants.";
-    public override TileObjectType Type => TileObjectType.Creer;
+    protected override string ObjectCategory => "Animals";
 
     // Animal Base
     protected override float VISION_RANGE => 10f;

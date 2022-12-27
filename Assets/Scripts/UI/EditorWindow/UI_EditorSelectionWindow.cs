@@ -35,7 +35,7 @@ namespace WorldEditorSpace
 
             AddSelectionThing(null, EditorTool.RemoveObject, "Remove Object", ResourceManager.Singleton.RemoveSprite);
 
-            foreach (TileObjectType objectType in TileObjectFactory.GetAllObjectTypes())
+            foreach (TileObjectId objectType in TileObjectFactory.GetAllObjectTypes())
             {
                 VisibleTileObjectBase dummyObject = TileObjectFactory.CreateObject(objectType); // Spawn a dummy object for each type to make it work modularly
                 dummyObject.transform.position = new Vector3(-666, -666, 0);

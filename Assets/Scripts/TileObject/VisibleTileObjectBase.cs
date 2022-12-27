@@ -17,13 +17,14 @@ public abstract class VisibleTileObjectBase : TileObjectBase
     {
         base.Init();
 
-        Sprite = ResourceManager.Singleton.GetTileObjectSprite(Type);
+        Sprite = ResourceManager.Singleton.GetTileObjectSprite(ObjectId);
         Renderer = GetComponent<SpriteRenderer>();
     }
 }
 
-public enum TileObjectType
+public enum TileObjectId
 {
     TallGrass,
-    Creer
+    Creer,
+    Wofox
 } 

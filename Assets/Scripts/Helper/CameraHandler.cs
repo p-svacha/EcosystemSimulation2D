@@ -14,7 +14,7 @@ public class CameraHandler : MonoBehaviour
 
     protected static float ZOOM_SPEED = 1.1f; // Mouse Wheel Speed
     protected static float DRAG_SPEED = 0.025f; // Middle Mouse Drag Speed
-    protected static float PAN_SPEED = 40f; // WASD Speed
+    protected static float PAN_SPEED = 60f; // WASD Speed
     protected static float MIN_CAMERA_SIZE = 3f;
     protected static float MAX_CAMERA_SIZE = 50f;
     protected bool IsLeftMouseDown;

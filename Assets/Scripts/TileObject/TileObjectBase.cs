@@ -18,8 +18,10 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public virtual UI_SelectionWindowContent SelectionWindowContent => ResourceManager.Singleton.SWC_TileObjectBase;
 
     // Required Attributes
+    public abstract TileObjectId ObjectId { get; }
     protected abstract string ObjectName { get; }
     protected abstract string ObjectDescription { get; }
+    protected abstract string ObjectCategory { get; }
     protected abstract int HEALTH_BASE { get; }
 
     // Optional Attributes
@@ -29,7 +31,6 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     // General
     protected int NumTicks;
-    public abstract TileObjectType Type { get; }
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
     protected Dictionary<AttributeId, float> FloatAttributeCache = new Dictionary<AttributeId, float>();
     public List<StatusEffect> StatusEffects { get; private set; }

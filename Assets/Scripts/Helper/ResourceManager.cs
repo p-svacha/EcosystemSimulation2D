@@ -19,8 +19,9 @@ public class ResourceManager : MonoBehaviour
     [Header("Object Sprites")]
     public Sprite TallGrassSprite;
     public Sprite CreerSprite;
+    public Sprite WofoxSprite;
 
-    private Dictionary<TileObjectType, Sprite> TileObjectSprites;
+    private Dictionary<TileObjectId, Sprite> TileObjectSprites;
 
     [Header("Status Display")]
     public World_StatusDisplay StatusDisplayWorldPrefab;
@@ -65,9 +66,10 @@ public class ResourceManager : MonoBehaviour
             TerrainTiles.Add(kvp.Key, TileGenerator.CreateTileFromTexture(kvp.Value));
 
         // Objects
-        TileObjectSprites = new Dictionary<TileObjectType, Sprite>();
-        TileObjectSprites.Add(TileObjectType.TallGrass, TallGrassSprite);
-        TileObjectSprites.Add(TileObjectType.Creer, CreerSprite);
+        TileObjectSprites = new Dictionary<TileObjectId, Sprite>();
+        TileObjectSprites.Add(TileObjectId.TallGrass, TallGrassSprite);
+        TileObjectSprites.Add(TileObjectId.Creer, CreerSprite);
+        TileObjectSprites.Add(TileObjectId.Wofox, WofoxSprite);
     }
 
     private void Start()
@@ -77,6 +79,6 @@ public class ResourceManager : MonoBehaviour
 
     public Texture2D GetSurfaceTexture(SurfaceType type) => TerrainTextures[type];
     public TileBase GetSurfaceTile(SurfaceType type) => TerrainTiles[type];
-    public Sprite GetTileObjectSprite(TileObjectType type) => TileObjectSprites[type];
+    public Sprite GetTileObjectSprite(TileObjectId type) => TileObjectSprites[type];
 
 }
