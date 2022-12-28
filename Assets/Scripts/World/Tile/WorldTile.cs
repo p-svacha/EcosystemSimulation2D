@@ -8,7 +8,7 @@ using UnityEngine;
 public class WorldTile : IThing
 {
     // IThing
-    public ThingId Id => ThingId.Tile;
+    public ThingId ThingId => ThingId.Tile;
     public string Name => Surface.Name + " Tile";
     public string Description => "A " + Surface.Name + " tile in the world.";
     public Dictionary<AttributeId, Attribute> Attributes => _Attributes;

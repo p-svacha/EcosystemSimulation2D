@@ -13,8 +13,8 @@ public class ResourceManager : MonoBehaviour
     public Texture2D SandTexture;
     public Texture2D WaterTexture;
 
-    private Dictionary<SurfaceType, Texture2D> TerrainTextures;
-    private Dictionary<SurfaceType, TileBase> TerrainTiles;
+    private Dictionary<SurfaceId, Texture2D> TerrainTextures;
+    private Dictionary<SurfaceId, TileBase> TerrainTiles;
 
     [Header("Object Sprites")]
     public Sprite TallGrassSprite;
@@ -55,14 +55,14 @@ public class ResourceManager : MonoBehaviour
     void Awake()
     {
         // Terrain
-        TerrainTextures = new Dictionary<SurfaceType, Texture2D>();
-        TerrainTiles = new Dictionary<SurfaceType, TileBase>();
+        TerrainTextures = new Dictionary<SurfaceId, Texture2D>();
+        TerrainTiles = new Dictionary<SurfaceId, TileBase>();
 
-        TerrainTextures.Add(SurfaceType.Soil, SoilTexture);
-        TerrainTextures.Add(SurfaceType.Sand, SandTexture);
-        TerrainTextures.Add(SurfaceType.Water, WaterTexture);
+        TerrainTextures.Add(SurfaceId.Soil, SoilTexture);
+        TerrainTextures.Add(SurfaceId.Sand, SandTexture);
+        TerrainTextures.Add(SurfaceId.Water, WaterTexture);
 
-        foreach (KeyValuePair<SurfaceType, Texture2D> kvp in TerrainTextures)
+        foreach (KeyValuePair<SurfaceId, Texture2D> kvp in TerrainTextures)
             TerrainTiles.Add(kvp.Key, TileGenerator.CreateTileFromTexture(kvp.Value));
 
         // Objects
@@ -77,8 +77,8 @@ public class ResourceManager : MonoBehaviour
         _Singleton = GameObject.Find("ResourceManager").GetComponent<ResourceManager>();
     }
 
-    public Texture2D GetSurfaceTexture(SurfaceType type) => TerrainTextures[type];
-    public TileBase GetSurfaceTile(SurfaceType type) => TerrainTiles[type];
+    public Texture2D GetSurfaceTexture(SurfaceId type) => TerrainTextures[type];
+    public TileBase GetSurfaceTile(SurfaceId type) => TerrainTiles[type];
     public Sprite GetTileObjectSprite(TileObjectId type) => TileObjectSprites[type];
 
 }

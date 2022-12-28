@@ -55,6 +55,19 @@ public static class HelperFunctions
         throw new System.Exception();
     }
 
+    public static T GetWeightedRandomElement<T>(Dictionary<T, float> weightDictionary)
+    {
+        float probabilitySum = weightDictionary.Sum(x => x.Value);
+        float rng = Random.Range(0, probabilitySum);
+        float tmpSum = 0;
+        foreach (KeyValuePair<T, float> kvp in weightDictionary)
+        {
+            tmpSum += kvp.Value;
+            if (rng < tmpSum) return kvp.Key;
+        }
+        throw new System.Exception();
+    }
+
     /// <summary>
     /// Returns a random number in a gaussian distribution. About 2/3 of generated numbers are within the standard deviation of the mean.
     /// </summary>
@@ -93,18 +106,24 @@ public static class HelperFunctions
         return new Vector2Int(x, y);
     }
 
-    /// <summary>
-    /// Returns a random position around a point within a given range.
-    /// </summary>
-    public static Vector2Int GetRandomPositionInRange(Vector2Int center, int range)
+    public static TileObjectId GetRandomPlantForSurface(SurfaceId surface) => GetRandomObjectForSurface("Plants", surface);
+    public static TileObjectId GetRandomAnimalForSurface(SurfaceId surface) => GetRandomObjectForSurface("Animals", surface);
+
+    private static TileObjectId GetRandomObjectForSurface(string category, SurfaceId surface)
     {
-        List<Vector2Int> allPositionsInRange = GetAllPositionsInRange(center, range);
-        return allPositionsInRange[Random.Range(0, allPositionsInRange.Count)];
+        Dictionary<TileObjectId, float> weightedCandidates = new Dictionary<TileObjectId, float>();
+        foreach(TileObjectBase obj in TileObjectFactory.DummyObjects.Values.Where(x => x.Category == category && x.SpawnSurfaces.Contains(surface)))
+        {
+            weightedCandidates.Add(obj.ObjectId, obj.Commonness);
+        }
+        return GetWeightedRandomElement(weightedCandidates);
     }
 
     #endregion
 
     #region Tilemap
+
+    public static bool AreCoordinatesInWorld(Vector2Int coordinates) => coordinates.x >= 0 && coordinates.x < WorldGenerator.MAP_WIDTH && coordinates.y >= 0 && coordinates.y < WorldGenerator.MAP_HEIGHT;
 
     /// <summary>
     /// Returns a vector in a given direction with a given distance. Used for other helper functions.
@@ -167,15 +186,29 @@ public static class HelperFunctions
     /// <summary>
     /// Returns all coordinates around a center point within a maximum range. Source position is included.
     /// </summary>
-    public static List<Vector2Int> GetAllPositionsInRange(Vector2Int center, int range)
+    public static List<Vector2Int> GetAllPositionsWithinRange(Vector2Int source, int maxRange)
     {
         List<Vector2Int> positions = new List<Vector2Int>();
-        for(int x = -range; x < range + 1; x++)
-            for(int y = -range; y < range + 1; y++)
-                positions.Add(center + new Vector2Int(x, y)); 
+        for(int x = -maxRange; x < maxRange + 1; x++)
+            for(int y = -maxRange; y < maxRange + 1; y++)
+                positions.Add(source + new Vector2Int(x, y)); 
 
         return positions;
     }
+    /// <summary>
+    /// Returns a random position around a center point within a maximum range.
+    /// </summary>
+    public static Vector2Int GetRandomPositionWithinRange(Vector2Int source, int maxRange)
+    {
+        int x = -1;
+        while (x < 0 || x >= WorldGenerator.MAP_WIDTH) x = Random.Range(source.x - maxRange, source.x + maxRange + 1);
+
+        int y = -1;
+        while (y < 0 || y >= WorldGenerator.MAP_HEIGHT) y = Random.Range(source.y - maxRange, source.y + maxRange + 1);
+
+        return new Vector2Int(x, y);
+    }
+
 
     /// <summary>
     /// Returns all coordinates that have an exact distance to a source position.
@@ -185,14 +218,23 @@ public static class HelperFunctions
         List<Vector2Int> positions = new List<Vector2Int>();
         for (int x = -range; x < range + 1; x++)
         {
-            for (int y = -range; y < range + 1; y++)
-            {
-                if (x > -range && x < range && y > -range && y < range) continue;
-                positions.Add(center + new Vector2Int(x, y));
-            }
+            positions.Add(center + new Vector2Int(x, -range));
+            positions.Add(center + new Vector2Int(x, range));
         }
-
+        for (int y = -range; y < range + 1; y++)
+        {
+            positions.Add(center + new Vector2Int(-range + 1, y));
+            positions.Add(center + new Vector2Int(range - 1, y));
+        }
         return positions;
+    }
+    /// <summary>
+    /// Returns a random position that has the exact range to a source position.
+    /// </summary>
+    public static Vector2Int GetRandomPositionWithRange(Vector2Int source, int range)
+    {
+        List<Vector2Int> allPositionsWithRange = GetAllPositionsWithRange(source, range);
+        return allPositionsWithRange[Random.Range(0, allPositionsWithRange.Count)];
     }
 
     public static SurfaceBase GetRandomSurface()
@@ -204,17 +246,6 @@ public static class HelperFunctions
     {
         int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_WIDTH - mapEdgeMargin);
         int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_HEIGHT - mapEdgeMargin);
-        return new Vector2Int(x, y);
-    }
-
-    public static Vector2Int GetRandomPositionAround(Vector2Int center, int maxDistance)
-    {
-        int x = -1;
-        while (x < 0 || x >= WorldGenerator.MAP_WIDTH) x = Random.Range(center.x - maxDistance, center.x + maxDistance + 1);
-
-        int y = -1;
-        while (y < 0 || y >= WorldGenerator.MAP_HEIGHT) y = Random.Range(center.y - maxDistance, center.y + maxDistance + 1);
-
         return new Vector2Int(x, y);
     }
 

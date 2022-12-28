@@ -7,14 +7,14 @@ using UnityEngine;
 /// </summary>
 public abstract class Activity
 {
-    protected AnimalBase Animal;
+    protected AnimalBase SourceAnimal;
     public abstract ActivityId Id { get; }
     public abstract string DisplayString { get; }
     public bool IsActive { get; protected set; }
 
     public Activity(AnimalBase animal)
     {
-        Animal = animal;
+        SourceAnimal = animal;
         IsActive = false;
     }
 

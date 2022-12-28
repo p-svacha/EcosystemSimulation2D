@@ -13,17 +13,17 @@ public class TerrainLayer : MonoBehaviour
     /// <summary>
     /// Dictionary containing the unique instances of each surface.
     /// </summary>
-    public Dictionary<SurfaceType, SurfaceBase> Surfaces;
+    public Dictionary<SurfaceId, SurfaceBase> Surfaces;
 
     #region Initialization
 
     private void Awake()
     {
         // Initilaize surfaces
-        Surfaces = new Dictionary<SurfaceType, SurfaceBase>();
-        Surfaces.Add(SurfaceType.Soil, new Surface_Soil());
-        Surfaces.Add(SurfaceType.Water, new Surface_Water());
-        Surfaces.Add(SurfaceType.Sand, new Surface_Sand());
+        Surfaces = new Dictionary<SurfaceId, SurfaceBase>();
+        Surfaces.Add(SurfaceId.Soil, new Surface_Soil());
+        Surfaces.Add(SurfaceId.Water, new Surface_Water());
+        Surfaces.Add(SurfaceId.Sand, new Surface_Sand());
     }
 
     #endregion
@@ -79,7 +79,7 @@ public class TerrainLayer : MonoBehaviour
             SurfaceBase surface = surfaceOverlays.Key;
             //string overlayString = TilemapFunctions.GetOverlayString(surfaceOverlays.Value);
             List<TilemapBlendType> blendTypes = DirectionsToBlendType(surfaceOverlays.Value);
-            foreach (TilemapBlendType type in blendTypes) DrawBlendTile(surface.Type, pos, type, blendLayerIndex);
+            foreach (TilemapBlendType type in blendTypes) DrawBlendTile(surface.SurfaceId, pos, type, blendLayerIndex);
             blendLayerIndex++;
         }
     }
@@ -184,7 +184,7 @@ public class TerrainLayer : MonoBehaviour
     /// <summary>
     /// Places a surface tile of the given surface on the correct tilemap according to the given layer and blend type.
     /// </summary>
-    private void DrawBlendTile(SurfaceType surfaceType, Vector2Int pos, TilemapBlendType blendType, int layer)
+    private void DrawBlendTile(SurfaceId surfaceType, Vector2Int pos, TilemapBlendType blendType, int layer)
     {
         Vector3Int pos3 = new Vector3Int(pos.x, pos.y, 0);
         TerrainBlendLayers[layer].DrawTile(pos, blendType, ResourceManager.Singleton.GetSurfaceTile(surfaceType));
@@ -197,7 +197,7 @@ public class TerrainLayer : MonoBehaviour
     public void DrawSurface(Vector2Int coordinates, SurfaceBase surface, bool refreshAdjacentTransitions)
     {
         Vector3Int pos = new Vector3Int(coordinates.x, coordinates.y, 0);
-        TerrainBaseLayer.SetTile(pos, ResourceManager.Singleton.GetSurfaceTile(surface.Type));
+        TerrainBaseLayer.SetTile(pos, ResourceManager.Singleton.GetSurfaceTile(surface.SurfaceId));
         RefreshSurfaceTransitionTiles(coordinates);
 
         if(refreshAdjacentTransitions)

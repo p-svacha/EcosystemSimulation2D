@@ -26,8 +26,13 @@ public class Wofox : AnimalBase
     protected override SimulationTime PREGNANCY_MAX_AGE => new SimulationTime(20, 0, 0, 0);
     protected override float PREGNANCY_CHANCE_BASE => 0.01f;
     protected override SimulationTime PREGNANCY_DURATION => new SimulationTime(0, 0, 5, 0);
-    protected override int MIN_NUM_OFFSPRING => 1;
-    protected override int MAX_NUM_OFFSPRING => 3;
+    protected override int NUM_OFFSPRING_MIN => 1;
+    protected override int NUM_OFFSPRING_MAX => 3;
+
+    protected override List<SurfaceId> SPAWN_SURFACES => new List<SurfaceId>() { SurfaceId.Soil };
+    protected override int SPAWN_GROUP_SIZE_MIN => 1;
+    protected override int SPAWN_GROUP_SIZE_MAX => 1;
+    protected override float COMMONNESS => 6f;
 
     // Individual
 

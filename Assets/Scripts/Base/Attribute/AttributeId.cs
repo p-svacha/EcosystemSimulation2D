@@ -20,12 +20,17 @@ public enum AttributeId
     /// <summary> Used by WorldTile. Coordinate position of a thing. </summary>
     Coordinates,
 
-    /// <summary> Used by WorldTile. Surface of the tile.  </summary>
+    /// <summary> Used by WorldTile. Surface of the tile. </summary>
     Surface,
 
-    /// <summary> Chance per hour that a specific object will spawn on a tile with this surface. Also affects world generation. </summary>
-    TallGrassSpawnChance,
-    /// xyzSpawnChance
+    /// <summary> Chance per hour that a plant will spawn on a tile with this surface. </summary>
+    PlantGrowChance,
+
+    /// <summary> Chance per tile that a plant is spawned on a tile with this surface during world generation. </summary>
+    PlantSpawnChance,
+
+    /// <summary> Chance per tile that a group of animals is spawned on a tile with this surface during world generation. </summary>
+    AnimalSpawnChance,
 
     /// <summary> Flag if animals need to be able to swim to traverse a surface. </summary>
     RequiresSwimming,
@@ -33,6 +38,9 @@ public enum AttributeId
     /// <summary> How much animals are slowed down by traversing something. </summary>
     MovementCost,
 
+
+    /// <summary> Category and subcategories describing what type of object this is. </summary>
+    Category,
 
     /// <summary> How long an object has been existing in the world. </summary>
     Age,
@@ -49,6 +57,15 @@ public enum AttributeId
     /// <summary> How big an organism is compared to its default size. </summary>
     Size,
 
+
+    /// <summary> How likely it is than an object gets spawned on the map. Value is compared relatively between objects for dynamic spawn tables. </summary>
+    Commonness,
+
+    /// <summary> List of surface types that an object can spawn on. </summary>
+    SpawnSurfaces,
+
+    /// <summary> Amount that gets spawned when an objects is created. </summary>
+    SpawnGroupSize,
 
 
     /// <summary> Modifier of how capable an animal is at moving. </summary>
@@ -121,9 +138,6 @@ public enum AttributeId
     /// <summary> How long an animal has been pregnant for. </summary>
     PregnancyProgress,
 
-    /// <summary> Minimum amount of children an animal will produce when giving birth. </summary>
-    MinNumOffspring,
-
-    /// <summary> Maximum amount of children an animal will produce when giving birth. </summary>
-    MaxNumOffspring,
+    /// <summary> Amount of children an animal will produce when giving birth. </summary>
+    NumOffspring,
 }

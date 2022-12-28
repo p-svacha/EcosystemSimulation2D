@@ -21,26 +21,31 @@ public class Act_Eat : Activity
         if (closestFood != null)
         {
             FoodTarget = closestFood;
-            if (FoodTarget.Tile == Animal.Tile) StartEating();
+            if (FoodTarget.Tile == SourceAnimal.Tile) StartEating();
             else
             {
                 _DisplayString = "Moving to eat " + FoodTarget.Name;
                 TargetReached = false;
-                Animal.MoveTo(FoodTarget.Tile);
+                SourceAnimal.MoveTo(FoodTarget.Tile);
             }
         }
-        else End(); // don't see any food
+        else
+        {
+            TargetReached = false;
+            _DisplayString = "Searching food";
+            SourceAnimal.Search();
+        }
     }
 
     public override void OnTick()
     {
-        if (FoodTarget == null || Animal.Nutrition.Ratio > 0.95f)
+        if ((TargetReached && FoodTarget == null) || SourceAnimal.Nutrition.Ratio > 0.95f)
         {
             End();
             return;
         }
 
-        if (!Animal.IsMoving)
+        if (!SourceAnimal.IsMoving)
         {
             if (!TargetReached) StartEating();
             else Eat();
@@ -62,16 +67,16 @@ public class Act_Eat : Activity
     private TileObjectBase FindClosestFood()
     {
         int range = 0;
-        List<WorldTile> currentRangeTiles = new List<WorldTile>() { Animal.Tile };
-        while (range < (int)Animal.VisionRange)
+        List<WorldTile> currentRangeTiles = new List<WorldTile>() { SourceAnimal.Tile };
+        while (range < (int)SourceAnimal.VisionRange)
         {
             foreach (WorldTile tile in currentRangeTiles)
             {
                 foreach (TileObjectBase obj in tile.TileObjects)
-                    if (obj.GetNutrientsForAnimal(Animal) > 0) return obj;
+                    if (obj.GetNutrientsForAnimal(SourceAnimal) > 0) return obj;
             }
             range++;
-            currentRangeTiles = Pathfinder.GetAllReachablePositionsWithRange(Animal, Animal.Tile, range);
+            currentRangeTiles = Pathfinder.GetAllReachablePositionsWithRange(SourceAnimal, SourceAnimal.Tile, range);
             if (currentRangeTiles == null) return null; // No tiles reachable with that range (we are in a closed space)
         }
         return null;
@@ -83,7 +88,7 @@ public class Act_Eat : Activity
     private void Eat()
     {
         // Calculate how much % of the object gets consumed this frame
-        float chunkEaten = FoodTarget.GetEatingSpeed(Animal) * Simulation.Singleton.TickTime;
+        float chunkEaten = FoodTarget.GetEatingSpeed(SourceAnimal) * Simulation.Singleton.TickTime;
 
         // Reduces objects health by that amount
         float lostHealth = FoodTarget.Health.MaxValue * chunkEaten;
@@ -91,11 +96,11 @@ public class Act_Eat : Activity
 
         // Increase animals nutrition by that amount
         float gainedNutrition = FoodTarget.NutrientValue * chunkEaten;
-        Animal.Nutrition.ChangeValue(gainedNutrition);
+        SourceAnimal.Nutrition.ChangeValue(gainedNutrition);
     }
 
     public override float GetUrgency()
     {
-        return (1f - Animal.Nutrition.Ratio) * 2f;
+        return (1f - SourceAnimal.Nutrition.Ratio) * 2f;
     }
 }

@@ -11,7 +11,7 @@ using UnityEngine;
 public abstract class TileObjectBase : MonoBehaviour, IThing
 {
     // IThing
-    public ThingId Id => ThingId.Object;
+    public ThingId ThingId => ThingId.Object;
     public string Name => ObjectName;
     public string Description => ObjectDescription;
     public Dictionary<AttributeId, Attribute> Attributes => _Attributes;
@@ -23,6 +23,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     protected abstract string ObjectDescription { get; }
     protected abstract string ObjectCategory { get; }
     protected abstract int HEALTH_BASE { get; }
+    protected abstract float COMMONNESS { get; }
 
     // Optional Attributes
     protected virtual NutrientType NUTRIENT_TYPE => NutrientType.None;
@@ -38,6 +39,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public List<StatusDisplay> StatusEffectDisplays { get; private set; }
     public List<ConditionalStatusDisplay> ConditionalStatusDisplays { get; private set; }
     public WorldTile Tile { get; private set; }
+    public Sprite DisplaySprite { get; private set; }
 
     #region Initialize
 
@@ -46,10 +48,14 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     /// </summary>
     public virtual void Init()
     {
+        DisplaySprite = ResourceManager.Singleton.GetTileObjectSprite(ObjectId);
+
         // Init attributes
+        _Attributes.Add(AttributeId.Category, new StaticAttribute<string>(AttributeId.Category, "General", "Category", "Category and subcategories describing what type of object this is.", ObjectCategory));
         _Attributes.Add(AttributeId.Age, new TimeAttribute(AttributeId.Age, "General", "Age", "How long an object has been existing in the world.", new SimulationTime()));
         _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
         _Attributes.Add(AttributeId.Health, new Att_Health(this));
+        _Attributes.Add(AttributeId.Commonness, new StaticAttribute<float>(AttributeId.Commonness, "Spawn", "Commonness", "How likely it is than an object gets spawned on the map. Value is compared relatively between objects for dynamic spawn tables.", COMMONNESS));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(NUTRIENT_TYPE));
         _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(AttributeId.NutrientValueBase, "Nutrition", "Base Nutrient Value", "Base amount of nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE_BASE));
@@ -71,9 +77,9 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public virtual void InitExisting() { }
 
     /// <summary>
-    /// Triggers after all Init calls are done.
+    /// Gets called when an object gets created that is completely new simulation-wise, i.e. animal births, plant growth spawns.
     /// </summary>
-    public virtual void LateInit()
+    public virtual void InitNew()
     {
         Health.Init(initialRatio: 1f);
     }
@@ -249,6 +255,9 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     public bool HasStatusEffect(StatusEffectId id) => StatusEffects.Any(x => x.Id == id);
 
+    public string Category => (Attributes[AttributeId.Category] as StaticAttribute<string>).GetStaticValue();
+    public float Commonness => GetFloatAttribute(AttributeId.Commonness);
+    public List<SurfaceId> SpawnSurfaces => (Attributes[AttributeId.SpawnSurfaces] as Att_SpawnSurfaces).Surfaces;
     public SimulationTime Age => (Attributes[AttributeId.Age] as TimeAttribute).GetStaticValue();
     public DynamicRangeAttribute Health => Attributes[AttributeId.Health] as DynamicRangeAttribute;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;

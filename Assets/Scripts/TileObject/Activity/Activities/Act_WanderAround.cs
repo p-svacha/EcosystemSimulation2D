@@ -13,12 +13,12 @@ public class Act_WanderAround : Activity
 
     protected override void OnActivityStart()
     {
-        Animal.SetMovementPath(Pathfinder.GetRandomPath(Animal, Animal.Tile, maxRange: 8));
+        SourceAnimal.SetMovementPath(Pathfinder.GetRandomPath(SourceAnimal, SourceAnimal.Tile, maxRange: 8));
     }
 
     public override void OnTick()
     {
-        if (!Animal.IsMoving) End();
+        if (!SourceAnimal.IsMoving) End();
     }
 
     public override float GetUrgency()

@@ -10,14 +10,12 @@ using UnityEngine;
 public abstract class VisibleTileObjectBase : TileObjectBase
 {
     // General
-    public Sprite Sprite { get; private set; }
     public SpriteRenderer Renderer { get; private set; }
 
     public override void Init()
     {
         base.Init();
 
-        Sprite = ResourceManager.Singleton.GetTileObjectSprite(ObjectId);
         Renderer = GetComponent<SpriteRenderer>();
     }
 }

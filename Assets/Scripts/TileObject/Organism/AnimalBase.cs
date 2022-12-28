@@ -18,8 +18,11 @@ public abstract class AnimalBase : OrganismBase
     protected abstract SimulationTime PREGNANCY_MAX_AGE { get; }
     protected abstract float PREGNANCY_CHANCE_BASE { get; }
     protected abstract SimulationTime PREGNANCY_DURATION { get; }
-    protected abstract int MIN_NUM_OFFSPRING { get; }
-    protected abstract int MAX_NUM_OFFSPRING { get; }
+    protected abstract int NUM_OFFSPRING_MIN { get; }
+    protected abstract int NUM_OFFSPRING_MAX { get; }
+
+    protected abstract int SPAWN_GROUP_SIZE_MIN { get; }
+    protected abstract int SPAWN_GROUP_SIZE_MAX { get; }
 
     // Optional Attributes
     protected virtual float EATING_SPEED => 1f;
@@ -68,8 +71,10 @@ public abstract class AnimalBase : OrganismBase
         _Attributes.Add(AttributeId.PregnancyProgress, new TimeAttribute(AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
         _Attributes.Add(AttributeId.PregnancyChanceBase, new StaticAttribute<float>(AttributeId.PregnancyChanceBase, "Reproduction", "Base Pregnancy Chance", "Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health.", PREGNANCY_CHANCE_BASE));
         _Attributes.Add(AttributeId.PregnancyChance, new Att_PregnancyChance(this));
-        _Attributes.Add(AttributeId.MinNumOffspring, new StaticAttribute<int>(AttributeId.MinNumOffspring, "Reproduction", "Minimum amount of offspring", "Minimum amount of children an animal will produce when giving birth.", MIN_NUM_OFFSPRING));
-        _Attributes.Add(AttributeId.MaxNumOffspring, new StaticAttribute<int>(AttributeId.MaxNumOffspring, "Reproduction", "Maximum amount of offspring", "Minimum amount of children an animal will produce when giving birth.", MAX_NUM_OFFSPRING));
+        _Attributes.Add(AttributeId.NumOffspring, new StaticRangeAttribute(AttributeId.NumOffspring, "Reproduction", "Amount of offspring", "Amount of children an animal will produce when giving birth.", NUM_OFFSPRING_MIN, NUM_OFFSPRING_MAX));
+
+        // Spawn
+        _Attributes.Add(AttributeId.SpawnGroupSize, new StaticRangeAttribute(AttributeId.SpawnGroupSize, "Spawm", "Spawn Group Size", "Amount that gets spawned when an objects is created.", SPAWN_GROUP_SIZE_MIN, SPAWN_GROUP_SIZE_MAX));
 
         // Status Displays
         ConditionalStatusDisplays.Add(new SD_LowHealth(this));
@@ -80,10 +85,16 @@ public abstract class AnimalBase : OrganismBase
         PossibleActivites.Add(new Act_Eat(this));
     }
 
-    public override void LateInit()
+    public override void InitNew()
     {
-        base.LateInit();
+        base.InitNew();
         Nutrition.Init(initialRatio: 1f);
+    }
+
+    public override void InitExisting()
+    {
+        base.InitExisting();
+        Nutrition.Init(initialRatio: Random.value);
     }
 
     #endregion
@@ -257,8 +268,18 @@ public abstract class AnimalBase : OrganismBase
 
     public void GiveBirth()
     {
-        int numOffspring = Random.Range(MinNumOffspring, MaxNumOffspring + 1);
+        int numOffspring = NumOffspring.RandomValue;
         for(int i = 0; i < numOffspring; i++) World.Singleton.SpawnTileObject(Tile, ObjectId);
+    }
+
+    /// <summary>
+    /// Takes a tile outside the vision range of the animal and walks there on the fastest path. Used when needing something but not seeing it.
+    /// </summary>
+    public void Search()
+    {
+        // Take a random coordinate twice the vision range
+        List<WorldTile> targetPath = Pathfinder.GetRandomDirectedPath(this, Tile, (int)VisionRange, (int)(VisionRange * 2));
+        SetMovementPath(targetPath);
     }
 
     #endregion
@@ -279,11 +300,12 @@ public abstract class AnimalBase : OrganismBase
 
     public float PregnancyMaxAge => GetFloatAttribute(AttributeId.PregnancyMaxAge);
     public SimulationTime PregnancyDuration => (Attributes[AttributeId.PregnancyDuration] as TimeAttribute).GetStaticValue();
-    public SimulationTime PregnancyProgress => (Attributes[AttributeId.PregnancyDuration] as TimeAttribute).GetStaticValue();
+    public SimulationTime PregnancyProgress => (Attributes[AttributeId.PregnancyProgress] as TimeAttribute).GetStaticValue();
     public bool IsPregnant => HasStatusEffect(StatusEffectId.Pregnancy);
     public float PregnancyChance => GetFloatAttribute(AttributeId.PregnancyChance);
-    public int MinNumOffspring => (int)Attributes[AttributeId.MinNumOffspring].GetValue();
-    public int MaxNumOffspring => (int)Attributes[AttributeId.MaxNumOffspring].GetValue();
+    public StaticRangeAttribute NumOffspring => Attributes[AttributeId.NumOffspring] as StaticRangeAttribute;
+
+    public StaticRangeAttribute SpawnGroupSize => Attributes[AttributeId.SpawnGroupSize] as StaticRangeAttribute;
 
     #endregion
 }

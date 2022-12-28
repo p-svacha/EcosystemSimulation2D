@@ -94,8 +94,47 @@ public static class Pathfinder
     }
 
     /// <summary>
+    /// Returns a random path in a certain (random) direction within the given range.
+    /// <br/> This is achieved by chosing either north/south combined with either east/west and then just going in these directions.
+    /// </summary>
+    public static List<WorldTile> GetRandomDirectedPath(AnimalBase animal, WorldTile source, int minRange, int maxRange)
+    {
+        int targetX = Random.value < 0.5f ? -1 : 1;
+        int targetY = Random.value < 0.5f ? -1 : 1;
+        int chosenRange = Random.Range(minRange, maxRange + 1);
+
+        WorldTile currentTile = source;
+
+        int failCounter = 0;
+
+        List<WorldTile> path = new List<WorldTile>() { source };
+        while (path.Count < chosenRange + 1 && failCounter < 5)
+        {
+            float rng = Random.value;
+            Vector2Int nextStep;
+            if (rng < 0.33f) nextStep = new Vector2Int(targetX, 0); // go east or west
+            else if (rng < 0.66f) nextStep = new Vector2Int(0, targetY); // go north or south
+            else nextStep = new Vector2Int(targetX, targetY); // go combined direction
+
+            WorldTile nextTile = World.Singleton.GetTile(currentTile.Coordinates + nextStep);
+            if(nextTile == null || !nextTile.IsPassable(animal))
+            {
+                failCounter++;
+                continue;
+            }
+            else
+            {
+                failCounter = 0;
+                path.Add(nextTile);
+                currentTile = nextTile;
+            }
+        }
+        return path;
+    }
+
+    /// <summary>
     /// Returns all tiles can be reached by traversing an exact amount of tiles (range) from a source position.
-    /// <br/> Checks shortest path and tiles that can reached earlier than range are not included.
+    /// <br/> Checks shortest (not fastest!) path and tiles that can reached earlier than range are not included.
     /// </summary>
     public static List<WorldTile> GetAllReachablePositionsWithRange(AnimalBase animal, WorldTile center, int range)
     {

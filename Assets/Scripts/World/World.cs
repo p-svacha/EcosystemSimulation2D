@@ -27,13 +27,11 @@ public class World : MonoBehaviour
     /// <summary>
     /// Draws all tiles of the world.
     /// </summary>
-    public void DrawTiles(Dictionary<Vector2Int, WorldTile> tiles)
+    public void DrawTiles()
     {
         ClearGrid();
         TileUpdatePots.Clear();
         for (int i = 0; i < Simulation.NUM_TILE_UPDATE_POTS; i++) TileUpdatePots.Add(i, new List<WorldTile>());
-
-        Tiles = tiles;
 
         foreach (WorldTile tile in Tiles.Values)
         {
@@ -121,8 +119,7 @@ public class World : MonoBehaviour
 
     public WorldTile GetTile(Vector2Int coordinates)
     {
-        WorldTile tile;
-        Tiles.TryGetValue(coordinates, out tile);
+        Tiles.TryGetValue(coordinates, out WorldTile tile);
         return tile;
     }
     public WorldTile GetTile(int x, int y)
@@ -141,12 +138,12 @@ public class World : MonoBehaviour
     public List<WorldTile> GetAllTilesInRange(Vector2Int pos, int range)
     {
         List<WorldTile> tiles = new List<WorldTile>();
-        foreach (Vector2Int v in HelperFunctions.GetAllPositionsInRange(pos, range)) tiles.Add(GetTile(v));
+        foreach (Vector2Int v in HelperFunctions.GetAllPositionsWithinRange(pos, range)) tiles.Add(GetTile(v));
         return tiles;
     }
     public WorldTile GetRandomTileInRange(Vector2Int pos, int range)
     {
-        return GetTile(HelperFunctions.GetRandomPositionInRange(pos, range));
+        return GetTile(HelperFunctions.GetRandomPositionWithinRange(pos, range));
     }
 
 

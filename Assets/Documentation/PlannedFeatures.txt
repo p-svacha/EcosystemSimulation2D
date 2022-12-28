@@ -1,21 +1,17 @@
 NEXT VERSION
 -------------------
-added tooltip framework,
-added tooltips to selection window
-added general movement modifier
-added main attributes to animal selection window
+
 
 UP NEXT
 -------------
 - rework attribute types (see attributetypes.txt)
-- add second animal
+- Change DynamicRangeAttribute to DynamicBarAttribute
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
-- rename Animal to AnimalBase
 - plants should have slow health regeneration
 - add berries
-- Add wofox animal
+- Add basic combat mechanics (attack, deal damage)
 - add selection marker when something is selected (add spriterenderer as child and scale it)
 - replace "remove object" button in selection window with god mode button that opens a popup menu with different actions
 	- remove object
@@ -38,6 +34,7 @@ UP NEXT
 	- max height
 	- make categories collapsable
 	- two tabs (sorted by category, sorted by type (with new type system))
+	- add max length to value display (wofox description)
 - create TilemapTileObject class that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
 	- update tileobjectfactory
 - add speed4 button with modifier 10
@@ -66,6 +63,12 @@ UP NEXT
 - add mouseover for statusdisplays in selectionwindow that show modifiers
 - sound
 - improve world generation to spawn plants with age and also animals with age
+- make it possible in editor to spawn existing objects with isNew = false
+- Offset plants a little bit so they are not all exactly in the center of tiles
+- add energy and sleeping
+- add different moving types (walk = normal, running = faster but uses energy and nutrition, strolling = slow)
+- add corpses upon animal deaths
+- fix bug that thinginfowindow can't be moved/closed anymore when header moved out of screen
 
 FEATURES FOR THE WHEEL (https://wheelofnames.com/)
 ----------------------------

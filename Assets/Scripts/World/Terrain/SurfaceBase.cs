@@ -9,35 +9,29 @@ using UnityEngine;
 public abstract class SurfaceBase : IThing
 {
     // IThing
-    public ThingId Id => ThingId.Surface;
+    public ThingId ThingId => ThingId.Surface;
     public string Name => SurfaceName;
     public string Description => SurfaceDescription;
     public Dictionary<AttributeId, Attribute> Attributes => _Attributes;
     public UI_SelectionWindowContent SelectionWindowContent => null;
 
     protected Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
+    protected Dictionary<AttributeId, float> FloatAttributeCache = new Dictionary<AttributeId, float>();
 
     // Required Attributes
 
-    /// <summary>
-    /// Unique identifier.
-    /// </summary>
-    public abstract SurfaceType Type { get; }
+    public abstract SurfaceId SurfaceId { get; }
 
-    /// <summary>
-    /// Determines the overlay order between surfaces. The higher the precedence, the more other surface types this type overlays.
-    /// <br/>Precedence must be unique.
-    /// </summary>
+    /// <summary> Determines the overlay order between surfaces. The higher the precedence, the more other surface types this type overlays. Precedence must be unique. </summary>
     public abstract int Precedence { get; }
     protected abstract string SurfaceName { get; }
     protected abstract string SurfaceDescription { get; }
 
     protected abstract float MOVEMENT_COST { get; }
     protected abstract bool REQUIRES_SWIMMING { get; }
-
-    private const string spawnChancePrefix = "Chance per hour that ";
-    private const string spawnChanceSuffix = " will start to grow on a tile with this surface.";
-    protected virtual float TALL_GRASS_SPAWN_CHANCE => 0f;
+    protected abstract float PLANT_GROW_CHANCE { get; }
+    protected abstract float PLANT_SPAWN_CHANCE { get; }
+    protected abstract float ANIMAL_SPAWN_CHANCE { get; }
 
 
     public SurfaceBase()
@@ -45,7 +39,9 @@ public abstract class SurfaceBase : IThing
         _Attributes.Add(AttributeId.MovementCost, new StaticAttribute<float>(AttributeId.MovementCost, "Movement", "Movement Cost", "How hard it is to move across this surface.", MOVEMENT_COST));
         _Attributes.Add(AttributeId.RequiresSwimming, new StaticAttribute<float>(AttributeId.RequiresSwimming, "Movement", "Requires Swimming", "If objects need to be able to swim to traverse this surface.", REQUIRES_SWIMMING? 1 : 0));
 
-        _Attributes.Add(AttributeId.TallGrassSpawnChance, new StaticAttribute<float>(AttributeId.TallGrassSpawnChance, "Production", "Tall Grass Spawn Chance", spawnChancePrefix + "tall grass" + spawnChanceSuffix, TALL_GRASS_SPAWN_CHANCE));
+        _Attributes.Add(AttributeId.PlantGrowChance, new StaticAttribute<float>(AttributeId.PlantGrowChance, "Life Support", "Plant Grow Chance", "Chance per hour that a plant will spawn on a tile with this surface.", PLANT_GROW_CHANCE));
+        _Attributes.Add(AttributeId.PlantSpawnChance, new StaticAttribute<float>(AttributeId.PlantSpawnChance, "Life Support", "Plant Spawn Chance", "Chance per tile that a plant is spawned on a tile with this surface during world generation.", PLANT_SPAWN_CHANCE));
+        _Attributes.Add(AttributeId.AnimalSpawnChance, new StaticAttribute<float>(AttributeId.AnimalSpawnChance, "Life Support", "Animal Spawn Chance", "Chance per tile that a group of animals is spawned on a tile with this surface during world generation.", ANIMAL_SPAWN_CHANCE));
     }
 
     /// <summary>
@@ -53,29 +49,62 @@ public abstract class SurfaceBase : IThing
     /// </summary>
     public void OnWorldGeneration(WorldTile tile)
     {
-        if (Random.value < TALL_GRASS_SPAWN_CHANCE * 50f) World.Singleton.SpawnTileObject(tile, TileObjectId.TallGrass, isNew: false);
-    }
+        // Spawn plant
+        if (Random.value < GetFloatAttribute(AttributeId.PlantSpawnChance))
+        {
+            TileObjectId chosenPlant = HelperFunctions.GetRandomPlantForSurface(SurfaceId);
+            World.Singleton.SpawnTileObject(tile, chosenPlant, isNew: false);
+        }
 
+        // Spawn animal group
+        if (Random.value < GetFloatAttribute(AttributeId.AnimalSpawnChance))
+        {
+            TileObjectId chosenAnimal = HelperFunctions.GetRandomAnimalForSurface(SurfaceId);
+            int numAnimalsToSpawn = (TileObjectFactory.DummyObjects[chosenAnimal] as AnimalBase).SpawnGroupSize.RandomValue;
+            for(int i = 0; i < numAnimalsToSpawn; i++)
+            {
+                WorldTile spawnTile = World.Singleton.GetTile(HelperFunctions.GetRandomPositionWithinRange(tile.Coordinates, 3));
+                World.Singleton.SpawnTileObject(spawnTile, chosenAnimal, isNew: false);
+            }
+            
+        }
+    }
+    
     /// <summary>
     /// Gets called every n'th frame.
     /// </summary>
     public void Tick(WorldTile tile, float hoursSinceLastUpdate)
     {
-        Attribute att;
-        if(Attributes.TryGetValue(AttributeId.TallGrassSpawnChance, out att))
+        FloatAttributeCache.Clear();
+
+        // Grow Plant
+        if(Random.value < GetFloatAttribute(AttributeId.PlantGrowChance))
         {
-            float spawnChance = hoursSinceLastUpdate * att.GetValue();
-            if (Random.value < spawnChance && tile.TileObjects.Where(x => x.ObjectId == TileObjectId.TallGrass).Count() == 0) World.Singleton.SpawnTileObject(tile, TileObjectId.TallGrass);
+            TileObjectId chosenPlant = HelperFunctions.GetRandomPlantForSurface(SurfaceId);
+            World.Singleton.SpawnTileObject(tile, chosenPlant, isNew: true);
         }
     }
 
     #region Getters
+
+    /// <summary>
+    /// Returns the value of a DynamicAttribute and caches it for the remainder of the tick.
+    /// </summary>
+    public float GetFloatAttribute(AttributeId id)
+    {
+        if (FloatAttributeCache.TryGetValue(id, out float cachedValue)) return cachedValue;
+
+        float value = Attributes[id].GetValue();
+        FloatAttributeCache[id] = value;
+        return value;
+    }
+
     public float MovementCost => Attributes[AttributeId.MovementCost].GetValue();
     public bool RequiresSwimming => Attributes[AttributeId.RequiresSwimming].GetValue() == 1f;
     #endregion
 }
 
-public enum SurfaceType
+public enum SurfaceId
 {
     Soil,
     Sand,

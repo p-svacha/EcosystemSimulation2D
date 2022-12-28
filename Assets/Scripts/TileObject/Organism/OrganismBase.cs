@@ -7,6 +7,7 @@ public abstract class OrganismBase : VisibleTileObjectBase
 {
     // Required Attributes
     protected abstract SimulationTime MATURITY_AGE { get; }
+    protected abstract List<SurfaceId> SPAWN_SURFACES { get; }
 
     #region Initialize
 
@@ -17,9 +18,24 @@ public abstract class OrganismBase : VisibleTileObjectBase
         // Attributes
         _Attributes.Add(AttributeId.MaturityAge, new TimeAttribute(AttributeId.MaturityAge, "General", "Maturity Age", "The age at which an organism reaches full size. Animals are able to get pregnant at that point.", MATURITY_AGE));
         _Attributes.Add(AttributeId.Size, new Att_Size(this));
+        _Attributes.Add(AttributeId.SpawnSurfaces, new Att_SpawnSurfaces(SPAWN_SURFACES));
 
         // Set size correctly immediately
         UpdateSizeDisplay();
+    }
+
+    
+    public override void InitExisting()
+    {
+        base.InitExisting();
+
+        int numYears = Random.Range(0, 4);
+        int numMonths = Random.Range(0, SimulationTime.MonthsPerYear);
+        int numDays = Random.Range(0, SimulationTime.DaysPerMonth);
+        int numHours = Random.Range(0, SimulationTime.HoursPerDay);
+        Age.SetTime(numYears, numMonths, numDays, numHours);
+
+        Health.Init(initialRatio: 1f);
     }
 
     #endregion

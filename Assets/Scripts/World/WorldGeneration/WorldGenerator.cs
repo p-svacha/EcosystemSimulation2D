@@ -6,28 +6,26 @@ using UnityEngine;
 public static class WorldGenerator
 {
     // Increase Simulation.TILE_UPDATE_POTS with bigger map sizes and performance keeps being good (16 for 200x200) (128 for 400x400)
-    public static int MAP_WIDTH => 250;
-    public static int MAP_HEIGHT => 250;
+    public static int MAP_WIDTH => 300;
+    public static int MAP_HEIGHT => 300;
 
     private static WorldGenerationInfo Info;
     private static World World;
-
-    private static Dictionary<Vector2Int, WorldTile> Tiles;
 
     public static Dictionary<Vector2Int, WorldTile> GenerateMap(World world, WorldGenerationInfo info)
     {
         World = world;
         Info = info;
 
-        Tiles = new Dictionary<Vector2Int, WorldTile>();
+        World.Tiles = new Dictionary<Vector2Int, WorldTile>();
 
         CreateTileInstances();
         CreateSurfaces();
         PopulateWorld();
 
-        Debug.Log("Generated world with " + Tiles.Count + " tiles.");
+        Debug.Log("Generated world with " + World.Tiles.Count + " tiles.");
 
-        return Tiles;
+        return World.Tiles;
     }
 
     private static void CreateTileInstances()
@@ -38,7 +36,7 @@ public static class WorldGenerator
             {
                 Vector2Int pos = new Vector2Int(x, y);
                 WorldTile tile = new WorldTile(World, pos);
-                Tiles.Add(pos, tile);
+                World.Tiles.Add(pos, tile);
             }
         }
     }
@@ -53,11 +51,11 @@ public static class WorldGenerator
             {
                 SurfaceBase surface = null;
                 Vector2Int pos = new Vector2Int(x, y);
-                if (noise.GetValue(pos) < 0.3f) surface = World.TerrainLayer.Surfaces[SurfaceType.Water];
-                else if (noise.GetValue(pos) < 0.4f) surface = World.TerrainLayer.Surfaces[SurfaceType.Sand];
-                else if (noise.GetValue(pos) < 2f) surface = World.TerrainLayer.Surfaces[SurfaceType.Soil];
+                if (noise.GetValue(pos) < 0.3f) surface = World.TerrainLayer.Surfaces[SurfaceId.Water];
+                else if (noise.GetValue(pos) < 0.4f) surface = World.TerrainLayer.Surfaces[SurfaceId.Sand];
+                else if (noise.GetValue(pos) < 2f) surface = World.TerrainLayer.Surfaces[SurfaceId.Soil];
 
-                Tiles[pos].SetSurface(surface);
+                World.Tiles[pos].SetSurface(surface);
             }
         }
     }
@@ -69,10 +67,8 @@ public static class WorldGenerator
             for (int x = 0; x < MAP_WIDTH; x++)
             {
                 Vector2Int pos = new(x, y);
-                Tiles[pos].OnWorldGeneration();
+                World.Tiles[pos].OnWorldGeneration();
             }
         }
-
-        // create animal herds with age according to new attributes attached to animals (spawn_commonness, spawn_surfaces, spawn_group_size)
     }
 }

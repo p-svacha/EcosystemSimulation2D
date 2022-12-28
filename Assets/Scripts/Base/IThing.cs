@@ -10,7 +10,7 @@ public interface IThing
     /// <summary>
     /// Unique key to identify what kind of thing it is.
     /// </summary>
-    public ThingId Id {get;}
+    public ThingId ThingId {get;}
 
     /// <summary>
     /// Name of the thing.

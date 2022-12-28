@@ -27,7 +27,7 @@ namespace WorldEditorSpace
             GoToTab(SurfaceTab);
             foreach(SurfaceBase surface in World.Singleton.TerrainLayer.Surfaces.Values)
             {
-                AddSelectionThing(surface, EditorTool.PlaceSurface, surface.Name, HelperFunctions.Texture2DToSprite(ResourceManager.Singleton.GetSurfaceTexture(surface.Type)));
+                AddSelectionThing(surface, EditorTool.PlaceSurface, surface.Name, HelperFunctions.Texture2DToSprite(ResourceManager.Singleton.GetSurfaceTexture(surface.SurfaceId)));
             }
 
             // Object
@@ -35,12 +35,8 @@ namespace WorldEditorSpace
 
             AddSelectionThing(null, EditorTool.RemoveObject, "Remove Object", ResourceManager.Singleton.RemoveSprite);
 
-            foreach (TileObjectId objectType in TileObjectFactory.GetAllObjectTypes())
-            {
-                VisibleTileObjectBase dummyObject = TileObjectFactory.CreateObject(objectType); // Spawn a dummy object for each type to make it work modularly
-                dummyObject.transform.position = new Vector3(-666, -666, 0);
-                AddSelectionThing(dummyObject, EditorTool.SpawnObject, dummyObject.Name, dummyObject.Sprite);
-            }
+            foreach (TileObjectBase dummyObject in TileObjectFactory.DummyObjects.Values)
+                AddSelectionThing(dummyObject, EditorTool.SpawnObject, dummyObject.Name, dummyObject.DisplaySprite);
 
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
