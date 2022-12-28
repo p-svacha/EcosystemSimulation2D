@@ -195,6 +195,29 @@ public static class HelperFunctions
         return positions;
     }
 
+    public static SurfaceBase GetRandomSurface()
+    {
+        return World.Singleton.TerrainLayer.Surfaces.Values.ToList()[Random.Range(0, World.Singleton.TerrainLayer.Surfaces.Values.Count)];
+    }
+
+    public static Vector2Int GetRandomPositionOnMap(int mapEdgeMargin = 5)
+    {
+        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_WIDTH - mapEdgeMargin);
+        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_HEIGHT - mapEdgeMargin);
+        return new Vector2Int(x, y);
+    }
+
+    public static Vector2Int GetRandomPositionAround(Vector2Int center, int maxDistance)
+    {
+        int x = -1;
+        while (x < 0 || x >= WorldGenerator.MAP_WIDTH) x = Random.Range(center.x - maxDistance, center.x + maxDistance + 1);
+
+        int y = -1;
+        while (y < 0 || y >= WorldGenerator.MAP_HEIGHT) y = Random.Range(center.y - maxDistance, center.y + maxDistance + 1);
+
+        return new Vector2Int(x, y);
+    }
+
     #endregion
 
     #region UI

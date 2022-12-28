@@ -41,7 +41,7 @@ namespace WorldEditorSpace
                 switch (EditorTool)
                 {
                     case EditorTool.PlaceSurface:
-                        Surface surface = (Surface)EditorToolThing;
+                        SurfaceBase surface = (SurfaceBase)EditorToolThing;
                         if (surface != null && tile != null) World.SetTerrain(tile, surface);
                         break;
 

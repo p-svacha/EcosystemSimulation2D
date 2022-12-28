@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Surface_Sand : Surface
+public class Surface_Sand : SurfaceBase
 {
     public override int Precedence => 30;
     public override SurfaceType Type => SurfaceType.Sand;
@@ -10,6 +10,4 @@ public class Surface_Sand : Surface
     protected override string SurfaceDescription => "Soft and slow to walk on.";
     protected override float MOVEMENT_COST => 4f;
     protected override bool REQUIRES_SWIMMING => false;
-
-    public Surface_Sand(World world) : base(world) { }
 }

@@ -9,7 +9,6 @@ public class Att_MovementCost : DynamicAttribute
     public override string Description => "How hard it is to traverse this tile.";
     public override AttributeId Id => AttributeId.MovementCost;
     public override string Category => "Movement";
-    public override IThing Thing => Tile;
 
     // Individual
     private readonly WorldTile Tile;

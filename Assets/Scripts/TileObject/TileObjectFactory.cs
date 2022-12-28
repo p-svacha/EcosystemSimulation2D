@@ -9,7 +9,7 @@ using UnityEngine;
 public static class TileObjectFactory
 {
 
-    public static VisibleTileObjectBase CreateObject(TileObjectId type)
+    public static VisibleTileObjectBase CreateObject(TileObjectId type, bool isNew = true)
     {
         GameObject newObject = new GameObject(type.ToString());
         VisibleTileObjectBase tileObject = type switch
@@ -30,6 +30,7 @@ public static class TileObjectFactory
         newObject.AddComponent<BoxCollider2D>();
 
         tileObject.Init();
+        if (!isNew) tileObject.InitExisting();
         tileObject.LateInit();
         return tileObject;
     }

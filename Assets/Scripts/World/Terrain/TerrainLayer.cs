@@ -13,17 +13,17 @@ public class TerrainLayer : MonoBehaviour
     /// <summary>
     /// Dictionary containing the unique instances of each surface.
     /// </summary>
-    public Dictionary<SurfaceType, Surface> Surfaces;
+    public Dictionary<SurfaceType, SurfaceBase> Surfaces;
 
     #region Initialization
 
     private void Awake()
     {
         // Initilaize surfaces
-        Surfaces = new Dictionary<SurfaceType, Surface>();
-        Surfaces.Add(SurfaceType.Soil, new Surface_Soil(World));
-        Surfaces.Add(SurfaceType.Water, new Surface_Water(World));
-        Surfaces.Add(SurfaceType.Sand, new Surface_Sand(World));
+        Surfaces = new Dictionary<SurfaceType, SurfaceBase>();
+        Surfaces.Add(SurfaceType.Soil, new Surface_Soil());
+        Surfaces.Add(SurfaceType.Water, new Surface_Water());
+        Surfaces.Add(SurfaceType.Sand, new Surface_Sand());
     }
 
     #endregion
@@ -56,10 +56,10 @@ public class TerrainLayer : MonoBehaviour
 
         // Refresh tiles
         // Make a dictionary that contains all surfaces that will overlay our tile with a list of adjacent tiles with that surface
-        Dictionary<Surface, List<Direction>> overlayTiles = new Dictionary<Surface, List<Direction>>();
+        Dictionary<SurfaceBase, List<Direction>> overlayTiles = new Dictionary<SurfaceBase, List<Direction>>();
         foreach (Direction dir in HelperFunctions.GetAdjacentDirections())
         {
-            Surface surface = World.GetSurfaceInDirection(pos, dir);
+            SurfaceBase surface = World.GetSurfaceInDirection(pos, dir);
             if (surface == null) continue; // Out of bounds
             if (surface.Precedence <= thisPrecedence) continue; // We ignore adjacent tiles with lower precedence, as they don't overlay this tile
             else
@@ -74,9 +74,9 @@ public class TerrainLayer : MonoBehaviour
 
         // Apply overlays for each surface
         int blendLayerIndex = 0;
-        foreach (KeyValuePair<Surface, List<Direction>> surfaceOverlays in overlayTiles)
+        foreach (KeyValuePair<SurfaceBase, List<Direction>> surfaceOverlays in overlayTiles)
         {
-            Surface surface = surfaceOverlays.Key;
+            SurfaceBase surface = surfaceOverlays.Key;
             //string overlayString = TilemapFunctions.GetOverlayString(surfaceOverlays.Value);
             List<TilemapBlendType> blendTypes = DirectionsToBlendType(surfaceOverlays.Value);
             foreach (TilemapBlendType type in blendTypes) DrawBlendTile(surface.Type, pos, type, blendLayerIndex);
@@ -194,7 +194,7 @@ public class TerrainLayer : MonoBehaviour
 
     #region Setters
 
-    public void DrawSurface(Vector2Int coordinates, Surface surface, bool refreshAdjacentTransitions)
+    public void DrawSurface(Vector2Int coordinates, SurfaceBase surface, bool refreshAdjacentTransitions)
     {
         Vector3Int pos = new Vector3Int(coordinates.x, coordinates.y, 0);
         TerrainBaseLayer.SetTile(pos, ResourceManager.Singleton.GetSurfaceTile(surface.Type));

@@ -9,7 +9,6 @@ public class Att_Health : DynamicRangeAttribute
     public override string Description => "Current and maximum amount of HP an object has.";
     public override AttributeId Id => AttributeId.Health;
     public override string Category => "General";
-    public override IThing Thing => Object;
 
     protected override bool KeepValueRatio => true;
 

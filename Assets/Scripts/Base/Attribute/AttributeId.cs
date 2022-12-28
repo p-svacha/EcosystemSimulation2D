@@ -23,8 +23,9 @@ public enum AttributeId
     /// <summary> Used by WorldTile. Surface of the tile.  </summary>
     Surface,
 
-    /// <summary> Used by Surface. % Chance per hour that tall grass gets spawned. </summary>
+    /// <summary> Chance per hour that a specific object will spawn on a tile with this surface. Also affects world generation. </summary>
     TallGrassSpawnChance,
+    /// xyzSpawnChance
 
     /// <summary> Flag if animals need to be able to swim to traverse a surface. </summary>
     RequiresSwimming,
@@ -32,9 +33,6 @@ public enum AttributeId
     /// <summary> How much animals are slowed down by traversing something. </summary>
     MovementCost,
 
-
-    /// <summary> Time at which an object has been created. </summary>
-    CreatedAt,
 
     /// <summary> How long an object has been existing in the world. </summary>
     Age,

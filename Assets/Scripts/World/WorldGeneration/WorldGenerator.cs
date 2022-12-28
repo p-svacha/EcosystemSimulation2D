@@ -14,7 +14,7 @@ public static class WorldGenerator
 
     private static Dictionary<Vector2Int, WorldTile> Tiles;
 
-    public static Dictionary<Vector2Int, WorldTile> GenerateBattleMap(World world, WorldGenerationInfo info)
+    public static Dictionary<Vector2Int, WorldTile> GenerateMap(World world, WorldGenerationInfo info)
     {
         World = world;
         Info = info;
@@ -23,6 +23,7 @@ public static class WorldGenerator
 
         CreateTileInstances();
         CreateSurfaces();
+        PopulateWorld();
 
         Debug.Log("Generated world with " + Tiles.Count + " tiles.");
 
@@ -44,16 +45,16 @@ public static class WorldGenerator
 
     private static void CreateSurfaces()
     {
-        PerlinNoise noise = new PerlinNoise(scale: 0.05f);
+        LayeredPerlinNoise noise = new LayeredPerlinNoise(scale: 0.03f, numOctaves: 5);
 
         for (int y = 0; y < MAP_HEIGHT; y++)
         {
             for (int x = 0; x < MAP_WIDTH; x++)
             {
-                Surface surface = null;
+                SurfaceBase surface = null;
                 Vector2Int pos = new Vector2Int(x, y);
                 if (noise.GetValue(pos) < 0.3f) surface = World.TerrainLayer.Surfaces[SurfaceType.Water];
-                else if (noise.GetValue(pos) < 0.35f) surface = World.TerrainLayer.Surfaces[SurfaceType.Sand];
+                else if (noise.GetValue(pos) < 0.4f) surface = World.TerrainLayer.Surfaces[SurfaceType.Sand];
                 else if (noise.GetValue(pos) < 2f) surface = World.TerrainLayer.Surfaces[SurfaceType.Soil];
 
                 Tiles[pos].SetSurface(surface);
@@ -61,26 +62,17 @@ public static class WorldGenerator
         }
     }
 
-    private static Surface GetRandomSurface()
+    private static void PopulateWorld()
     {
-        return World.TerrainLayer.Surfaces.Values.ToList()[Random.Range(0, World.TerrainLayer.Surfaces.Values.Count)];
-    }
+        for (int y = 0; y < MAP_HEIGHT; y++)
+        {
+            for (int x = 0; x < MAP_WIDTH; x++)
+            {
+                Vector2Int pos = new(x, y);
+                Tiles[pos].OnWorldGeneration();
+            }
+        }
 
-    private static Vector2Int GetRandomPositionOnMap(int mapEdgeMargin = 5)
-    {
-        int x = Random.Range(mapEdgeMargin, MAP_WIDTH - mapEdgeMargin);
-        int y = Random.Range(mapEdgeMargin, MAP_HEIGHT - mapEdgeMargin);
-        return new Vector2Int(x, y);
-    }
-
-    private static Vector2Int GetRandomPositionAround(Vector2Int center, int maxDistance)
-    {
-        int x = -1;
-        while (x < 0 || x >= MAP_WIDTH) x = Random.Range(center.x - maxDistance, center.x + maxDistance + 1);
-
-        int y = -1;
-        while (y < 0 || y >= MAP_HEIGHT) y = Random.Range(center.y - maxDistance, center.y + maxDistance + 1);
-
-        return new Vector2Int(x, y);
+        // create animal herds with age according to new attributes attached to animals (spawn_commonness, spawn_surfaces, spawn_group_size)
     }
 }

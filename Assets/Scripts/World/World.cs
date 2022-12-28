@@ -57,7 +57,7 @@ public class World : MonoBehaviour
 
     #region Setters
 
-    public void SetTerrain(WorldTile tile, Surface surface)
+    public void SetTerrain(WorldTile tile, SurfaceBase surface)
     {
         if (tile == null) return;
         tile.SetSurface(surface);
@@ -65,11 +65,11 @@ public class World : MonoBehaviour
     }
 
     /// <summary>
-    /// Spawns a new tileobject in the world.
+    /// Spawns a new TileObject of a specified type on a tile. If isNew is false, the object will already have a certain age and random properties set.
     /// </summary>
-    public void SpawnTileObject(WorldTile tile, TileObjectId tileObjectType)
+    public void SpawnTileObject(WorldTile tile, TileObjectId tileObjectType, bool isNew = true)
     {
-        VisibleTileObjectBase newObject = TileObjectFactory.CreateObject(tileObjectType);
+        VisibleTileObjectBase newObject = TileObjectFactory.CreateObject(tileObjectType, isNew);
         newObject.transform.position = tile.WorldPosition3;
         tile.AddObject(newObject);
         newObject.SetTile(tile);
@@ -150,16 +150,16 @@ public class World : MonoBehaviour
     }
 
 
-    public Surface GetSurface(int x, int y)
+    public SurfaceBase GetSurface(int x, int y)
     {
         return GetSurface(new Vector2Int(x, y));
     }
-    public Surface GetSurface(Vector2Int position)
+    public SurfaceBase GetSurface(Vector2Int position)
     {
         if (!Tiles.ContainsKey(position)) return null;
         else return Tiles[position].Surface;
     }
-    public Surface GetSurfaceInDirection(Vector2Int pos, Direction dir)
+    public SurfaceBase GetSurfaceInDirection(Vector2Int pos, Direction dir)
     {
         return GetSurface(HelperFunctions.GetPositionInDirection(pos, dir));
     }

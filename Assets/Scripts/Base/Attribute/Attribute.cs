@@ -5,10 +5,14 @@ using UnityEngine;
 
 /// <summary>
 /// An Attribute that defines a certain aspect of a thing. Contains all information and calculations of its values.
-/// Attributes can be dynamic (see NumberAttribute) or static (see StaticAttribute).
 /// </summary>
 public abstract class Attribute
 {
+    /// <summary>
+    /// Identifier of the attribute. Has to be unique per thing.
+    /// </summary>
+    public abstract AttributeId Id { get; }
+
     /// <summary>
     /// Display name of the attribute.
     /// </summary>
@@ -20,11 +24,6 @@ public abstract class Attribute
     public abstract string Description { get; }
 
     /// <summary>
-    /// Identifier of the attribute. Is unique per thing.
-    /// </summary>
-    public abstract AttributeId Id { get; }
-
-    /// <summary>
     /// Type of the attribute used to know how to handle it. Can be static or dynamic number.
     /// </summary>
     public abstract AttributeType Type { get; }
@@ -33,11 +32,6 @@ public abstract class Attribute
     /// Category is solely used to better sort and organize different attributes within a thing. Has no effect of how the attribute is calculated.
     /// </summary>
     public abstract string Category { get; }
-
-    /// <summary>
-    /// Thing that this attribute belongs to.
-    /// </summary>
-    public abstract IThing Thing { get; }
 
     /// <summary>
     /// Returns the numeric value of the attribute as a float.

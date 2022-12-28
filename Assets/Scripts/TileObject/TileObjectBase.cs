@@ -47,15 +47,14 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public virtual void Init()
     {
         // Init attributes
-        _Attributes.Add(AttributeId.CreatedAt, new TimeAttribute(this, AttributeId.CreatedAt, "General", "Created At", "Time at which an object has been created.", Simulation.Singleton.CurrentTime.Copy()));
-        _Attributes.Add(AttributeId.Age, new Att_Age(this));
-        _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(this, AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
+        _Attributes.Add(AttributeId.Age, new TimeAttribute(AttributeId.Age, "General", "Age", "How long an object has been existing in the world.", new SimulationTime()));
+        _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
         _Attributes.Add(AttributeId.Health, new Att_Health(this));
 
-        _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(this, NUTRIENT_TYPE));
-        _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(this, AttributeId.NutrientValueBase, "Nutrition", "Base Nutrient Value", "Base amount of nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE_BASE));
+        _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(NUTRIENT_TYPE));
+        _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(AttributeId.NutrientValueBase, "Nutrition", "Base Nutrient Value", "Base amount of nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE_BASE));
         _Attributes.Add(AttributeId.NutrientValue, new Att_NutrientValue(this));
-        _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(this, AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
+        _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
 
         // Status effects
         StatusEffects = new List<StatusEffect>();
@@ -65,6 +64,11 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         StatusEffectDisplays = new List<StatusDisplay>();
         ConditionalStatusDisplays = new List<ConditionalStatusDisplay>();
     }
+
+    /// <summary>
+    /// Gets called when an object gets created that is not completely new and already "existed" before its creation. Used for events and world generation.
+    /// </summary>
+    public virtual void InitExisting() { }
 
     /// <summary>
     /// Triggers after all Init calls are done.
@@ -81,6 +85,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     // Performance Profilers
     static readonly ProfilerMarker pm_all = new ProfilerMarker("Update TileObject");
     static readonly ProfilerMarker pm_cache = new ProfilerMarker("Clear Attribute Cache");
+    static readonly ProfilerMarker pm_age = new ProfilerMarker("Update Age");
     static readonly ProfilerMarker pm_statusEffects = new ProfilerMarker("Update Status Effects");
     static readonly ProfilerMarker pm_statusDisplays = new ProfilerMarker("Update Status Displays");
     static readonly ProfilerMarker pm_health = new ProfilerMarker("Update Health");
@@ -97,6 +102,10 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         ClearAttributeCache();
         pm_cache.End();
 
+        pm_age.Begin();
+        UpdateAge();
+        pm_age.End();
+
         pm_health.Begin();
         if(NumTicks % 60 == 0) UpdateHealth();
         pm_health.End();
@@ -112,9 +121,15 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         pm_all.End();
     }
 
+
     private void ClearAttributeCache()
     {
         FloatAttributeCache.Clear();
+    }
+
+    private void UpdateAge()
+    {
+        Age.IncreaseTime(Simulation.Singleton.TickTime);
     }
 
     private void UpdateStatusEffects()
@@ -234,7 +249,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
 
     public bool HasStatusEffect(StatusEffectId id) => StatusEffects.Any(x => x.Id == id);
 
-    public float Age => GetFloatAttribute(AttributeId.Age);
+    public SimulationTime Age => (Attributes[AttributeId.Age] as TimeAttribute).GetStaticValue();
     public DynamicRangeAttribute Health => Attributes[AttributeId.Health] as DynamicRangeAttribute;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
     public float NutrientValue => GetFloatAttribute(AttributeId.NutrientValue);

@@ -25,7 +25,7 @@ namespace WorldEditorSpace
         {
             // Surfaces
             GoToTab(SurfaceTab);
-            foreach(Surface surface in World.Singleton.TerrainLayer.Surfaces.Values)
+            foreach(SurfaceBase surface in World.Singleton.TerrainLayer.Surfaces.Values)
             {
                 AddSelectionThing(surface, EditorTool.PlaceSurface, surface.Name, HelperFunctions.Texture2DToSprite(ResourceManager.Singleton.GetSurfaceTexture(surface.Type)));
             }

@@ -57,7 +57,7 @@ public class Simulation : MonoBehaviour
         _Singleton = GameObject.Find("Simulation").GetComponent<Simulation>();
 
         WorldGenerationInfo genInfo = new WorldGenerationInfo();
-        World.DrawTiles(WorldGenerator.GenerateBattleMap(World, genInfo));
+        World.DrawTiles(WorldGenerator.GenerateMap(World, genInfo));
 
         CameraHandler.Singleton.SetBounds(World.MinWorldX, World.MinWorldY, World.MaxWorldX, World.MaxWorldY);
         CameraHandler.Singleton.FocusPosition(new Vector2(World.CenterWorldX, World.CenterWorldY));

@@ -9,7 +9,6 @@ public class Att_PregnancyChance : DynamicAttribute
     public override string Description => "Actual chance per hour that an animal gets pregnant.";
     public override AttributeId Id => AttributeId.PregnancyChance;
     public override string Category => "Reproduction";
-    public override IThing Thing => Animal;
 
     // Individual
     private readonly AnimalBase Animal;

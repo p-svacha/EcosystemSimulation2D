@@ -9,7 +9,6 @@ public class Att_WaterMovementSpeed : DynamicAttribute
     public override string Description => "Actual speed at which an animal moves on water.";
     public override AttributeId Id => AttributeId.WaterMovementSpeed;
     public override string Category => "Movement";
-    public override IThing Thing => Animal;
 
     // Individual
     private readonly AnimalBase Animal;

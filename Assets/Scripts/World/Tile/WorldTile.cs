@@ -22,7 +22,7 @@ public class WorldTile : IThing
     public Vector3 WorldPosition3 => new Vector3(WorldPosition.x, WorldPosition.y, 0);
 
     // Content
-    public Surface Surface { get; private set; }
+    public SurfaceBase Surface { get; private set; }
     public List<TileObjectBase> TileObjects = new List<TileObjectBase>();
 
     // Attributes
@@ -36,9 +36,17 @@ public class WorldTile : IThing
         WorldPosition = new Vector2(coordinates.x + 0.5f, coordinates.y + 0.5f);
 
         // Attributes
-        _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(this, AttributeId.Coordinates, "General", "Coordinates", "Position of this tile on the world map.", Coordinates.x + " / " + Coordinates.y));
-        _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(this, AttributeId.Surface, "General", "Surface", "Surface type of this tile.", ""));
+        _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(AttributeId.Coordinates, "General", "Coordinates", "Position of this tile on the world map.", Coordinates.x + " / " + Coordinates.y));
+        _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(AttributeId.Surface, "General", "Surface", "Surface type of this tile.", ""));
         _Attributes.Add(AttributeId.MovementCost, new Att_MovementCost(this));
+    }
+
+    /// <summary>
+    /// Gets called when the world is generated.
+    /// </summary>
+    public void OnWorldGeneration()
+    {
+        Surface.OnWorldGeneration(this);
     }
 
     /// <summary>
@@ -117,7 +125,7 @@ public class WorldTile : IThing
 
     #region Setters
 
-    public void SetSurface(Surface surface)
+    public void SetSurface(SurfaceBase surface)
     {
         Surface = surface;
         ((StaticAttribute<string>)_Attributes[AttributeId.Surface]).SetValue(surface.Name);

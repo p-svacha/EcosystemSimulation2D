@@ -22,9 +22,9 @@ public class SimulationTime
     /// </summary>
     public float Hour => AbsoluteTime % HoursPerDay;
 
-    private const int MonthsPerYear = 4;
-    private const int DaysPerMonth = 10;
-    private const int HoursPerDay = 24;
+    public const int MonthsPerYear = 4;
+    public const int DaysPerMonth = 10;
+    public const int HoursPerDay = 24;
 
     private readonly string[] MonthNames = { "January", "April", "Juli", "October"};
     /// <summary>
@@ -32,9 +32,9 @@ public class SimulationTime
     /// </summary>
     public SimulationTime() { }
 
-    public SimulationTime(int year, int month, int day, int hour, float hourSplit = 0f)
+    public SimulationTime(int year, int month, int day, float hour)
     {
-        AbsoluteTime = (year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (month * DaysPerMonth * HoursPerDay) + (day * HoursPerDay) + hour + hourSplit;
+        AbsoluteTime = SegmentedToAbsoluteTime(year, month, day, hour);
     }
 
     public SimulationTime(float absoluteTime)
@@ -53,11 +53,22 @@ public class SimulationTime
         AbsoluteTime += hourSplitInterval;
     }
 
+    public void SetTime(float absoluteTime)
+    {
+        AbsoluteTime = absoluteTime;
+    }
+
+    public void SetTime(int year, int month, int day, float hour)
+    {
+        AbsoluteTime = SegmentedToAbsoluteTime(year, month, day, hour);
+    }
+
     public void Reset()
     {
         AbsoluteTime = 0;
     }
 
+    private float SegmentedToAbsoluteTime(int year, int month, int day, float hour) => (year * MonthsPerYear * DaysPerMonth * HoursPerDay) + (month * DaysPerMonth * HoursPerDay) + (day * HoursPerDay) + hour;
 
     public string DateString { get { return (Day + 1) + HelperFunctions.GetOrdinalSuffix(Day + 1) + " of " + MonthNames[Month] + ", Year " + Year + " | " + (int)Hour + "h"; } }
 

@@ -9,7 +9,6 @@ public class Att_NutrientValue : DynamicAttribute
     public override string Description => "Actual amount of nutrition an object provides at when being eaten from full health to 0.";
     public override AttributeId Id => AttributeId.NutrientValue;
     public override string Category => "Nutrition";
-    public override IThing Thing => Thing;
 
     // Individual
     private readonly TileObjectBase Object;

@@ -9,28 +9,25 @@ using UnityEngine;
 public class StaticAttribute<T> : Attribute
 {
     // Attribute Base
+    public override AttributeId Id => _Id;
     public override string Name => _Name;
     public override string Description => _Description;
-    public override AttributeId Id => _Id;
     public override AttributeType Type => AttributeType.Static;
     public override string Category => _Category;
-    public override IThing Thing => _Thing;
 
     // Static
     private readonly string _Name;
     private readonly string _Description;
     private readonly AttributeId _Id;
     private readonly string _Category;
-    private readonly IThing _Thing;
 
     // Value
     public virtual T Value { get; private set; }
 
-    public StaticAttribute(IThing thing, AttributeId id, string category, string name, string description, T value)
+    public StaticAttribute(AttributeId id, string category, string name, string description, T value)
     {
         if (!(this is TimeAttribute) && value is SimulationTime) throw new System.Exception("Use TimeAttribute instead of StaticAttribute<SimulationTime>");
 
-        _Thing = thing;
         _Id = id;
         _Category = category;
         _Name = name;

@@ -13,7 +13,7 @@ public class Att_Diet : StaticAttribute<List<NutrientType>>
     // Individual
     public List<NutrientType> Diet { get; private set; }
 
-    public Att_Diet(TileObjectBase obj, List<NutrientType> diet) : base(obj, ID, CATEGORY, NAME, DESCRIPTION, diet)
+    public Att_Diet(List<NutrientType> diet) : base(ID, CATEGORY, NAME, DESCRIPTION, diet)
     {
         Diet = diet;
     }

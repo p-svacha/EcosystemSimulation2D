@@ -9,7 +9,6 @@ public class Att_Nutrition : DynamicRangeAttribute
     public override string Description => "Current and maximum amount of nutrition an animal has.";
     public override AttributeId Id => AttributeId.Nutrition;
     public override string Category => "Needs";
-    public override IThing Thing => Animal;
 
     protected override bool KeepValueRatio => false;
 

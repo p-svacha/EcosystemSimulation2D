@@ -9,7 +9,6 @@ public class Att_Size : PercentageAttribute
     public override string Description => "How big an organism is compared to its default size.";
     public override AttributeId Id => AttributeId.Size;
     public override string Category => "General";
-    public override IThing Thing => Organism;
 
     // Individual
     private readonly OrganismBase Organism;
@@ -25,8 +24,8 @@ public class Att_Size : PercentageAttribute
 
         if (Organism.Age < Organism.MaturityAge) 
         {
-            float ageRatio = Organism.Age / Organism.MaturityAge;
-            float sizeRatio = 0.3f + (0.7f * ageRatio); // 30%-100%
+            float ageRatio = Organism.Age.AbsoluteTime / Organism.MaturityAge;
+            float sizeRatio = 0.35f + (0.65f * ageRatio); // 35%-100%
             mods.Add(new AttributeModifier("Age", sizeRatio, AttributeModifierType.Multiply));
         }
 

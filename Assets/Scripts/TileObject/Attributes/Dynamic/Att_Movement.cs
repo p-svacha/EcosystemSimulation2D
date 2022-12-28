@@ -9,7 +9,6 @@ public class Att_Movement : PercentageAttribute
     public override string Description => "Modifier of how capable an animal is at moving.";
     public override AttributeId Id => AttributeId.Movement;
     public override string Category => "Movement";
-    public override IThing Thing => Organism;
 
     // Individual
     private readonly OrganismBase Organism;

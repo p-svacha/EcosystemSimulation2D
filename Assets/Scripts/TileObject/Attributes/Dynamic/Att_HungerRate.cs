@@ -9,7 +9,6 @@ public class Att_HungerRate : DynamicAttribute
     public override string Description => "Actual amount at which the nutrition of an animal drops per hour.";
     public override AttributeId Id => AttributeId.HungerRate;
     public override string Category => "Needs";
-    public override IThing Thing => Thing;
 
     // Individual
     private readonly AnimalBase Animal;

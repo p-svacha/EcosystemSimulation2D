@@ -12,9 +12,19 @@ public class TallGrass : PlantBase
 
 
     protected override int HEALTH_BASE => 10;
-    protected override SimulationTime MATURITY_AGE => new SimulationTime(0, 1, 0, 0);
+    protected override SimulationTime MATURITY_AGE => new SimulationTime(1, 0, 0, 0);
 
     protected override NutrientType NUTRIENT_TYPE => NutrientType.Plant;
     protected override float NUTRIENT_VALUE_BASE => 20;
     protected override float EATING_DIFFICULTY => 0.4f;
+
+    // Individual
+    public override void InitExisting()
+    {
+        int numYears = Random.Range(0, 4);
+        int numMonths = Random.Range(0, SimulationTime.MonthsPerYear);
+        int numDays = Random.Range(0, SimulationTime.DaysPerMonth);
+        int numHours = Random.Range(0, SimulationTime.HoursPerDay);
+        Age.SetTime(numYears, numMonths, numDays, numHours);
+    }
 }

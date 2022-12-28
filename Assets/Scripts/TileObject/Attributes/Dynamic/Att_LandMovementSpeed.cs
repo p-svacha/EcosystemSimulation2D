@@ -9,7 +9,6 @@ public class Att_LandMovementSpeed : DynamicAttribute
     public override string Description => "Actual speed at which an animal moves on land.";
     public override AttributeId Id => AttributeId.LandMovementSpeed;
     public override string Category => "Movement";
-    public override IThing Thing => Animal;
 
     // Individual
     private readonly AnimalBase Animal;

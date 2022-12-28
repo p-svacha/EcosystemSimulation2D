@@ -13,7 +13,7 @@ public class Att_NutrientType : StaticAttribute<NutrientType>
     // Individual
     public NutrientType NutrientType { get; private set; }
 
-    public Att_NutrientType(TileObjectBase obj, NutrientType nutrientType) : base(obj, ID, CATEGORY, NAME, DESCRIPTION, nutrientType)
+    public Att_NutrientType(NutrientType nutrientType) : base(ID, CATEGORY, NAME, DESCRIPTION, nutrientType)
     {
         NutrientType = nutrientType;
     }

@@ -40,9 +40,9 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         HelperFunctions.DestroyAllChildredImmediately(AttributeListContainer);
 
         // Create temporary attributes for ID, Name and Description to display in as rows.
-        Attribute tempIdAtt = new StaticAttribute<string>(thing, AttributeId.Id, "Base", "Thing ID", "Unique key to identify what kind of thing this is.", thing.Id.ToString());
-        Attribute tempNameAtt = new StaticAttribute<string>(thing, AttributeId.Name, "Base", "Name", "", thing.Name);
-        Attribute tempDescAtt = new StaticAttribute<string>(thing, AttributeId.Description, "Base", "Description", "", thing.Description);
+        Attribute tempIdAtt = new StaticAttribute<string>(AttributeId.Id, "Base", "Thing ID", "Unique key to identify what kind of thing this is.", thing.Id.ToString());
+        Attribute tempNameAtt = new StaticAttribute<string>(AttributeId.Name, "Base", "Name", "", thing.Name);
+        Attribute tempDescAtt = new StaticAttribute<string>(AttributeId.Description, "Base", "Description", "", thing.Description);
 
         // Collect all attributes to display
         List<Attribute> attributes = new List<Attribute>() { tempIdAtt, tempNameAtt, tempDescAtt };
