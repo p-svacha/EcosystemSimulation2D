@@ -16,7 +16,7 @@ public abstract class OrganismBase : VisibleTileObjectBase
         base.Init();
 
         // Attributes
-        _Attributes.Add(AttributeId.MaturityAge, new TimeAttribute(AttributeId.MaturityAge, "General", "Maturity Age", "The age at which an organism reaches full size. Animals are able to get pregnant at that point.", MATURITY_AGE));
+        _Attributes.Add(AttributeId.MaturityAge, new TimeAttribute(AttributeId.MaturityAge, "Maturity Age", "General", MATURITY_AGE));
         _Attributes.Add(AttributeId.Size, new Att_Size(this));
         _Attributes.Add(AttributeId.SpawnSurfaces, new Att_SpawnSurfaces(SPAWN_SURFACES));
 

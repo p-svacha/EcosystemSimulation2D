@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class TimeAttribute : StaticAttribute<SimulationTime>
 {
-    public TimeAttribute(AttributeId id, string category, string name, string description, SimulationTime value) : base(id, category, name, description, value) { }
+    public TimeAttribute(AttributeId id, string name, string category, SimulationTime value) : base(id, name, category, value) { }
 
     public override float GetValue() => Value.AbsoluteTime;
 }

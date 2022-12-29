@@ -8,12 +8,11 @@ public class Att_NutrientType : StaticAttribute<NutrientType>
     private const AttributeId ID = AttributeId.NutrientType;
     private const string CATEGORY = "Nutrition";
     private const string NAME = "Nutrient Type";
-    private const string DESCRIPTION = "What kind of diet is needed to be able to eat this object.";
 
     // Individual
     public NutrientType NutrientType { get; private set; }
 
-    public Att_NutrientType(NutrientType nutrientType) : base(ID, CATEGORY, NAME, DESCRIPTION, nutrientType)
+    public Att_NutrientType(NutrientType nutrientType) : base(ID, NAME, CATEGORY, nutrientType)
     {
         NutrientType = nutrientType;
     }

@@ -8,12 +8,11 @@ public class Att_SpawnSurfaces : StaticAttribute<List<SurfaceId>>
     private const AttributeId ID = AttributeId.SpawnSurfaces;
     private const string CATEGORY = "Spawn";
     private const string NAME = "Spawn Surfaces";
-    private const string DESCRIPTION = "List of surface types that an object can spawn on.";
 
     // Individual
     public List<SurfaceId> Surfaces { get; private set; }
 
-    public Att_SpawnSurfaces(List<SurfaceId> surfaces) : base(ID, CATEGORY, NAME, DESCRIPTION, surfaces)
+    public Att_SpawnSurfaces(List<SurfaceId> surfaces) : base(ID, NAME, CATEGORY, surfaces)
     {
         Surfaces = surfaces;
     }

@@ -1,143 +1,138 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml.Linq;
 
 public enum AttributeId
 {
     /// <summary> Used as null. </summary>
     None,
 
-    /// <summary> Unique identifier of a thing. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Id'/></summary>
     Id,
 
-    /// <summary> Name that gets displayed. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Name'/></summary>
     Name,
 
-    /// <summary> Description of a thing. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Description'/></summary>
     Description,
 
 
-    /// <summary> Used by WorldTile. Coordinate position of a thing. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Coordinates'/></summary>
     Coordinates,
 
-    /// <summary> Used by WorldTile. Surface of the tile. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Surface'/></summary>
     Surface,
 
-    /// <summary> Chance per hour that a plant will spawn on a tile with this surface. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PlantGrowChance'/></summary>
     PlantGrowChance,
 
-    /// <summary> Chance per tile that a plant is spawned on a tile with this surface during world generation. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PlantSpawnChance'/></summary>
     PlantSpawnChance,
 
-    /// <summary> Chance per tile that a group of animals is spawned on a tile with this surface during world generation. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/AnimalSpawnChance'/></summary>
     AnimalSpawnChance,
 
-    /// <summary> Flag if animals need to be able to swim to traverse a surface. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/RequiresSwimming'/></summary>
     RequiresSwimming,
 
-    /// <summary> How much animals are slowed down by traversing something. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/MovementCost'/></summary>
     MovementCost,
 
 
-    /// <summary> Category and subcategories describing what type of object this is. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Category'/></summary>
     Category,
 
-    /// <summary> How long an object has been existing in the world. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Age'/></summary>
     Age,
 
-    /// <summary> The age at which an organism reaches full size. Animals are able to get pregnant at that point. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/MaturityAge'/></summary>
     MaturityAge,
 
-    /// <summary> Base max health of an object. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/HealthBase'/></summary>
     HealthBase,
 
-    /// <summary> Current and maximum amount of HP an object currently has. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Health'/></summary>
     Health,
 
-    /// <summary> How big an organism is compared to its default size. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Size'/></summary>
     Size,
 
 
-    /// <summary> How likely it is than an object gets spawned on the map. Value is compared relatively between objects for dynamic spawn tables. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Commonness'/></summary>
     Commonness,
 
-    /// <summary> List of surface types that an object can spawn on. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/SpawnSurfaces'/></summary>
     SpawnSurfaces,
 
-    /// <summary> Amount that gets spawned when an objects is created. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/SpawnGroupSize'/></summary>
     SpawnGroupSize,
 
 
-    /// <summary> Modifier of how capable an animal is at moving. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Movement'/></summary>
     Movement,
 
-    /// <summary> Base speed at which an animal moves on land. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/LandMovementSpeedBase'/></summary>
     LandMovementSpeedBase,
 
-    /// <summary> Actual speed at which an animal moves on land. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/LandMovementSpeed'/></summary>
     LandMovementSpeed,
 
-    /// <summary> Base speed at which an animal moves on water. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/WaterMovementSpeedBase'/></summary>
     WaterMovementSpeedBase,
 
-    /// <summary> Actual speed at which an animal moves on water </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/WaterMovementSpeed'/></summary>
     WaterMovementSpeed,
 
-    /// <summary> How many tiles an animal can see in all directions and detect specific objects. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/VisionRange'/></summary>
     VisionRange,
 
-
-    /// <summary> Base amount of nutrition an animal can store. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/NutritionBase'/></summary>
     NutritionBase,
 
-    /// <summary> Current and maximum amount of nutrition an animal has. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Nutrition'/></summary>
     Nutrition,
 
-    /// <summary> Base amount at which the nutrition of an animal drops per hour. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/HungerRateBase'/></summary>
     HungerRateBase,
 
-    /// <summary> Actual amount at which the nutrition of an animal drops per hour. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/HungerRate'/></summary>
     HungerRate,
 
-    /// <summary> How advanced the malnutrition of an animal is. The higher it is, the more health it loses. </summary>
-    Malnutrition,
-
-    /// <summary> What kind of diet is needed to be able to eat an object. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/NutrientType'/></summary>
     NutrientType,
 
-    /// <summary> Base amount of nutrition an object provides at when being eaten from full health to 0. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/NutrientValueBase'/></summary>
     NutrientValueBase,
 
-    /// <summary> Actual amount of nutrition an object provides at when being eaten from full health to 0. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/NutrientValue'/></summary>
     NutrientValue,
 
-    /// <summary> What types of food an animal is able to eat. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/Diet'/></summary>
     Diet,
 
-    /// <summary> How fast an animal is at eating food generally. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/EatingSpeed'/></summary>
     EatingSpeed,
 
-    /// <summary> How difficult an object is to eat generally. 1 means it takes 1 hour for the full thing to be eaten. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/EatingDifficulty'/></summary>
     EatingDifficulty,
 
-    /// <summary> Minimum age at which an animal can get pregnant. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PregnancyMinAge'/></summary>
     PregnancyMinAge,
 
-    /// <summary> Maximum age at which an animal can get pregnant. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PregnancyMaxAge'/></summary>
     PregnancyMaxAge,
 
-    /// <summary> Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PregnancyChanceBase'/></summary>
     PregnancyChanceBase,
 
-    /// <summary> Actual chance per hour that an animal gets pregnant. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PregnancyChance'/></summary>
     PregnancyChance,
 
-    /// <summary> How long an animal is pregnant for. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/PregnancyDuration'/></summary>
     PregnancyDuration,
 
-    /// <summary> How long an animal has been pregnant for. </summary>
-    PregnancyProgress,
-
-    /// <summary> Amount of children an animal will produce when giving birth. </summary>
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/NumOffspring'/></summary>
     NumOffspring,
 }
+

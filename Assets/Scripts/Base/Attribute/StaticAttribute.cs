@@ -16,21 +16,22 @@ public class StaticAttribute<T> : Attribute
     public override AttributeType Type => AttributeType.Base;
 
     // Static
+    private readonly AttributeId _Id;
     private readonly string _Name;
     private readonly string _Description;
-    private readonly AttributeId _Id;
     private readonly string _Category;
+
     // Value
     public virtual T Value { get; private set; }
 
-    public StaticAttribute(AttributeId id, string category, string name, string description, T value)
+    public StaticAttribute(AttributeId id, string name, string category, T value)
     {
         if (!(this is TimeAttribute) && value is SimulationTime) throw new System.Exception("Use TimeAttribute instead of StaticAttribute<SimulationTime>");
 
         _Id = id;
         _Category = category;
         _Name = name;
-        _Description = description;
+        _Description = GlobalStrings.GetAttributeDescription(id);
 
         Value = value;
     }

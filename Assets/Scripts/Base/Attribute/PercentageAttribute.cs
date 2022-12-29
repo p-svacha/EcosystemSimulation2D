@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public abstract class PercentageAttribute : DynamicAttribute
 {
+    public PercentageAttribute(AttributeId id, string name, string category, AttributeType type) : base(id, name, category, type) { }
+
     public override List<AttributeModifier> GetDynamicValueModifiers()
     {
         List<AttributeModifier> mods = new List<AttributeModifier>

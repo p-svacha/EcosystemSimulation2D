@@ -10,6 +10,8 @@ using UnityEngine;
 /// </summary>
 public abstract class DynamicBarAttribute : DynamicAttribute
 {
+    public DynamicBarAttribute(AttributeId id, string name, string category, AttributeType type) : base(id, name, category, type) { }
+
     // Required setting
     /// <summary>
     /// If true, the value will also change whenever the max value changes to keep the ratio the same.

@@ -15,21 +15,32 @@ public class SE_Malnutrition : StatusEffect
     public override Dictionary<AttributeId, AttributeModifier> AttributeModifiers => _Modifiers;
 
     // Individual
+    private AnimalBase Animal;
     private StatusDisplay _Display;
     private Dictionary<AttributeId, AttributeModifier> _Modifiers;
+    public float MalnutritionAdvancement; // Animal loses this much health per hour
 
     public SE_Malnutrition()
     {
-        _Display = new SD_Malnutrition();
+        _Display = new SD_Malnutrition(this);
         _Modifiers = new Dictionary<AttributeId, AttributeModifier>()
         {
             { AttributeId.HungerRate, new AttributeModifier(Name, 1.2f, AttributeModifierType.Multiply) }
         };
     }
 
-    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).Malnutrition == 0;
+    protected override void OnAdd()
+    {
+        Animal = TileObject as AnimalBase;
+    }
+    protected override bool IsEndConditionReached() => MalnutritionAdvancement <= 0;
     protected override void OnTick()
     {
-        TileObject.Health.ChangeValue(-((TileObject as AnimalBase).Malnutrition * Simulation.Singleton.TickTime));
+        if (Animal.Nutrition.Value == 0) MalnutritionAdvancement += Animal.HungerRate * Simulation.Singleton.TickTime; // Increase malnutrition
+        else MalnutritionAdvancement -= Animal.HungerRate * Simulation.Singleton.TickTime; // Decrease malnutrition
+
+        if (MalnutritionAdvancement < 0) MalnutritionAdvancement = 0;
+
+        Animal.Health.ChangeValue(-(MalnutritionAdvancement * Simulation.Singleton.TickTime));
     }
 }

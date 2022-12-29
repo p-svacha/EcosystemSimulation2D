@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 using UnityEngine.EventSystems;
+using static Attribute;
 
 public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
 {
@@ -40,9 +41,9 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         HelperFunctions.DestroyAllChildredImmediately(AttributeListContainer);
 
         // Create temporary attributes for ID, Name and Description to display in as rows.
-        Attribute tempIdAtt = new StaticAttribute<string>(AttributeId.Id, "Base", "Thing ID", "Unique key to identify what kind of thing this is.", thing.ThingId.ToString());
-        Attribute tempNameAtt = new StaticAttribute<string>(AttributeId.Name, "Base", "Name", "", thing.Name);
-        Attribute tempDescAtt = new StaticAttribute<string>(AttributeId.Description, "Base", "Description", "", thing.Description);
+        Attribute tempIdAtt = new StaticAttribute<string>(AttributeId.Id, "Thing ID", "Base", thing.ThingId.ToString());
+        Attribute tempNameAtt = new StaticAttribute<string>(AttributeId.Name, "Name", "Base", thing.Name);
+        Attribute tempDescAtt = new StaticAttribute<string>(AttributeId.Description, "Description", "Base", thing.Description);
 
         // Collect all attributes to display
         List<Attribute> attributes = new List<Attribute>() { tempIdAtt, tempNameAtt, tempDescAtt };

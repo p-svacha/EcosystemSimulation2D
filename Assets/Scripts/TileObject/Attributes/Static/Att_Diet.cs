@@ -8,12 +8,11 @@ public class Att_Diet : StaticAttribute<List<NutrientType>>
     private const AttributeId ID = AttributeId.Diet;
     private const string CATEGORY = "Needs";
     private const string NAME = "Diet";
-    private const string DESCRIPTION = "What types of food an animal is able to eat.";
 
     // Individual
     public List<NutrientType> Diet { get; private set; }
 
-    public Att_Diet(List<NutrientType> diet) : base(ID, CATEGORY, NAME, DESCRIPTION, diet)
+    public Att_Diet(List<NutrientType> diet) : base(ID, NAME, CATEGORY, diet)
     {
         Diet = diet;
     }

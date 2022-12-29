@@ -4,17 +4,10 @@ using UnityEngine;
 
 public class Att_MovementCost : DynamicAttribute
 {
-    // Attribute Base
-    public override AttributeId Id => AttributeId.MovementCost;
-    public override string Name => "Movement Cost";
-    public override string Description => "How hard it is to traverse this tile.";
-    public override string Category => "Movement";
-    public override AttributeType Type => AttributeType.Stat;
-
     // Individual
     private readonly WorldTile Tile;
 
-    public Att_MovementCost(WorldTile tile)
+    public Att_MovementCost(WorldTile tile) : base(AttributeId.MovementCost, "Movement Cost", "Movement", AttributeType.Stat)
     {
         Tile = tile;
     }

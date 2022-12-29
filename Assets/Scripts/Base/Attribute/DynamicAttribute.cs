@@ -11,6 +11,29 @@ using UnityEngine;
 /// </summary>
 public abstract class DynamicAttribute : Attribute
 {
+    // Attribute Base
+    public override AttributeId Id => _Id;
+    public override string Name => _Name;
+    public override string Description => _Description;
+    public override string Category => _Category;
+    public override AttributeType Type => _Type;
+
+    // Static
+    private readonly AttributeId _Id;
+    private readonly string _Name;
+    private readonly string _Description;
+    private readonly string _Category;
+    private readonly AttributeType _Type;
+
+    public DynamicAttribute(AttributeId id, string name, string category, AttributeType type)
+    {
+        _Id = id;
+        _Category = category;
+        _Name = name;
+        _Description = GlobalStrings.GetAttributeDescription(id);
+        _Type = type;
+    }
+
     /// <summary>
     /// List of all modifiers that come from StatusEffects on the parent thing. Elements get added and removed from this list by the StatusEffects themselves.
     /// <br/> Does not get operated on each frame and is therefore more performant than dynamic modifiers.

@@ -4,8 +4,6 @@ NEXT VERSION
 
 UP NEXT
 -------------
-- rework attribute types (see attributetypes.txt)
-- Change DynamicRangeAttribute to DynamicBarAttribute
 - Animals should drink water and have Thirst
 - Add mountains
 - add multiple sprite support for objects (tall grass)
@@ -33,7 +31,7 @@ UP NEXT
 	- display floats with only one decimal
 	- max height
 	- make categories collapsable
-	- two tabs (sorted by category, sorted by type (with new type system))
+	- multiple tabs (all sorted by category, base attributes, intermediary, stats)
 	- add max length to value display (wofox description)
 - create TilemapTileObject class that supports health and basic functions without needing to be visible on the map (used later for walls/cliffs)
 	- update tileobjectfactory
@@ -70,8 +68,8 @@ UP NEXT
 - add corpses upon animal deaths
 - fix bug that thinginfowindow can't be moved/closed anymore when header moved out of screen
 - add hunger as a shown attribute in swc
-- remove malnutrtition attribute and add its value to the status effect
-- remove pregnancyprogress attribute and add its value to the pregnancy status effect
+- in attribute display in swc (size, movmenent, etc) show what affects the values (simple)
+- in editor show a little display of the selected tool beside the cursor
 
 FEATURES FOR THE WHEEL (https://wheelofnames.com/)
 ----------------------------

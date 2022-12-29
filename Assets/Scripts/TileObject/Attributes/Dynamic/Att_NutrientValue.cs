@@ -4,17 +4,10 @@ using UnityEngine;
 
 public class Att_NutrientValue : DynamicAttribute
 {
-    // Attribute Base
-    public override AttributeId Id => AttributeId.NutrientValue;
-    public override string Name => "Nutrient Value";
-    public override string Description => "Actual amount of nutrition an object provides at when being eaten from full health to 0.";
-    public override string Category => "Nutrition";
-    public override AttributeType Type => AttributeType.Stat;
-
     // Individual
     private readonly TileObjectBase Object;
 
-    public Att_NutrientValue(TileObjectBase obj)
+    public Att_NutrientValue(TileObjectBase obj) : base(AttributeId.NutrientValue, "Nutrient Value", "Nutrition", AttributeType.Stat)
     {
         Object = obj;
     }

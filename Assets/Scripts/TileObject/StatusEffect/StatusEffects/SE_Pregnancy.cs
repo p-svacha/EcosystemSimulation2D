@@ -17,12 +17,14 @@ public class SE_Pregnancy : StatusEffect
     public override Dictionary<AttributeId, AttributeModifier> AttributeModifiers => _Modifiers;
 
     // Individual
+    private AnimalBase Animal;
     private StatusDisplay _Display;
     private Dictionary<AttributeId, AttributeModifier> _Modifiers;
+    public SimulationTime PregnancyProgress { get; private set; }
 
     public SE_Pregnancy()
     {
-        _Display = new SD_Pregnancy();
+        _Display = new SD_Pregnancy(this);
         _Modifiers = new Dictionary<AttributeId, AttributeModifier>()
         {
             { AttributeId.HungerRate, new AttributeModifier(Name, 1.5f, AttributeModifierType.Multiply) },
@@ -32,15 +34,20 @@ public class SE_Pregnancy : StatusEffect
         };
     }
 
-    protected override bool IsEndConditionReached() => (TileObject as AnimalBase).PregnancyProgress >= (TileObject as AnimalBase).PregnancyDuration;
+    protected override void OnAdd()
+    {
+        Animal = TileObject as AnimalBase;
+        PregnancyProgress = new SimulationTime();
+    }
+    protected override bool IsEndConditionReached() => PregnancyProgress >= (TileObject as AnimalBase).PregnancyDuration;
     protected override void OnTick()
     {
-        (TileObject as AnimalBase).PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
+        PregnancyProgress.IncreaseTime(Simulation.Singleton.TickTime);
     }
 
     protected override void OnEnd()
     {
-        (TileObject as AnimalBase).GiveBirth();
-        (TileObject as AnimalBase).PregnancyProgress.Reset();
+        Animal.GiveBirth();
+        PregnancyProgress.Reset();
     }
 }

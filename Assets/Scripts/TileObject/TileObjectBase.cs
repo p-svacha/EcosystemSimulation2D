@@ -51,16 +51,16 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
         DisplaySprite = ResourceManager.Singleton.GetTileObjectSprite(ObjectId);
 
         // Init attributes
-        _Attributes.Add(AttributeId.Category, new StaticAttribute<string>(AttributeId.Category, "General", "Category", "Category and subcategories describing what type of object this is.", ObjectCategory));
-        _Attributes.Add(AttributeId.Age, new TimeAttribute(AttributeId.Age, "General", "Age", "How long an object has been existing in the world.", new SimulationTime()));
-        _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(AttributeId.HealthBase, "General", "Base Health", "Base max health of an object.", HEALTH_BASE));
+        _Attributes.Add(AttributeId.Category, new StaticAttribute<string>(AttributeId.Category, "Category", "General", ObjectCategory));
+        _Attributes.Add(AttributeId.Age, new TimeAttribute(AttributeId.Age, "Age", "General", new SimulationTime()));
+        _Attributes.Add(AttributeId.HealthBase, new StaticAttribute<float>(AttributeId.HealthBase, "Base Health", "General", HEALTH_BASE));
         _Attributes.Add(AttributeId.Health, new Att_Health(this));
-        _Attributes.Add(AttributeId.Commonness, new StaticAttribute<float>(AttributeId.Commonness, "Spawn", "Commonness", "How likely it is than an object gets spawned on the map. Value is compared relatively between objects for dynamic spawn tables.", COMMONNESS));
+        _Attributes.Add(AttributeId.Commonness, new StaticAttribute<float>(AttributeId.Commonness, "Commonness", "Spawn", COMMONNESS));
 
         _Attributes.Add(AttributeId.NutrientType, new Att_NutrientType(NUTRIENT_TYPE));
-        _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(AttributeId.NutrientValueBase, "Nutrition", "Base Nutrient Value", "Base amount of nutrition an object provides at when being eaten from full health to 0.", NUTRIENT_VALUE_BASE));
+        _Attributes.Add(AttributeId.NutrientValueBase, new StaticAttribute<float>(AttributeId.NutrientValueBase, "Base Nutrient Value", "Nutrition", NUTRIENT_VALUE_BASE));
         _Attributes.Add(AttributeId.NutrientValue, new Att_NutrientValue(this));
-        _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(AttributeId.EatingDifficulty, "Nutrition", "Eating Difficulty", "How difficult an object is to eat generally.", EATING_DIFFICULTY));
+        _Attributes.Add(AttributeId.EatingDifficulty, new StaticAttribute<float>(AttributeId.EatingDifficulty, "Eating Difficulty", "Nutrition", EATING_DIFFICULTY));
 
         // Status effects
         StatusEffects = new List<StatusEffect>();

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using static Attribute;
 
 public class UI_SWC_AnimalBase : UI_SWC_TileObjectBase
 {

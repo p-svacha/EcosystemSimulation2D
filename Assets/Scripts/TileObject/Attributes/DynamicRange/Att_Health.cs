@@ -5,17 +5,12 @@ using UnityEngine;
 public class Att_Health : DynamicBarAttribute
 {
     // Attribute Base
-    public override AttributeId Id => AttributeId.Health;
-    public override string Name => "Health";
-    public override string Description => "Current and maximum amount of HP an object has.";
-    public override string Category => "General";
-    public override AttributeType Type => AttributeType.Stat;
     protected override bool KeepValueRatio => true;
 
     // Individual
     private readonly TileObjectBase Object;
 
-    public Att_Health(TileObjectBase obj)
+    public Att_Health(TileObjectBase obj) : base(AttributeId.Health, "Health", "General", AttributeType.Stat)
     {
         Object = obj;
     }

@@ -61,3 +61,4 @@ public enum AttributeType
     /// <summary> Attributes that are dynamically calculated from base attributes, intermediary attributes, stat attributes and/or status effects. Directly used for mechanics. </summary>
     Stat
 }
+

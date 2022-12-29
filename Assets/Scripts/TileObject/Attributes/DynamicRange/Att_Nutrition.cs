@@ -5,17 +5,12 @@ using UnityEngine;
 public class Att_Nutrition : DynamicBarAttribute
 {
     // Attribute Base
-    public override AttributeId Id => AttributeId.Nutrition;
-    public override string Name => "Nutrition";
-    public override string Description => "Current and maximum amount of nutrition an animal has.";
-    public override string Category => "Needs";
-    public override AttributeType Type => AttributeType.Stat;
     protected override bool KeepValueRatio => false;
 
     // Individual
     private readonly AnimalBase Animal;
 
-    public Att_Nutrition(AnimalBase animal)
+    public Att_Nutrition(AnimalBase animal) : base(AttributeId.Nutrition, "Nutrition", "Needs", AttributeType.Stat)
     {
         Animal = animal;
     }

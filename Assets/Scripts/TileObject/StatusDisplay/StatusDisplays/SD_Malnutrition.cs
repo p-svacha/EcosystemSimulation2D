@@ -10,5 +10,11 @@ public class SD_Malnutrition : StatusDisplay
     public override bool DoShowDisplayValue => true;
 
     // Individual
-    public override string DisplayValue => TileObject.Attributes[AttributeId.Malnutrition].GetValue().ToString("F0");
+    private SE_Malnutrition MalnutritionEffect;
+    public SD_Malnutrition(SE_Malnutrition effect)
+    {
+        MalnutritionEffect = effect;
+    }
+
+    public override string DisplayValue => MalnutritionEffect.MalnutritionAdvancement.ToString("F0");
 }

@@ -9,7 +9,7 @@ public class Act_Eat : Activity
     public override string DisplayString => _DisplayString;
 
     // Individual
-    private bool TargetReached;
+    private EatState State;
     private TileObjectBase FoodTarget;
     private string _DisplayString;
 
@@ -17,48 +17,52 @@ public class Act_Eat : Activity
 
     protected override void OnActivityStart()
     {
+        SetNextState();
+    }
+
+    public override void OnTick()
+    {
+        switch(State)
+        {
+            case EatState.SearchingFood:
+                if (!SourceAnimal.IsMoving) SetNextState();
+                break;
+
+            case EatState.MovingToFood:
+                if (!SourceAnimal.IsMoving || FoodTarget == null) SetNextState();
+                break;
+
+            case EatState.Eating:
+                if (FoodTarget == null) End();
+                else Eat();
+                break;
+        }
+    }
+
+    private void SetNextState()
+    {
         TileObjectBase closestFood = FindClosestFood();
         if (closestFood != null)
         {
             FoodTarget = closestFood;
-            if (FoodTarget.Tile == SourceAnimal.Tile) StartEating();
+            if (FoodTarget.Tile == SourceAnimal.Tile)
+            {
+                State = EatState.Eating;
+                _DisplayString = "Eating " + FoodTarget.Name;
+            }
             else
             {
+                State = EatState.MovingToFood;
                 _DisplayString = "Moving to eat " + FoodTarget.Name;
-                TargetReached = false;
                 SourceAnimal.MoveTo(FoodTarget.Tile);
             }
         }
         else
         {
-            TargetReached = false;
+            State = EatState.SearchingFood;
             _DisplayString = "Searching food";
             SourceAnimal.Search();
         }
-    }
-
-    public override void OnTick()
-    {
-        if ((TargetReached && FoodTarget == null) || SourceAnimal.Nutrition.Ratio > 0.95f)
-        {
-            End();
-            return;
-        }
-
-        if (!SourceAnimal.IsMoving)
-        {
-            if (!TargetReached) StartEating();
-            else Eat();
-        }
-    }
-
-    /// <summary>
-    /// Starts eating the target food.
-    /// </summary>
-    private void StartEating()
-    {
-        _DisplayString = "Eating " + FoodTarget.Name;
-        TargetReached = true;
     }
 
     /// <summary>
@@ -103,4 +107,12 @@ public class Act_Eat : Activity
     {
         return (1f - SourceAnimal.Nutrition.Ratio) * 2f;
     }
+
+    private enum EatState
+    {
+        SearchingFood,
+        MovingToFood,
+        Eating
+    }
 }
+

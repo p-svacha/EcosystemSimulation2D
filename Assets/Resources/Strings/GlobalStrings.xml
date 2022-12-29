@@ -1,5 +1,42 @@
 <GlobalStrings>
   <AttributeDescriptions>
-    <Vision>How many tiles an animal can see in all directions and detect specific objects.</Vision>
+    <Age>How long an object has been existing in the world.</Age>
+    <AnimalSpawnChance>Chance per tile that a group of animals is spawned on a tile with this surface during world generation.</AnimalSpawnChance>
+    <Category>Category and subcategories describing what type of object this is.</Category>
+    <Commonness>How likely it is than an object gets spawned on the map. Value is compared relatively between objects for dynamic spawn tables.</Commonness>
+    <Coordinates>Position of this tile on the world map.</Coordinates>
+    <Description>Description of a thing.</Description>
+    <Diet>What types of food an animal is able to eat.</Diet>
+    <EatingDifficulty>How difficult an object is to eat generally.</EatingDifficulty>
+    <EatingSpeed>How fast an animal is at eating food generally.</EatingSpeed>
+    <LandMovementSpeed>Actual speed at which an animal moves on land.</LandMovementSpeed>
+    <LandMovementSpeedBase>Base speed at which an animal moves on land.</LandMovementSpeedBase>
+    <Health>Current and maximum amount of HP an object has.</Health>
+    <HealthBase>Base max health of an object.</HealthBase>
+    <HungerRate>Actual amount at which the nutrition of an animal drops per hour.</HungerRate>
+    <HungerRateBase>Base amount at which the nutrition of an animal drops per hour.</HungerRateBase>
+    <Id>Unique key to identify what kind of thing this is.</Id>
+    <MaturityAge>The age at which an organism reaches full size. Animals are able to get pregnant at that point.</MaturityAge>
+    <Movement>Modifier of how capable an animal is at moving.</Movement>
+    <MovementCost>How hard it is to move across this surface.</MovementCost>
+    <Name>Display name of a thing.</Name>
+    <Nutrition>Current and maximum amount of nutrition an animal has.</Nutrition>
+    <NutritionBase>Base amount of nutrition an animal can store.</NutritionBase>
+    <NutrientType>What kind of diet is needed to be able to eat this object.</NutrientType>
+    <NutrientValue>Actual amount of nutrition an object provides at when being eaten from full health to 0.</NutrientValue>
+    <NutrientValueBase>Base amount of nutrition an object provides at when being eaten from full health to 0.</NutrientValueBase>
+    <PlantGrowChance>Chance per hour that a plant will start growing on a tile with this surface.</PlantGrowChance>
+    <PlantSpawnChance>Chance per tile that a plant is spawned on a tile with this surface during world generation.</PlantSpawnChance>
+    <PregnancyChance>Actual chance per hour that an animal gets pregnant.</PregnancyChance>
+    <PregnancyChanceBase>Base chance per hour that an animal gets pregnant.</PregnancyChanceBase>
+    <PregnancyDuration>How long an animal is pregnant for.</PregnancyDuration>
+    <PregnancyMaxAge>Maximum age at which an animal can get pregnant.</PregnancyMaxAge>
+    <RequiresSwimming>If objects need to be able to swim to traverse this surface.</RequiresSwimming>
+    <Size>How big an organism is compared to its default size.</Size>
+    <SpawnSurfaces>List of surface types that an object can spawn on.</SpawnSurfaces>
+    <Surface>Surface type of this tile.</Surface>
+    <VisionRange>How many tiles an animal can see in all directions and detect specific objects.</VisionRange>
+    <WaterMovementSpeed>Actual speed at which an animal moves on water.</WaterMovementSpeed>
+    <WaterMovementSpeedBase>Base speed at which an animal moves on water.</WaterMovementSpeedBase>
   </AttributeDescriptions>
 </GlobalStrings>

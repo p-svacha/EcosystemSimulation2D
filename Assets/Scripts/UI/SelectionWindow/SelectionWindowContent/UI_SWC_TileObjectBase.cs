@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Attribute;
 
 public class UI_SWC_TileObjectBase : UI_SelectionWindowContent
 {

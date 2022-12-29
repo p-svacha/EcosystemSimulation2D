@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Attribute;
 
 /// <summary>
 /// A surface represents one type of terrain. The higher the precedence the more prominent it gets drawn.
@@ -36,12 +37,12 @@ public abstract class SurfaceBase : IThing
 
     public SurfaceBase()
     {
-        _Attributes.Add(AttributeId.MovementCost, new StaticAttribute<float>(AttributeId.MovementCost, "Movement", "Movement Cost", "How hard it is to move across this surface.", MOVEMENT_COST));
-        _Attributes.Add(AttributeId.RequiresSwimming, new StaticAttribute<float>(AttributeId.RequiresSwimming, "Movement", "Requires Swimming", "If objects need to be able to swim to traverse this surface.", REQUIRES_SWIMMING? 1 : 0));
+        _Attributes.Add(AttributeId.MovementCost, new StaticAttribute<float>(AttributeId.MovementCost, "Movement Cost", "Movement", MOVEMENT_COST));
+        _Attributes.Add(AttributeId.RequiresSwimming, new StaticAttribute<float>(AttributeId.RequiresSwimming, "Requires Swimming", "Movement", REQUIRES_SWIMMING ? 1 : 0));
 
-        _Attributes.Add(AttributeId.PlantGrowChance, new StaticAttribute<float>(AttributeId.PlantGrowChance, "Life Support", "Plant Grow Chance", "Chance per hour that a plant will spawn on a tile with this surface.", PLANT_GROW_CHANCE));
-        _Attributes.Add(AttributeId.PlantSpawnChance, new StaticAttribute<float>(AttributeId.PlantSpawnChance, "Life Support", "Plant Spawn Chance", "Chance per tile that a plant is spawned on a tile with this surface during world generation.", PLANT_SPAWN_CHANCE));
-        _Attributes.Add(AttributeId.AnimalSpawnChance, new StaticAttribute<float>(AttributeId.AnimalSpawnChance, "Life Support", "Animal Spawn Chance", "Chance per tile that a group of animals is spawned on a tile with this surface during world generation.", ANIMAL_SPAWN_CHANCE));
+        _Attributes.Add(AttributeId.PlantGrowChance, new StaticAttribute<float>(AttributeId.PlantGrowChance, "Plant Grow Chance", "Life Support", PLANT_GROW_CHANCE));
+        _Attributes.Add(AttributeId.PlantSpawnChance, new StaticAttribute<float>(AttributeId.PlantSpawnChance, "Plant Spawn Chance", "Life Support", PLANT_SPAWN_CHANCE));
+        _Attributes.Add(AttributeId.AnimalSpawnChance, new StaticAttribute<float>(AttributeId.AnimalSpawnChance, "Animal Spawn Chance", "Life Support", ANIMAL_SPAWN_CHANCE));
     }
 
     /// <summary>

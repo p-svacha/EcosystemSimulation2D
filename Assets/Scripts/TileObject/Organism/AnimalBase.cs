@@ -27,10 +27,6 @@ public abstract class AnimalBase : OrganismBase
     // Optional Attributes
     protected virtual float EATING_SPEED => 1f;
 
-    // Constant Values (could be replaced by attributes if necessary)
-    private float MALNUTRITION_RATE => HUNGER_RATE_BASE; // How much malnutrition increases per hour when out of food. 1 Malnutrition = -1 Health per hour
-    private float MALNUTRITION_REGENERATION_RATE => HUNGER_RATE_BASE; // How much malnutrition decreases per hour when not out of food. 1 Malnutrition = -1 Health per hour
-
     // Behaviour Logic
     protected List<WorldTile> CurrentPath;
     public bool IsMoving { get; private set; }
@@ -47,34 +43,32 @@ public abstract class AnimalBase : OrganismBase
 
         // Attributes
         // General
-        _Attributes.Add(AttributeId.VisionRange, new StaticAttribute<float>(AttributeId.VisionRange, "General", "Vision Range", "How many tiles an animal can see in all directions and detect specific objects.", VISION_RANGE));
+        _Attributes.Add(AttributeId.VisionRange, new StaticAttribute<float>(AttributeId.VisionRange, "Vision Range", "General", VISION_RANGE));
 
         // Movement
-        _Attributes.Add(AttributeId.LandMovementSpeedBase, new StaticAttribute<float>(AttributeId.LandMovementSpeedBase, "Movement", "Base Movement Speed", "Base speed at which an animal moves on land.", LAND_MOVEMENT_SPEED_BASE));
-        _Attributes.Add(AttributeId.WaterMovementSpeedBase, new StaticAttribute<float>(AttributeId.WaterMovementSpeed, "Movement", "Base Movement Speed", "Base speed at which an animal moves on water.", WATER_MOVEMENT_SPEED_BASE));
+        _Attributes.Add(AttributeId.LandMovementSpeedBase, new StaticAttribute<float>(AttributeId.LandMovementSpeedBase, "Base Land Movement Speed", "Movement", LAND_MOVEMENT_SPEED_BASE));
+        _Attributes.Add(AttributeId.WaterMovementSpeedBase, new StaticAttribute<float>(AttributeId.WaterMovementSpeed, "Base Water Movement Speed", "Movement", WATER_MOVEMENT_SPEED_BASE));
         _Attributes.Add(AttributeId.Movement, new Att_Movement(this));
         _Attributes.Add(AttributeId.LandMovementSpeed, new Att_LandMovementSpeed(this));
         _Attributes.Add(AttributeId.WaterMovementSpeed, new Att_WaterMovementSpeed(this));
 
         // Needs
         _Attributes.Add(AttributeId.Diet, new Att_Diet(DIET));
-        _Attributes.Add(AttributeId.NutritionBase, new StaticAttribute<float>(AttributeId.NutritionBase, "Needs", "Base Nutrition", "Base amount of nutrition an animal can store.", NUTRITION_BASE));
+        _Attributes.Add(AttributeId.NutritionBase, new StaticAttribute<float>(AttributeId.NutritionBase, "Base Nutrition", "Needs", NUTRITION_BASE));
         _Attributes.Add(AttributeId.Nutrition, new Att_Nutrition(this));
-        _Attributes.Add(AttributeId.HungerRateBase, new StaticAttribute<float>(AttributeId.HungerRateBase, "Needs", "Base Hunger Rate", "Base amount at which the nutrition of an animal drops per hour.", HUNGER_RATE_BASE));
+        _Attributes.Add(AttributeId.HungerRateBase, new StaticAttribute<float>(AttributeId.HungerRateBase, "Base Hunger Rate", "Needs", HUNGER_RATE_BASE));
         _Attributes.Add(AttributeId.HungerRate, new Att_HungerRate(this));
-        _Attributes.Add(AttributeId.Malnutrition, new StaticAttribute<float>(AttributeId.Malnutrition, "Needs", "Malnutrition", "How advanced the malnutrition of an animal is. The higher it is, the more health it loses.", 0f));
-        _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(AttributeId.EatingSpeed, "Needs", "Eating Speed", "How fast an animal is at eating food generally.", EATING_SPEED));
+        _Attributes.Add(AttributeId.EatingSpeed, new StaticAttribute<float>(AttributeId.EatingSpeed, "Eating Speed", "Needs", EATING_SPEED));
 
         // Reproduction
-        _Attributes.Add(AttributeId.PregnancyMaxAge, new TimeAttribute(AttributeId.PregnancyMaxAge, "Reproduction", "Maximum Age for Pregnancy", "Maximum age at which an animal can get pregnant.", PREGNANCY_MAX_AGE));
-        _Attributes.Add(AttributeId.PregnancyDuration, new TimeAttribute(AttributeId.PregnancyDuration, "Reproduction", "Pregnancy Duration", "How long an animal is pregnant for.", PREGNANCY_DURATION));
-        _Attributes.Add(AttributeId.PregnancyProgress, new TimeAttribute(AttributeId.PregnancyProgress, "Reproduction", "Pregnancy Progress", "How long an animal has been pregnant for.", new SimulationTime()));
-        _Attributes.Add(AttributeId.PregnancyChanceBase, new StaticAttribute<float>(AttributeId.PregnancyChanceBase, "Reproduction", "Base Pregnancy Chance", "Base chance per hour that an animal gets pregnant. Actualy chance depends on a lot of factors like age and health.", PREGNANCY_CHANCE_BASE));
+        _Attributes.Add(AttributeId.PregnancyMaxAge, new TimeAttribute(AttributeId.PregnancyMaxAge, "Maximum Age for Pregnancy", "Reproduction", PREGNANCY_MAX_AGE));
+        _Attributes.Add(AttributeId.PregnancyDuration, new TimeAttribute(AttributeId.PregnancyDuration, "Pregnancy Duration", "Reproduction", PREGNANCY_DURATION));
+        _Attributes.Add(AttributeId.PregnancyChanceBase, new StaticAttribute<float>(AttributeId.PregnancyChanceBase, "Base Pregnancy Chance", "Reproduction", PREGNANCY_CHANCE_BASE));
         _Attributes.Add(AttributeId.PregnancyChance, new Att_PregnancyChance(this));
-        _Attributes.Add(AttributeId.NumOffspring, new StaticRangeAttribute(AttributeId.NumOffspring, "Reproduction", "Amount of offspring", "Amount of children an animal will produce when giving birth.", NUM_OFFSPRING_MIN, NUM_OFFSPRING_MAX));
+        _Attributes.Add(AttributeId.NumOffspring, new StaticRangeAttribute(AttributeId.NumOffspring, "Amount of offspring", "Reproduction", "Amount of children an animal will produce when giving birth.", NUM_OFFSPRING_MIN, NUM_OFFSPRING_MAX));
 
         // Spawn
-        _Attributes.Add(AttributeId.SpawnGroupSize, new StaticRangeAttribute(AttributeId.SpawnGroupSize, "Spawm", "Spawn Group Size", "Amount that gets spawned when an objects is created.", SPAWN_GROUP_SIZE_MIN, SPAWN_GROUP_SIZE_MAX));
+        _Attributes.Add(AttributeId.SpawnGroupSize, new StaticRangeAttribute(AttributeId.SpawnGroupSize, "Spawn Group Size", "Spawn", "Amount that gets spawned when an objects is created.", SPAWN_GROUP_SIZE_MIN, SPAWN_GROUP_SIZE_MAX));
 
         // Status Displays
         ConditionalStatusDisplays.Add(new SD_LowHealth(this));
@@ -147,10 +141,7 @@ public abstract class AnimalBase : OrganismBase
         Nutrition.CalculateNewValues();
 
         Nutrition.ChangeValue(-(HungerRate * Simulation.Singleton.TickTime)); // Decrease Nutrition by HungerRate
-        if (Nutrition.Value == 0) ChangeStaticAttribute(AttributeId.Malnutrition, MALNUTRITION_RATE * Simulation.Singleton.TickTime, 0f, 1000f); // Increase malnutrition
-        else ChangeStaticAttribute(AttributeId.Malnutrition, -(MALNUTRITION_REGENERATION_RATE * Simulation.Singleton.TickTime), 0f, 1000f); // Decrease malnutrition
-
-        if (Malnutrition > 0 && !HasStatusEffect(StatusEffectId.Malnutrition)) AddStatusEffect(new SE_Malnutrition()); // Malnutrition status effect
+        if (Nutrition.Value <= 0 && !HasStatusEffect(StatusEffectId.Malnutrition)) AddStatusEffect(new SE_Malnutrition()); // Malnutrition status effect
     }
 
     private void UpdateActivity()
@@ -291,6 +282,7 @@ public abstract class AnimalBase : OrganismBase
 
     #region Getters
 
+    /// <summary><include file='Assets/Resources/Strings/GlobalStrings.xml' path='GlobalStrings/AttributeDescriptions/VisionRange'/></summary>
     public float VisionRange => GetFloatAttribute(AttributeId.VisionRange);
     public float Movement => GetFloatAttribute(AttributeId.Movement);
     public float LandMovementSpeed => GetFloatAttribute(AttributeId.LandMovementSpeed);
@@ -300,12 +292,10 @@ public abstract class AnimalBase : OrganismBase
     public List<NutrientType> Diet => ((Att_Diet)Attributes[AttributeId.Diet]).Diet;
     public DynamicBarAttribute Nutrition => Attributes[AttributeId.Nutrition] as DynamicBarAttribute;
     public float HungerRate => GetFloatAttribute(AttributeId.HungerRate);
-    public float Malnutrition => GetFloatAttribute(AttributeId.Malnutrition);
     public float EatingSpeed => GetFloatAttribute(AttributeId.EatingSpeed);
 
     public float PregnancyMaxAge => GetFloatAttribute(AttributeId.PregnancyMaxAge);
     public SimulationTime PregnancyDuration => (Attributes[AttributeId.PregnancyDuration] as TimeAttribute).GetStaticValue();
-    public SimulationTime PregnancyProgress => (Attributes[AttributeId.PregnancyProgress] as TimeAttribute).GetStaticValue();
     public bool IsPregnant => HasStatusEffect(StatusEffectId.Pregnancy);
     public float PregnancyChance => GetFloatAttribute(AttributeId.PregnancyChance);
     public StaticRangeAttribute NumOffspring => Attributes[AttributeId.NumOffspring] as StaticRangeAttribute;

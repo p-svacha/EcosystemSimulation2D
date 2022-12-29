@@ -15,9 +15,9 @@ public class StaticRangeAttribute : Attribute
     public override AttributeType Type => AttributeType.Base;
 
     // Static
+    private readonly AttributeId _Id;
     private readonly string _Name;
     private readonly string _Description;
-    private readonly AttributeId _Id;
     private readonly string _Category;
 
     // Value
@@ -25,7 +25,7 @@ public class StaticRangeAttribute : Attribute
     public int MaxValue { get; private set; }
     public int RandomValue => Random.Range(MinValue, MaxValue + 1);
 
-    public StaticRangeAttribute(AttributeId id, string category, string name, string description, int min, int max)
+    public StaticRangeAttribute(AttributeId id, string name, string category, string description, int min, int max)
     {
         _Id = id;
         _Name = name;
