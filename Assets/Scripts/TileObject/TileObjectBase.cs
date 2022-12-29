@@ -246,7 +246,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     /// </summary>
     public float GetFloatAttribute(AttributeId id)
     {
-        if (FloatAttributeCache.TryGetValue(id, out float cachedValue)) return cachedValue;
+        if (FloatAttributeCache.TryGetValue(id, out float cachedValue) && NumTicks > 0) return cachedValue;
 
         float value = Attributes[id].GetValue();
         FloatAttributeCache[id] = value;

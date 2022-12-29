@@ -277,9 +277,14 @@ public abstract class AnimalBase : OrganismBase
     /// </summary>
     public void Search()
     {
+        int numFailedAttempts = 0;
         // Take a random coordinate twice the vision range
-        List<WorldTile> targetPath = Pathfinder.GetRandomDirectedPath(this, Tile, (int)VisionRange, (int)(VisionRange * 2));
-        SetMovementPath(targetPath);
+        while (!IsMoving && numFailedAttempts < 5)
+        {
+            List<WorldTile> targetPath = Pathfinder.GetRandomDirectedPath(this, Tile, (int)VisionRange, (int)(VisionRange * 2));
+            SetMovementPath(targetPath);
+            numFailedAttempts++;
+        }
     }
 
     #endregion
