@@ -101,42 +101,7 @@ public class UI_ThingInfoWindow : MonoBehaviour, IPointerClickHandler
         string text = SelectedAttribute.Name + "\n\n";
         if(SelectedAttribute.Description != "") text += SelectedAttribute.Description + "\n\n";
 
-
-        if (SelectedAttribute.Type == AttributeType.Dynamic || SelectedAttribute.Type == AttributeType.DynamicRange)
-        {
-            DynamicAttribute att = (DynamicAttribute)SelectedAttribute;
-
-            if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "Calculation of max value:\n\n";
-
-            // Overwrite active
-            AttributeModifier overwriteModifier = att.GetActiveOverwriteModifier();
-            if (overwriteModifier != null)
-            {
-                text += overwriteModifier.Source + ":\t" + overwriteModifier.Value + " (Forced)\n";
-            }
-            // Default calculation
-            else
-            {
-                List<AttributeModifier> modifiers = att.GetAllModifiers();
-
-                AttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
-                text += baseMod.Source + ":\t" + baseMod.Value + "\n";
-
-                foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add))
-                    text += "\n" + mod.Source + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
-                foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
-                    text += "\n" + mod.Source + ":\tx" + mod.Value;
-                if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "\n\nMax Value:\t" + ((DynamicRangeAttribute)att).MaxValue;
-                else text += "\n\nFinal Value:\t" + att.GetValue();
-            }
-
-            if (SelectedAttribute.Type == AttributeType.DynamicRange) text += "\nCurrent Value:\t" + ((DynamicRangeAttribute)att).Value + "\n\n" + ((DynamicRangeAttribute)att).Value + " / " + ((DynamicRangeAttribute)att).MaxValue;
-        }
-        else
-        {
-            text += SelectedAttribute.GetValueString();
-        }
-
+        text += SelectedAttribute.GetValueBreakdownText();
         AttributeBreakdownText.text = text;
 
         UpdateLayout();

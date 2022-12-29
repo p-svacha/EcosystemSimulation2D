@@ -5,10 +5,11 @@ using UnityEngine;
 public class Att_PregnancyChance : DynamicAttribute
 {
     // Attribute Base
+    public override AttributeId Id => AttributeId.PregnancyChance;
     public override string Name => "Pregnancy Chance";
     public override string Description => "Actual chance per hour that an animal gets pregnant.";
-    public override AttributeId Id => AttributeId.PregnancyChance;
     public override string Category => "Reproduction";
+    public override AttributeType Type => AttributeType.Stat;
 
     // Individual
     private readonly AnimalBase Animal;

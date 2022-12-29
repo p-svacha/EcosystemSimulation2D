@@ -69,6 +69,9 @@ UP NEXT
 - add different moving types (walk = normal, running = faster but uses energy and nutrition, strolling = slow)
 - add corpses upon animal deaths
 - fix bug that thinginfowindow can't be moved/closed anymore when header moved out of screen
+- add hunger as a shown attribute in swc
+- remove malnutrtition attribute and add its value to the status effect
+- remove pregnancyprogress attribute and add its value to the pregnancy status effect
 
 FEATURES FOR THE WHEEL (https://wheelofnames.com/)
 ----------------------------

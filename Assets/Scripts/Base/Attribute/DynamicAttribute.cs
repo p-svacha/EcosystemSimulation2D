@@ -11,8 +11,6 @@ using UnityEngine;
 /// </summary>
 public abstract class DynamicAttribute : Attribute
 {
-    public override AttributeType Type => AttributeType.Dynamic;
-
     /// <summary>
     /// List of all modifiers that come from StatusEffects on the parent thing. Elements get added and removed from this list by the StatusEffects themselves.
     /// <br/> Does not get operated on each frame and is therefore more performant than dynamic modifiers.
@@ -71,6 +69,35 @@ public abstract class DynamicAttribute : Attribute
     }
 
     public override string GetValueString() => GetValue().ToString();
+
+    public override string GetValueBreakdownText()
+    {
+        string text = "";
+
+        // Overwrite active
+        AttributeModifier overwriteModifier = GetActiveOverwriteModifier();
+        if (overwriteModifier != null)
+        {
+            text += overwriteModifier.Source + ":\t" + overwriteModifier.Value + " (Forced)\n";
+        }
+
+        // Default calculation
+        else
+        {
+            List<AttributeModifier> modifiers = GetAllModifiers();
+
+            AttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
+            text += baseMod.Source + ":\t" + baseMod.Value + "\n";
+
+            foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add))
+                text += "\n" + mod.Source + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
+            foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
+                text += "\n" + mod.Source + ":\tx" + mod.Value;
+            text += "\n\nFinal Value:\t" + GetValue();
+        }
+
+        return text;
+    }
 
     /// <summary>
     /// Returns all modifiers of this attribute.

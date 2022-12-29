@@ -24,14 +24,14 @@ public abstract class Attribute
     public abstract string Description { get; }
 
     /// <summary>
-    /// Type of the attribute used to know how to handle it. Can be static or dynamic number.
-    /// </summary>
-    public abstract AttributeType Type { get; }
-
-    /// <summary>
     /// Category is solely used to better sort and organize different attributes within a thing. Has no effect of how the attribute is calculated.
     /// </summary>
     public abstract string Category { get; }
+
+    /// <summary>
+    /// Type of the attribute used to know what it is used for.
+    /// </summary>
+    public abstract AttributeType Type { get; }
 
     /// <summary>
     /// Returns the numeric value of the attribute as a float.
@@ -43,11 +43,21 @@ public abstract class Attribute
     /// Returns the display value of this attribute.
     /// </summary>
     public abstract string GetValueString();
+
+    /// <summary>
+    /// Returns a detailed breakdown of how the attribute value is calculated.
+    /// </summary>
+    public abstract string GetValueBreakdownText();
 }
 
 public enum AttributeType
 {
-    Static,
-    Dynamic,
-    DynamicRange,
+    /// <summary> Attributes that are set before/at creation and don't change during the lifetime of an object. Not directly used for any mechanics. </summary>
+    Base,
+
+    /// <summary> Attributes that are dynamically calculated from other attributes and status effects. Not directly used for any mechanics. </summary>
+    Intermediary,
+
+    /// <summary> Attributes that are dynamically calculated from base attributes, intermediary attributes, stat attributes and/or status effects. Directly used for mechanics. </summary>
+    Stat
 }

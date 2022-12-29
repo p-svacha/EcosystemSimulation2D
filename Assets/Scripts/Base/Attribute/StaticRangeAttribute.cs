@@ -11,8 +11,8 @@ public class StaticRangeAttribute : Attribute
     public override AttributeId Id => _Id;
     public override string Name => _Name;
     public override string Description => _Description;
-    public override AttributeType Type => AttributeType.Static;
     public override string Category => _Category;
+    public override AttributeType Type => AttributeType.Base;
 
     // Static
     private readonly string _Name;
@@ -28,14 +28,15 @@ public class StaticRangeAttribute : Attribute
     public StaticRangeAttribute(AttributeId id, string category, string name, string description, int min, int max)
     {
         _Id = id;
-        _Category = category;
         _Name = name;
         _Description = description;
+        _Category = category;
+
         MinValue = min;
         MaxValue = max;
     }
 
     public override float GetValue() => throw new System.Exception("GetValue is not supported for StaticRangeAttribute. Use MinValue, MaxValue or RandomValue");
-
     public override string GetValueString() => MinValue + " - " + MaxValue;
+    public override string GetValueBreakdownText() => GetValueString();
 }

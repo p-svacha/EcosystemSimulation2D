@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Att_Health : DynamicRangeAttribute
+public class Att_Health : DynamicBarAttribute
 {
-    // Base
+    // Attribute Base
+    public override AttributeId Id => AttributeId.Health;
     public override string Name => "Health";
     public override string Description => "Current and maximum amount of HP an object has.";
-    public override AttributeId Id => AttributeId.Health;
     public override string Category => "General";
-
+    public override AttributeType Type => AttributeType.Stat;
     protected override bool KeepValueRatio => true;
 
     // Individual

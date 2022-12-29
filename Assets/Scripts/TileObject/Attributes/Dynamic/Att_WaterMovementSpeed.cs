@@ -5,10 +5,11 @@ using UnityEngine;
 public class Att_WaterMovementSpeed : DynamicAttribute
 {
     // Attribute Base
+    public override AttributeId Id => AttributeId.WaterMovementSpeed;
     public override string Name => "Water Movement Speed";
     public override string Description => "Actual speed at which an animal moves on water.";
-    public override AttributeId Id => AttributeId.WaterMovementSpeed;
     public override string Category => "Movement";
+    public override AttributeType Type => AttributeType.Stat;
 
     // Individual
     private readonly AnimalBase Animal;

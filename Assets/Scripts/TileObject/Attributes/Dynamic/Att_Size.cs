@@ -5,10 +5,11 @@ using UnityEngine;
 public class Att_Size : PercentageAttribute
 {
     // Attribute Base
+    public override AttributeId Id => AttributeId.Size;
     public override string Name => "Size";
     public override string Description => "How big an organism is compared to its default size.";
-    public override AttributeId Id => AttributeId.Size;
     public override string Category => "General";
+    public override AttributeType Type => AttributeType.Stat;
 
     // Individual
     private readonly OrganismBase Organism;

@@ -259,7 +259,7 @@ public abstract class TileObjectBase : MonoBehaviour, IThing
     public float Commonness => GetFloatAttribute(AttributeId.Commonness);
     public List<SurfaceId> SpawnSurfaces => (Attributes[AttributeId.SpawnSurfaces] as Att_SpawnSurfaces).Surfaces;
     public SimulationTime Age => (Attributes[AttributeId.Age] as TimeAttribute).GetStaticValue();
-    public DynamicRangeAttribute Health => Attributes[AttributeId.Health] as DynamicRangeAttribute;
+    public DynamicBarAttribute Health => Attributes[AttributeId.Health] as DynamicBarAttribute;
     public NutrientType NutrientType => ((Att_NutrientType)Attributes[AttributeId.NutrientType]).NutrientType;
     public float NutrientValue => GetFloatAttribute(AttributeId.NutrientValue);
     public float EatingDifficulty => GetFloatAttribute(AttributeId.EatingDifficulty);

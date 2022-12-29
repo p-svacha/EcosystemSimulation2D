@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Att_Nutrition : DynamicRangeAttribute
+public class Att_Nutrition : DynamicBarAttribute
 {
-    // Base
+    // Attribute Base
+    public override AttributeId Id => AttributeId.Nutrition;
     public override string Name => "Nutrition";
     public override string Description => "Current and maximum amount of nutrition an animal has.";
-    public override AttributeId Id => AttributeId.Nutrition;
     public override string Category => "Needs";
-
+    public override AttributeType Type => AttributeType.Stat;
     protected override bool KeepValueRatio => false;
 
     // Individual

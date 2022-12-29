@@ -5,10 +5,11 @@ using UnityEngine;
 public class Att_HungerRate : DynamicAttribute
 {
     // Attribute Base
+    public override AttributeId Id => AttributeId.HungerRate;
     public override string Name => "Hunger Rate";
     public override string Description => "Actual amount at which the nutrition of an animal drops per hour.";
-    public override AttributeId Id => AttributeId.HungerRate;
     public override string Category => "Needs";
+    public override AttributeType Type => AttributeType.Stat;
 
     // Individual
     private readonly AnimalBase Animal;

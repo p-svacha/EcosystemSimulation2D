@@ -9,8 +9,5 @@ public class TimeAttribute : StaticAttribute<SimulationTime>
 {
     public TimeAttribute(AttributeId id, string category, string name, string description, SimulationTime value) : base(id, category, name, description, value) { }
 
-    public override float GetValue()
-    {
-        return Value.AbsoluteTime;
-    }
+    public override float GetValue() => Value.AbsoluteTime;
 }

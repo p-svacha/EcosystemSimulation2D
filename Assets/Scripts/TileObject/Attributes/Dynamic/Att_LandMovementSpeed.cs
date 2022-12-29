@@ -5,10 +5,11 @@ using UnityEngine;
 public class Att_LandMovementSpeed : DynamicAttribute
 {
     // Attribute Base
+    public override AttributeId Id => AttributeId.LandMovementSpeed;
     public override string Name => "Land Movement Speed";
     public override string Description => "Actual speed at which an animal moves on land.";
-    public override AttributeId Id => AttributeId.LandMovementSpeed;
     public override string Category => "Movement";
+    public override AttributeType Type => AttributeType.Stat;
 
     // Individual
     private readonly AnimalBase Animal;

@@ -1,17 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// A DynamicRangeAttribute is an attribute consisting of a current value and a max value (i.e. 84/100).
+/// A DynamicBarAttribute is an attribute consisting of a current value and a max value (i.e. 84/100).
 /// <br/> AttributeModifiers affect the max value of the attribute. 
 /// <br/> The current value can be directly changed by discrete values but is also affected by changes of the max value, meaning the ratio (CurrentValue / MaxValue) will stay the same when the MaxValue is changed.
 /// </summary>
-public abstract class DynamicRangeAttribute : DynamicAttribute
+public abstract class DynamicBarAttribute : DynamicAttribute
 {
-    // Attribute Base
-    public override AttributeType Type => AttributeType.DynamicRange;
-
     // Required setting
     /// <summary>
     /// If true, the value will also change whenever the max value changes to keep the ratio the same.
@@ -53,4 +51,33 @@ public abstract class DynamicRangeAttribute : DynamicAttribute
 
     public override float GetValue() => throw new System.Exception("GetValue should not be used for DynamicRangeAttributes. Use Value or MaxValue instead.");
     public override string GetValueString() => Value.ToString("F1") + " / " + MaxValue.ToString("F1");
+    public override string GetValueBreakdownText()
+    {
+        string text = "Calculation of max value:\n\n";
+
+        // Overwrite active
+        AttributeModifier overwriteModifier = GetActiveOverwriteModifier();
+        if (overwriteModifier != null)
+        {
+            text += overwriteModifier.Source + ":\t" + overwriteModifier.Value + " (Forced)\n";
+        }
+        // Default calculation
+        else
+        {
+            List<AttributeModifier> modifiers = GetAllModifiers();
+
+            AttributeModifier baseMod = modifiers.First(x => x.Type == AttributeModifierType.BaseValue);
+            text += baseMod.Source + ":\t" + baseMod.Value + "\n";
+
+            foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Add))
+                text += "\n" + mod.Source + ":\t" + (mod.Value >= 0 ? "+" : "") + mod.Value;
+            foreach (AttributeModifier mod in modifiers.Where(x => x.Type == AttributeModifierType.Multiply))
+                text += "\n" + mod.Source + ":\tx" + mod.Value;
+            text += "\n\nMax Value:\t" + MaxValue;
+        }
+
+        text += "\nCurrent Value:\t" + Value + "\n\n" + Value + " / " + MaxValue;
+
+        return text;
+    }
 }

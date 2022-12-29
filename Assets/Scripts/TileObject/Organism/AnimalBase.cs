@@ -298,7 +298,7 @@ public abstract class AnimalBase : OrganismBase
     public bool CanSwim => GetFloatAttribute(AttributeId.WaterMovementSpeed) > 0f;
 
     public List<NutrientType> Diet => ((Att_Diet)Attributes[AttributeId.Diet]).Diet;
-    public DynamicRangeAttribute Nutrition => Attributes[AttributeId.Nutrition] as DynamicRangeAttribute;
+    public DynamicBarAttribute Nutrition => Attributes[AttributeId.Nutrition] as DynamicBarAttribute;
     public float HungerRate => GetFloatAttribute(AttributeId.HungerRate);
     public float Malnutrition => GetFloatAttribute(AttributeId.Malnutrition);
     public float EatingSpeed => GetFloatAttribute(AttributeId.EatingSpeed);

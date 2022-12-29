@@ -12,15 +12,14 @@ public class StaticAttribute<T> : Attribute
     public override AttributeId Id => _Id;
     public override string Name => _Name;
     public override string Description => _Description;
-    public override AttributeType Type => AttributeType.Static;
     public override string Category => _Category;
+    public override AttributeType Type => AttributeType.Base;
 
     // Static
     private readonly string _Name;
     private readonly string _Description;
     private readonly AttributeId _Id;
     private readonly string _Category;
-
     // Value
     public virtual T Value { get; private set; }
 
@@ -32,6 +31,7 @@ public class StaticAttribute<T> : Attribute
         _Category = category;
         _Name = name;
         _Description = description;
+
         Value = value;
     }
 
@@ -40,18 +40,8 @@ public class StaticAttribute<T> : Attribute
         Value = newValue;
     }
 
-    public override float GetValue()
-    {
-        return (float)(object)Value;
-    }
-
-    public T GetStaticValue()
-    {
-        return Value;
-    }
-
-    public override string GetValueString()
-    {
-        return Value.ToString();
-    }
+    public override float GetValue() => (float)(object)Value;
+    public T GetStaticValue() => Value;
+    public override string GetValueString() => Value.ToString();
+    public override string GetValueBreakdownText() => GetValueString();
 }
