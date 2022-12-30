@@ -23,7 +23,7 @@ public class Creer : AnimalBase
     protected override float EATING_SPEED => 0.9f;
 
     protected override SimulationTime PREGNANCY_MAX_AGE => new SimulationTime(20, 0, 0, 0);
-    protected override float PREGNANCY_CHANCE_BASE => 0.01f;
+    protected override float PREGNANCY_CHANCE_BASE => 0.003f;
     protected override SimulationTime PREGNANCY_DURATION => new SimulationTime(0, 0, 3, 0);
     protected override int NUM_OFFSPRING_MIN => 1;
     protected override int NUM_OFFSPRING_MAX => 2;

@@ -23,6 +23,7 @@ public class UI_TileInfoText : MonoBehaviour
         string text = "";
         text += "Coordinates: " + tile.Coordinates.ToString();
         text += "\nSurface: " + tile.Surface.Name;
+        text += "\nElevation: " + tile.MaxElevation + " / " + tile.ElevationType.ToString() + " (" + tile.ElevationDirection.ToString() + ")";
         if(tile.TileObjects.Count > 0)
         {
             text += "\nObjects: ";

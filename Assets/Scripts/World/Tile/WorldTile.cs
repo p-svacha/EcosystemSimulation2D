@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Attribute;
 
@@ -25,6 +26,13 @@ public class WorldTile : IThing
     // Content
     public SurfaceBase Surface { get; private set; }
     public List<TileObjectBase> TileObjects = new List<TileObjectBase>();
+    /// <summary> Elevation that each corner of this tile has. Order is NW, NE, SE, SW. </summary>
+    public int[] Elevation { get; private set; }
+    public int MinElevation { get; private set; }
+    public int MaxElevation { get; private set; }
+    public TileElevationType ElevationType { get; private set; }
+    /// <summary> Direction in which this tile is facing upwards towards higher elevation </summary>
+    public TileElevationDirection ElevationDirection { get; private set; }
 
     // Attributes
     private Dictionary<AttributeId, Attribute> _Attributes = new Dictionary<AttributeId, Attribute>();
@@ -40,6 +48,38 @@ public class WorldTile : IThing
         _Attributes.Add(AttributeId.Coordinates, new StaticAttribute<string>(AttributeId.Coordinates, "Coordinates", "General", Coordinates.x + " / " + Coordinates.y));
         _Attributes.Add(AttributeId.Surface, new StaticAttribute<string>(AttributeId.Surface, "Surface", "General", ""));
         _Attributes.Add(AttributeId.MovementCost, new Att_MovementCost(this));
+    }
+
+    public void SetElevation(int[] elevation)
+    {
+        Elevation = elevation;
+        MinElevation = elevation.Min();
+        MaxElevation = elevation.Max();
+        int elevationDiff = MaxElevation - MinElevation;
+        if (elevationDiff == 0) ElevationType = TileElevationType.Flat;
+        else if(elevationDiff == 1) ElevationType = TileElevationType.Slope;
+        else if(elevationDiff == 2) ElevationType = TileElevationType.Cliff;
+        else throw new System.Exception("Elevation change is not allowed to be greater than 2 on a single tile.");
+        UpdateElevationDirection();
+    }
+
+    private void UpdateElevationDirection()
+    {
+        if (MinElevation == MaxElevation) ElevationDirection = TileElevationDirection.None;
+        else if (Elevation[0] == MaxElevation && Elevation[1] == MaxElevation && Elevation[2] == MaxElevation) ElevationDirection = TileElevationDirection.Side_NE;
+        else if (Elevation[1] == MaxElevation && Elevation[2] == MaxElevation && Elevation[3] == MaxElevation) ElevationDirection = TileElevationDirection.Side_SE;
+        else if (Elevation[2] == MaxElevation && Elevation[3] == MaxElevation && Elevation[0] == MaxElevation) ElevationDirection = TileElevationDirection.Side_SW;
+        else if (Elevation[3] == MaxElevation && Elevation[0] == MaxElevation && Elevation[1] == MaxElevation) ElevationDirection = TileElevationDirection.Side_NW;
+        else if (Elevation[0] == MaxElevation && Elevation[1] == MaxElevation) ElevationDirection = TileElevationDirection.Side_N;
+        else if (Elevation[1] == MaxElevation && Elevation[2] == MaxElevation) ElevationDirection = TileElevationDirection.Side_E;
+        else if (Elevation[2] == MaxElevation && Elevation[3] == MaxElevation) ElevationDirection = TileElevationDirection.Side_S;
+        else if (Elevation[3] == MaxElevation && Elevation[0] == MaxElevation) ElevationDirection = TileElevationDirection.Side_W;
+        else if (Elevation[0] == MaxElevation && Elevation[2] == MaxElevation) ElevationDirection = TileElevationDirection.Corners_NW_SE;
+        else if (Elevation[1] == MaxElevation && Elevation[3] == MaxElevation) ElevationDirection = TileElevationDirection.Corners_NE_SW;
+        else if (Elevation[0] == MaxElevation) ElevationDirection = TileElevationDirection.Corner_NW;
+        else if (Elevation[1] == MaxElevation) ElevationDirection = TileElevationDirection.Corner_NE;
+        else if (Elevation[2] == MaxElevation) ElevationDirection = TileElevationDirection.Corner_SE;
+        else if (Elevation[3] == MaxElevation) ElevationDirection = TileElevationDirection.Corner_SW;
     }
 
     /// <summary>
@@ -144,4 +184,31 @@ public class WorldTile : IThing
 
     #endregion
 
+}
+
+public enum TileElevationType
+{
+    Flat,
+    Slope,
+    Cliff
+}
+
+/// <summary> Direction in which a tile is facing upwards towards higher elevation </summary>
+public enum TileElevationDirection
+{
+    None,
+    Corner_NE,
+    Corner_NW,
+    Corner_SW,
+    Corner_SE,
+    Corners_NE_SW,
+    Corners_NW_SE,
+    Side_N,
+    Side_E,
+    Side_S,
+    Side_W,
+    Side_NE,
+    Side_NW,
+    Side_SW,
+    Side_SE
 }

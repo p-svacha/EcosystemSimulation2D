@@ -128,7 +128,7 @@ public static class HelperFunctions
     /// <summary>
     /// Returns a vector in a given direction with a given distance. Used for other helper functions.
     /// </summary>
-    private static Vector2Int GetDirectionVector(Direction dir, int distance = 1)
+    public static Vector2Int GetDirectionVector(Direction dir, int distance = 1)
     {
         switch (dir)
         {

@@ -8,13 +8,17 @@ public class ResourceManager : MonoBehaviour
     private static ResourceManager _Singleton;
     public static ResourceManager Singleton => _Singleton;
 
-    [Header("Surface Textures")]
+    [Header("Terrain Textures")]
     public Texture2D SoilTexture;
     public Texture2D SandTexture;
     public Texture2D WaterTexture;
 
     private Dictionary<SurfaceId, Texture2D> TerrainTextures;
     private Dictionary<SurfaceId, TileBase> TerrainTiles;
+
+    [Header("Tilesets")]
+    public Texture2D CliffTileset;
+    public Texture2D SlopeTileset;
 
     [Header("Object Sprites")]
     public Sprite TallGrassSprite;
@@ -54,6 +58,8 @@ public class ResourceManager : MonoBehaviour
 
     void Awake()
     {
+        _Singleton = GameObject.Find("ResourceManager").GetComponent<ResourceManager>();
+
         // Terrain
         TerrainTextures = new Dictionary<SurfaceId, Texture2D>();
         TerrainTiles = new Dictionary<SurfaceId, TileBase>();
@@ -70,11 +76,6 @@ public class ResourceManager : MonoBehaviour
         TileObjectSprites.Add(TileObjectId.TallGrass, TallGrassSprite);
         TileObjectSprites.Add(TileObjectId.Creer, CreerSprite);
         TileObjectSprites.Add(TileObjectId.Wofox, WofoxSprite);
-    }
-
-    private void Start()
-    {
-        _Singleton = GameObject.Find("ResourceManager").GetComponent<ResourceManager>();
     }
 
     public Texture2D GetSurfaceTexture(SurfaceId type) => TerrainTextures[type];

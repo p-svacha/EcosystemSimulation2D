@@ -16,6 +16,7 @@ public class World : MonoBehaviour
     private int CurrentTilePot = 0;
 
     public TerrainLayer TerrainLayer;
+    public ElevationLayer ElevationLayer;
 
     #region Initialization
 
@@ -40,6 +41,7 @@ public class World : MonoBehaviour
 
             // Surface Tiles
             TerrainLayer.DrawSurface(tile.Coordinates, tile.Surface, refreshAdjacentTransitions: false);
+            ElevationLayer.DrawElevation(tile);
         }
     }
 

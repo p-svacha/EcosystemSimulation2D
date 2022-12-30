@@ -269,6 +269,7 @@ public abstract class AnimalBase : OrganismBase
     public void Search()
     {
         int numFailedAttempts = 0;
+        IsMoving = false;
         // Take a random coordinate twice the vision range
         while (!IsMoving && numFailedAttempts < 5)
         {
