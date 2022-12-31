@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// FROM https://github.com/ricardojmendez/LibNoise.Unity
 /// </summary>
-public class RidgedMultifractalNoise
+public class RidgedMultifractalNoise : Noise
 {
     #region Fields
 
@@ -39,12 +39,12 @@ public class RidgedMultifractalNoise
     /// <param name="octaves">The number of octaves of the ridged-multifractal noise.</param>
     /// <param name="seed">The seed of the ridged-multifractal noise.</param>
     /// <param name="quality">The quality of the ridged-multifractal noise.</param>
-    public RidgedMultifractalNoise(double frequency, double lacunarity, int octaves, int seed)
+    public RidgedMultifractalNoise(double frequency, double lacunarity, int octaves)
     {
         Frequency = frequency;
         Lacunarity = lacunarity;
         OctaveCount = octaves;
-        Seed = seed;
+        Seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
     }
 
     #endregion
@@ -146,6 +146,11 @@ public class RidgedMultifractalNoise
     #endregion
 
     #region ModuleBase Members
+
+    public override float GetValue(float x, float y)
+    {
+        return (float)GetValue(x, y, 1);
+    }
 
     /// <summary>
     /// Returns the output value for the given input coordinates.
