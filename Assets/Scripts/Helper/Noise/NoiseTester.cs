@@ -60,7 +60,9 @@ public class NoiseTester : MonoBehaviour
                     if(distinctColors.TryGetValue(intValue, out Color c)) tex.SetPixel(x, y, c);
                     else
                     {
-                        Color newColor = new Color(0f + Random.value * 0.5f, 0.5f + Random.value * 0.5f, 0.6f + Random.value * 0.4f);
+                        //Color newColor = new Color(0f + Random.value * 0.5f, 0.5f + Random.value * 0.5f, 0.6f + Random.value * 0.4f); // blue-greenish colors
+                        float grayScale = Random.value;
+                        Color newColor = new Color(grayScale, grayScale, grayScale);
                         distinctColors.Add(intValue, newColor);
                         tex.SetPixel(x, y, newColor);
                     }

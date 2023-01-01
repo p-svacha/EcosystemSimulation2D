@@ -101,8 +101,8 @@ public static class HelperFunctions
 
     public static Vector2Int GetRandomPositionInWorld(World world, int mapEdgeMargin)
     {
-        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_WIDTH - mapEdgeMargin);
-        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_HEIGHT - mapEdgeMargin);
+        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
+        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
         return new Vector2Int(x, y);
     }
 
@@ -122,8 +122,6 @@ public static class HelperFunctions
     #endregion
 
     #region Tilemap
-
-    public static bool AreCoordinatesInWorld(Vector2Int coordinates) => coordinates.x >= 0 && coordinates.x < WorldGenerator.MAP_WIDTH && coordinates.y >= 0 && coordinates.y < WorldGenerator.MAP_HEIGHT;
 
     /// <summary>
     /// Returns a vector in a given direction with a given distance. Used for other helper functions.
@@ -201,10 +199,10 @@ public static class HelperFunctions
     public static Vector2Int GetRandomPositionWithinRange(Vector2Int source, int maxRange)
     {
         int x = -1;
-        while (x < 0 || x >= WorldGenerator.MAP_WIDTH) x = Random.Range(source.x - maxRange, source.x + maxRange + 1);
+        while (x < 0 || x >= WorldGenerator.MAP_SIZE) x = Random.Range(source.x - maxRange, source.x + maxRange + 1);
 
         int y = -1;
-        while (y < 0 || y >= WorldGenerator.MAP_HEIGHT) y = Random.Range(source.y - maxRange, source.y + maxRange + 1);
+        while (y < 0 || y >= WorldGenerator.MAP_SIZE) y = Random.Range(source.y - maxRange, source.y + maxRange + 1);
 
         return new Vector2Int(x, y);
     }
@@ -244,8 +242,8 @@ public static class HelperFunctions
 
     public static Vector2Int GetRandomPositionOnMap(int mapEdgeMargin = 5)
     {
-        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_WIDTH - mapEdgeMargin);
-        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_HEIGHT - mapEdgeMargin);
+        int x = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
+        int y = Random.Range(mapEdgeMargin, WorldGenerator.MAP_SIZE - mapEdgeMargin);
         return new Vector2Int(x, y);
     }
 

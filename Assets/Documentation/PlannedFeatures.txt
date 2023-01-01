@@ -1,32 +1,9 @@
 NEXT VERSION
 -------------------
-ELEVATION UPDATE:
-
-each tile corner has an elevation (shared corners ALWAYS have the same elevation, it's like an offset grid)
-each tile has an elevation diff = max elevation difference between all corners
-elevation diffs == 0 means flat tile
-elevation diffs == 1 are slopes and can either normal passable tiles or impassable cliff tiles
-cliffs have special rules of how they are drawn
-the elevation diff can never be > 1
-water has elev < 0
-shore and lowest land has elev 0
-the higher a tile the brighter (or bigger?) it and its contents gets shown, starting at 1
-
-+has clear elevation
-+has cliffs as own entities
-+leaves options for caves at elev 0 below mountains
-
-elevation todo:
-----------------
-slowdown on slopes
-impassable on cliffs
-improve heightmap with combination of perlin+voronoi
-	- have a base perlin heightmap and take random voronoi regions and apply a gradient to them. (https://www.reddit.com/r/proceduralgeneration/comments/oflrz8/how_would_i_go_about_creating_a_noise_map_that_i/)
 
 UP NEXT
 -------------
 - Animals should drink water and have Thirst
-- Add mountains
 - add multiple sprite support for objects (tall grass)
 - plants should have slow health regeneration
 - add berries
@@ -82,6 +59,7 @@ UP NEXT
 	- split thingId into Animal, Plant etc. and make editorwindow dynamically sort into categories
 	- in editor show a little display of the selected tool beside the cursor
 	- editor: rightclick removes active tool
+	- add new editor tool category "general": elevation change (with left/right click) and remove object
 - Offset plants a little bit so they are not all exactly in the center of tiles
 - add energy and sleeping
 - add different moving types (walk = normal, running = faster but uses energy and nutrition, strolling = slow)
@@ -102,6 +80,10 @@ UP NEXT
 - caves:
 	- tiles at elevation 0 that exist below mountains
 	- view can be toggled between default/underground
+- add rock surface for high elevation
+- add temperature / waether
+- make worldtiles selectable
+- add rocks and rock clusters
 
 
 IDEAS FOR PERFORMANCE INCREASES

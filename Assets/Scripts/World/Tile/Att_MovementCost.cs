@@ -19,6 +19,9 @@ public class Att_MovementCost : DynamicAttribute
         mods.Add(new AttributeModifier("Base Value", 1f, AttributeModifierType.BaseValue));
         mods.Add(new AttributeModifier(Tile.Surface.Name + " Surface", Tile.Surface.MovementCost, AttributeModifierType.Multiply));
 
+        if (Tile.ElevationType == TileElevationType.Slope)
+            mods.Add(new AttributeModifier("Slope", 1.5f, AttributeModifierType.Multiply));
+
         return mods;
     }
 

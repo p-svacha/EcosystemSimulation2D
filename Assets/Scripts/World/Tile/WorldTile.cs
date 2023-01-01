@@ -58,8 +58,7 @@ public class WorldTile : IThing
         int elevationDiff = MaxElevation - MinElevation;
         if (elevationDiff == 0) ElevationType = TileElevationType.Flat;
         else if(elevationDiff == 1) ElevationType = TileElevationType.Slope;
-        else if(elevationDiff == 2) ElevationType = TileElevationType.Cliff;
-        else throw new System.Exception("Elevation change is not allowed to be greater than 2 on a single tile.");
+        else if(elevationDiff > 1) ElevationType = TileElevationType.Cliff;
         UpdateElevationDirection();
     }
 
@@ -150,6 +149,7 @@ public class WorldTile : IThing
     public bool IsPassable(AnimalBase animal)
     {
         if (Surface.RequiresSwimming && !animal.CanSwim) return false;
+        if (ElevationType == TileElevationType.Cliff) return false;
         return true;
     }
 
