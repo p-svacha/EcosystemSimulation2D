@@ -485,7 +485,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -3685,7 +3685,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -5509,7 +5509,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -9733,7 +9733,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -9877,7 +9877,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -10527,7 +10527,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -11655,6 +11655,11 @@ MonoBehaviour:
   - {fileID: 436346838}
   - {fileID: 876577422}
   - {fileID: 898695327}
+  - {fileID: 299654493}
+  - {fileID: 1579791529}
+  - {fileID: 1606167675}
+  - {fileID: 930259030}
+  - {fileID: 28950644}
 --- !u!1 &1056299563
 GameObject:
   m_ObjectHideFlags: 0
@@ -15853,7 +15858,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
@@ -16477,7 +16482,7 @@ Tilemap:
     m_Data: {r: NaN, g: NaN, b: NaN, a: NaN}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 0.039215688}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.02745098}
   m_Origin: {x: 0, y: 0, z: 0}
   m_Size: {x: 113, y: 188, z: 1}
   m_TileAnchor: {x: 0.5, y: 0.5, z: 0}

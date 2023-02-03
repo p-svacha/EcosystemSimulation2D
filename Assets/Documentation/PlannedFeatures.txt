@@ -4,11 +4,11 @@ NEXT VERSION
 UP NEXT
 -------------
 - Animals should drink water and have Thirst
-- add multiple sprite support for objects (tall grass)
 - plants should have slow health regeneration
 - add berries
 - Add basic combat mechanics (attack, deal damage)
 - add selection marker when something is selected (add spriterenderer as child and scale it)
+	- make worldtiles selectable
 - replace "remove object" button in selection window with god mode button that opens a popup menu with different actions
 	- remove object
 	- age 1 month
@@ -80,10 +80,25 @@ UP NEXT
 - caves:
 	- tiles at elevation 0 that exist below mountains
 	- view can be toggled between default/underground
-- add rock surface for high elevation
 - add temperature / waether
-- make worldtiles selectable
-- add rocks and rock clusters
+- add rocks and rock clusters + add rock surface for high elevation
+- dynamic sprite loading from assets (create dictionary on tileobjectfactory initialization) instead of resourcemanager for TileObjectId's
+	- add multiple sprite support for objects (tall grass)
+
+FEATURE WHEEL (https://wheelofnames.com/)
+----------------------------
+Hydration & Thirst
+Energy & Sleep
+Rework ThingInfo
+Improve TimeControls
+Corpses
+Wool Shed
+Health Regeneration (isHealthy)
+Berries
+SWC > Rework God Mode Tools
+Improve EditorWindow
+Selection Display
+Combat
 
 
 IDEAS FOR PERFORMANCE INCREASES

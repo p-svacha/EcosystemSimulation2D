@@ -1,0 +1,53 @@
+# General
+
+Every creature is a collection of genes and nothing else.
+
+Phenotype and genotype are both set by the same genetics system.
+This means two creatures with the exact same genetic makeup will always look the same, have the same stats and act the same.
+Every gene can (but doesn't have to) affect the creatures looks, stats and behavioural logic.
+The goal is that genes always influence both the looks and logic/stats, so that a creatures behaviour can be broadly read solely by looking at it.
+
+
+# Genes
+Each gene has the following attributes:
+ Id: Unique identifier for that specific gene
+ Category: An identifier to group genes. The category is used to decide if it can be attached to another gene or not.
+ Effect: The effect the gene has on the looks, stats and behaviour of the creature.
+
+ Required gene categories: A list of categories which need to have at least 1 gene. They can also have multiple but only 1 will be dominant/expressed - all can be inherited tho. 
+                      Usually used for mutually exclusive behaviour types.
+                      Initial (wild) species will usually only have 1 gene per required category.
+
+ Optional gene categories: A list of categories which can have 0-n genes. Only 1 will be dominant/expressed but all can be inherited tho. 
+
+ Modifier gene categories: 0-n genes of these categories can be present and all of them are expressed. Usually used for stat modifiers.
+
+
+# Root Genes
+
+Every creature has exactly one root gene which makes up the base of the creature.
+Creatures are only able to reproduce with species of the same root gene.
+Root genes are there to have certain "creature classes" that are distinct by nature but can still have very different subspecies within them.
+
+Examples for root genes and some possible subspecies are:
+ Hoofed     -   Elk, Deer, Cow, Sheep, Horse (https://en.wikipedia.org/wiki/Even-toed_ungulate)
+ Weasel     -   Raccoon, Squirrel, Skunk
+ Dog        -   Fox, Wolf
+ Cat        -   House cat, tiger, hyena
+ Fish
+ Insect
+
+
+# Gene Examples
+
+## Hoofed Root Gene
+Category: Root
+Effect: Gives a specific look, base stats and behaviour tree to the creature.
+        4 Legs, alive children, lungs, eat grass, hoofes (can walk any terrain), can't fly/climb
+Required gene categories: Hoofed body type, Hoofed head shape, Size, Neck type, Group behaviour, Hoof surface specialization
+Optional gene categories: Head gear
+Modifier gene categories: General modifiers, Hoofed modifiers
+
+
+
+
