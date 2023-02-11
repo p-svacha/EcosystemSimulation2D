@@ -22,6 +22,10 @@ Each gene has the following attributes:
 
  Modifier gene categories: 0-n genes of these categories can be present and all of them are expressed. Usually used for stat modifiers.
 
+A gene should additionally contain easy to get info regarding.
+Does it change looks / behaviours / stats? (3 bools)
+
+
 
 # Root Genes
 
@@ -37,6 +41,10 @@ Examples for root genes and some possible subspecies are:
  Fish
  Insect
 
+ Root genes affect:
+        - Which gene categories the animal must/can have
+        - Which body parts the animal must/can have. 
+
 
 # Gene Examples
 
@@ -47,7 +55,3 @@ Effect: Gives a specific look, base stats and behaviour tree to the creature.
 Required gene categories: Hoofed body type, Hoofed head shape, Size, Neck type, Group behaviour, Hoof surface specialization
 Optional gene categories: Head gear
 Modifier gene categories: General modifiers, Hoofed modifiers
-
-
-
-
