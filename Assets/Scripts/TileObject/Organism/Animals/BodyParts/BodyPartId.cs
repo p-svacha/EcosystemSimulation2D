@@ -6,7 +6,9 @@ public enum BodyPartId
 {
     Torso,
     Head,
+    Headgear,
     LegsHind,
     LegsFront,
-    Neck
+    Neck,
+    Tail
 }

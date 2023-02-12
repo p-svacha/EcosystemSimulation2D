@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,31 +38,60 @@ namespace BodyPartEditor
             // Create preview of connectors
             ConnectorPreviews.Clear();
             foreach (BodyPartConnectorData con in bodyPart.Connectors)
+                AddConnectorPreview(con);
+        }
+
+        public void ShowAddConnectorMenu()
+        {
+            // Identify for which body parts a connector can be added
+            List<BodyPartId> possibleConnectors = new List<BodyPartId>();
+            foreach (BodyPartId id in System.Enum.GetValues(typeof(BodyPartId)))
             {
-                BodyPartConnector connectorPreview = Instantiate(ConnectorPrefab, PreviewContainer.transform);
-                connectorPreview.Init(con);
-                ConnectorPreviews.Add(connectorPreview);
+                if (BodyPartPreview.BodyPartId == id) continue;
+                if (BodyPartPreview.Connectors.Any(x => x.BodyPartId == id)) continue;
+                possibleConnectors.Add(id);
             }
+            if (possibleConnectors.Count == 0) return;
+
+            // Display context menu with all options
+            List<ContextMenuEntry> entries = new List<ContextMenuEntry>();
+            foreach(BodyPartId id in possibleConnectors)
+            {
+                ContextMenuEntry entry = new ContextMenuEntry(id.ToString(), () => AddConnector(id));
+                entries.Add(entry);
+            }
+            UI_ContextMenu.Singleton.Show(entries);
+        }
+
+        private void AddConnector(BodyPartId id)
+        {
+            BodyPartConnectorData newCon = new BodyPartConnectorData()
+            {
+                BodyPartId = id,
+                x = Random.Range(0, BodyPartLibrary.BODY_PART_SPRITE_SIZE),
+                y = Random.Range(0, BodyPartLibrary.BODY_PART_SPRITE_SIZE)
+            };
+            BodyPartPreview.Connectors.Add(newCon);
+            AddConnectorPreview(newCon);
+        }
+
+        public void RemoveConnector(BodyPartConnectorData con)
+        {
+            BodyPartPreview.Connectors.Remove(con);
+            GameObject.Destroy(ConnectorPreviews.First(x => x.ConnectorData == con).gameObject);
+        }
+
+        public void AddConnectorPreview(BodyPartConnectorData con)
+        {
+            BodyPartConnector connectorPreview = Instantiate(ConnectorPrefab, PreviewContainer.transform);
+            connectorPreview.gameObject.name = con.BodyPartId + " connector preview";
+            connectorPreview.Init(BodyPartPreview, con, this);
+            ConnectorPreviews.Add(connectorPreview);
         }
 
         public void SaveCurrentBodyPart()
         {
-            BodyPartData newData = new BodyPartData();
-            newData.Name = BodyPartPreview.Name;
-            newData.Path = BodyPartPreview.Path;
-            newData.BodyPartId = BodyPartPreview.BodyPartId;
-            newData.Connectors = new List<BodyPartConnectorData>();
-            foreach(var con in ConnectorPreviews)
-            {
-                newData.Connectors.Add(new BodyPartConnectorData()
-                {
-                    BodyPartId = con.Data.BodyPartId,
-                    x = con.Data.x,
-                    y = con.Data.y
-                });
-            }
-
-            BodyPartLibrary.SaveBodyPartData(newData);
+            BodyPartLibrary.SaveBodyPartData(BodyPartPreview);
         }
     }
 }

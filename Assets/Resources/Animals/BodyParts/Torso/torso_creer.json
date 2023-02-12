@@ -1,1 +1,1 @@
-{"Sprite":null,"Name":"Torso_Creer","BodyPartId":"Torso","Connectors":[{"BodyPartId":"Neck","x":335.093262,"y":296.482727},{"BodyPartId":"LegsHind","x":40.3290558,"y":200.036469},{"BodyPartId":"LegsFront","x":400.0,"y":100.0}]}
+{"Name":"torso_creer","BodyPartId":"Torso","Connectors":[{"BodyPartId":"Neck","x":398.964569,"y":298.742157},{"BodyPartId":"LegsHind","x":154.595322,"y":212.041931},{"BodyPartId":"LegsFront","x":356.34137,"y":206.181137},{"BodyPartId":"Tail","x":95.7754,"y":272.903168}]}

@@ -8,24 +8,42 @@ using UnityEngine;
 public static class BodyPartLibrary
 {
     public static Dictionary<BodyPartId, List<BodyPartData>> BodyParts;
+    public const int BODY_PART_SPRITE_SIZE = 512;
 
     public static void Init()
     {
         BodyParts = new Dictionary<BodyPartId, List<BodyPartData>>();
 
-        // Retrieve all body part data from json files
-        string[] files = Directory.GetFiles("Assets/Resources/Animals/BodyParts", "*.json", SearchOption.AllDirectories);
-        foreach(string filePath in files)
+        // Retrieve all body part sprites
+        string[] files = Directory.GetFiles("Assets/Resources/Animals/BodyParts", "*.png", SearchOption.AllDirectories);
+        foreach(string pngFilePath in files)
         {
-            using(StreamReader r = new StreamReader(filePath))
+            // Check if the sprite has a json with the same name
+            string jsonFilePath = Path.ChangeExtension(pngFilePath, ".json");
+            if(!File.Exists(jsonFilePath)) // Create a new json if one does not exist already
+            {
+                string bodyPartType = new DirectoryInfo(jsonFilePath).Parent.Name;
+
+                BodyPartData newBodyPartData = new BodyPartData()
+                {
+                    Name = Path.GetFileNameWithoutExtension(jsonFilePath),
+                    Path = jsonFilePath,
+                    Connectors = new List<BodyPartConnectorData>(),
+                    BodyPartId = (BodyPartId) (Enum.Parse(typeof(BodyPartId), bodyPartType))
+                };
+
+                SaveBodyPartData(newBodyPartData);
+            }
+
+            using (StreamReader r = new StreamReader(jsonFilePath))
             {
                 // Create object
                 string json = r.ReadToEnd();
                 BodyPartData bodyPart = JsonConvert.DeserializeObject<BodyPartData>(json);
-                bodyPart.Path = filePath;
+                bodyPart.Path = jsonFilePath;
 
                 // Set sprite
-                string spritePath = Path.ChangeExtension(filePath, ".png");
+                string spritePath = Path.ChangeExtension(jsonFilePath, ".png");
                 bodyPart.Sprite = HelperFunctions.LoadNewSprite(spritePath, 512);
 
                 // Save to library
@@ -40,6 +58,14 @@ public static class BodyPartLibrary
             Debug.Log("BodyPartLibrary: Found " + category.Value.Count + " " + category.Key);
             foreach (BodyPartData bodyPart in category.Value) Debug.Log(bodyPart);
         }
+    }
+
+    /// <summary>
+    /// Checks if all sprites within the body part folder have a json with the same name and creates new json files for those that don't.
+    /// </summary>
+    private static void CreateMissingJson()
+    {
+
     }
 
     public static void SaveBodyPartData(BodyPartData data)

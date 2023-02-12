@@ -3,6 +3,7 @@ using Newtonsoft.Json.Converters;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -18,6 +19,7 @@ public class BodyPartData
 
     public List<BodyPartConnectorData> Connectors { get; set; }
 
+    [NonSerialized]
     public Sprite Sprite;
 
     [NonSerialized]
@@ -31,5 +33,10 @@ public class BodyPartData
             s += "\nConnector " + c.BodyPartId.ToString() + ": " + c.x + "/" + c.y;
         }
         return s;
+    }
+
+    public BodyPartConnectorData GetConnectorTo(BodyPartId id)
+    {
+        return Connectors.First(x => x.BodyPartId == id);
     }
 }
